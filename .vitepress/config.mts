@@ -35,6 +35,12 @@ export default defineConfig({
     socialLinks: [
       { icon: "github", link: "https://github.com/vuejs/vitepress" },
     ],
+
+    // 配置大纲显示 2-3 级标题
+    outline: {
+      level: [2, 3], // 或者使用 'deep' 显示所有级别
+      label: '页面导航' // 可选：修改大纲的标题
+    }
   },
   vite:{
     plugins: [
