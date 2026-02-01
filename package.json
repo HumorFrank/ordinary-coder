@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "为了防止秃头而学的那些事儿",
   "devDependencies": {
+    "@types/node": "^25.1.0",
     "vitepress": "^1.6.4",
     "vue": "^3.5.27"
   },
