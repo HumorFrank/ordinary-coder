@@ -1,0 +1,14 @@
+{
+  "name": "ordinary-coder",
+  "version": "1.0.0",
+  "description": "为了防止秃头而学的那些事儿",
+  "devDependencies": {
+    "vitepress": "^1.6.4",
+    "vue": "^3.5.27"
+  },
+  "scripts": {
+    "docs:dev": "vitepress dev",
+    "docs:build": "vitepress build",
+    "docs:preview": "vitepress preview"
+  }
+}
