@@ -100,8 +100,8 @@ VITE_APP_WEB_IMAGE='你的网站或者APP logo地址（如：https://example.com
 ### Vue3多根节点
 - 支持多根节点
 - ⚠️若封装通用组件，多根节点需要注意`Attributes`透传问题
-  - 禁用`Attributes`透传
-  - 明确给节点绑定 `Attributes`（v-bind="$attrs"）
+  > - 禁用`Attributes`透传
+  > - 明确给节点绑定 `Attributes`（v-bind="$attrs"）
 > ⚠️ 和`单根节`点组件有所不同，有着`多个根节点`的组件没有自动 attribute 透传行为。若 `$attrs` 没有被`显式绑定`，将会`抛出`一个`运行时警告`。
 ### 组件基础
 #### 组件命名和模板使用
@@ -109,16 +109,21 @@ VITE_APP_WEB_IMAGE='你的网站或者APP logo地址（如：https://example.com
 - 🅱 `PascalCase`：帕斯卡/大驼峰命名，模板使用可选`kebab-case`/`PascalCase`方式，可自闭合
 
 > 学习目标？
-> - 在哪命名？答：在 `components:{name: 导入符号}`/`defineOptions({name:组件名称})` 选项中。
-> - 如何命名？答：`kebab-case`/`PascalCase`方式命名。
-> - 如何使用？答：`kebab-case`/`PascalCase`方式以及可选自闭。
-> - 组件中name用途? 答：组件递归、调试、搭配`keep-alive` 使用.
-> - 注意事项？答：无论选用那种命名方式/模板使用方式，都应该保持统一。
+> - 在哪命名？
+> > 答：在 `components:{name: 导入符号}`/`defineOptions({name:组件名称})` 选项中。
+> - 如何命名？
+> > 答：`kebab-case`/`PascalCase`方式命名。
+> - 如何使用？
+> > 答：`kebab-case`/`PascalCase`方式以及可选自闭。
+> - 组件中name用途?
+> >  答：组件递归、调试、搭配`keep-alive` 使用.
+> - 注意事项？
+> > 答：无论选用那种命名方式/模板使用方式，都应该保持统一。
 #### 插槽
 - 默认插槽：`<slot></slot>`
 - 具名插槽：`<slot name="header"></slot>`
-- 条件插槽：有时需根据内容是否被传入了插槽来渲染某些内容，可结合`$slots`属性与`v-if`来实现。
-  - `<div v-if="$slots.header"><slot name="header" /></div>`
+- 条件插槽：有时需根据内容是否被传入插槽来渲染某部分，可结合`$slots`与`v-if`实现。
+  > - `<div v-if="$slots.header"><slot name="header" /></div>`
 - 动态插槽：`<template #[dynamicSlotName]></template>`
 - 作用域插槽：`<slot :text="msg" :count="1"></slot>`
 ### 动态组件&异步组件
@@ -162,7 +167,7 @@ VITE_APP_WEB_IMAGE='你的网站或者APP logo地址（如：https://example.com
     - `同步执行期间追踪`，它只追踪在回调函数同步执行期间被读取的依赖。
     - `比深度侦听器更有效`，因为它将只跟踪回调中被使用到的属性，而不是递归地跟踪所有的属性。
     - `回调函数无参`
-    - ⚠️
+    - ⚠️注意事项
       - 仅会在其同步执行期间，才追踪依赖。
       - 异步回调时，只有在第一个 `await` 正常工作前访问到的属性才会被追踪。
 ㊙️ 调试
@@ -315,7 +320,7 @@ defineProps({
 
 
 ::: code-group
-```ts [index.ts] [type.ts]
+```ts [type.ts]
 // 只读
 function computed<T>(
   getter: (oldValue: T | undefined) => T,
@@ -333,7 +338,7 @@ function computed<T>(
 ): Ref<T>
 ```
 
-```ts [index.ts] [readonly.ts]
+```ts [readonly.ts]
 const count = ref(0)
 const plusOne = computed(() => count.value + 1)
 
@@ -341,7 +346,7 @@ console.log(plusOne.value) // 2
 plusOne.value++ // ❌ 错误
 ```
 
-```ts [index.ts] [readAndWrite.ts]
+```ts [readAndWrite.ts]
 const count = ref(0)
 const plusCount = computed({
   get: () => count.value,
@@ -363,7 +368,7 @@ function btnReduceCount() {
 }
 ```
 
-```ts [index.ts] [readAndWrite2.ts]
+```ts [readAndWrite2.ts]
 const count = ref(1)
 const plusCount = computed({
   get: () => count.value + 1,
@@ -380,7 +385,7 @@ plusCount.value = 1 // plusCount 赋值，会触发其 set 方法，从而修改
 console.error(count.value, plusCount.value) // 0 1
 ```
 
-```ts [index.ts] [debugger.ts]
+```ts [debugger.ts]
 import type { DebuggerEvent } from 'vue'
 const count = ref(0)
 const plusOne = computed(() => count.value + 1, {
@@ -909,11 +914,13 @@ type Res = MyAwaited<Promise<Promise<number>>>; // number
 
 ### 正确判断相等性
 1️⃣ `==`、`===`、`Object.is()`
-  - `==`：先类型转换，然后在比较 —— 宽松相等
-    - 会按照`IEEE 754`标准对`NaN`、`-0`、`+0` 进行特殊处理(`NaN != NaN`，`-0 == +0`)
-  - `===`：不进行类型转换，值和类型都相等 —— 严格相等
-    - 会按照`IEEE 754`标准对`NaN`、`-0`、` +0` 进行特殊处理(`NaN != NaN`，`-0 === +0`)
-  - `Object.is()`：既不进行类型转换，也不对 `NaN`、`-0`、`+0`进行特殊处理
+  > 1.1 `==`：先类型转换，然后在比较 —— 宽松相等
+    >> 会按照`IEEE 754`标准对`NaN`、`-0`、`+0` 进行特殊处理(`NaN != NaN`，`-0 == +0`)
+
+  > 1.2 `===`：不进行类型转换，值和类型都相等 —— 严格相等
+    >> 会按照`IEEE 754`标准对`NaN`、`-0`、` +0` 进行特殊处理(`NaN != NaN`，`-0 === +0`)
+
+  > 1.3 `Object.is()`：既不进行类型转换，也不对 `NaN`、`-0`、`+0`进行特殊处理
 
 2️⃣ JavaScript 提供三种不同的值比较运算
 | x                 | y                 | ==     | ===    | Object.is |
@@ -972,11 +979,11 @@ type Res = MyAwaited<Promise<Promise<number>>>; // number
 ### 基础
 - `defineStore()` 定义 `Store`
 - `defineStore()` 的返回值的命名——名称
-  - 最好含有 `store` 的名字，且以 `use` 开头，以 `Store` 结尾。
-  - 如：`useUserStore`，`useCartStore`，`useProductStore`
+  > - 最好含有 `store` 的名字，且以 `use` 开头，以 `Store` 结尾。
+  > - 如：`useUserStore`，`useCartStore`，`useProductStore`
 - `defineStore(storeId,[Setup Store | Option Store])` 参数
-  - `storeId`：第一个参数是应用中 Store 的唯一 ID。
-  - `[Setup Store | Option Store]`：第二个参数可接受两类值（Setup 函数或 Option 对象）。
+  > - `storeId`：第一个参数是应用中 Store 的唯一 ID。
+  > - `[Setup | Option`：第二个参数可接受两类值（Setup 函数或 Option 对象）。
 
 ### Setup Store
 > 必须在 `setup store` 中返回 `state` 的所有属性
