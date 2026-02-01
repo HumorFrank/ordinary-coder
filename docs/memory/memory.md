@@ -1050,7 +1050,7 @@ const store = useCounterStore()
 1️⃣ 定义
 > 同源策略 (Same-Origin Policy, `SOP`)：是一种重要的`安全机制`，限制了从`一个源`加载的`文档或脚本`如何`与`来自`另一个源`的资源进行`交互`。
 
-2️⃣ 同源
+2️⃣ 同源    
   - 协议相同（Protocol）
   - 域名相同（Host）
   - 端口相同（Port）
@@ -1058,7 +1058,7 @@ const store = useCounterStore()
 3️⃣ 跨域解决方案
   - 1.《W3C 标准方案》—— CORS (Cross-Origin Resource Sharing)
     - 通过服务器设置 HTTP 响应头来告诉浏览器：“允许这个源访问资源”。
-      - `Access-Control-Allow-Origin`: 允许的域名（如 http://localhost:3000 或 *）。
+      - `Access-Control-Allow-Origin`: 允许的域名（如 `http://localhost:3000` 或 *）。
       - `Access-Control-Allow-Methods`: 允许的方法（GET, POST 等）。
       - `Access-Control-Allow-Headers`: 允许的请求头。
       - `Access-Control-Allow-Credentials`: 是否允许发送 Cookie。
