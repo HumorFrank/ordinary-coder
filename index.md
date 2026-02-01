@@ -9,16 +9,16 @@ hero:
   actions:
     - theme: brand
       text: CV 工程师
-      link: /docs/cv/index
+      link: /docs/cv/cv
     - theme: alt
       text: 对抗遗忘曲线
-      link: /docs/memory/index
+      link: /docs/memory/memory
     - theme: alt
       text: Bug 制造与修复
-      link: /docs/bug/index
+      link: /docs/bug/bug
     - theme: alt
       text: 面向工资编程
-      link: /docs/salary/index
+      link: /docs/salary/salary
 
 features:
   - title: 📋 CV 工程师
