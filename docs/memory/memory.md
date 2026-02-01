@@ -1260,6 +1260,23 @@ const store = useCounterStore()
 
 ## Git
 
+## 创建并切换分支
+
+::: code-group
+```git [创建分支]
+git branch dev
+```
+```bash [切换分支]
+git checkout dev
+```
+```bash [新建并切换到分支]
+git checkout -b dev
+```
+```bash [将分支推送到远程]
+git push -u origin dev
+```
+:::
+
 ### 创建备份分支（存档）
 
 1️⃣ 假设你当前在 main 分支，准备进行撤销操作
@@ -1338,6 +1355,7 @@ git reset --hard HEAD~1
 # 会直接删除最后一次提交的代码修改，恢复到上一次提交时的状态。你的代码会丢失！
 git reset --hard HEAD^
 ```
+
 ### 撤回已推送到远程（团队协作场景！）
 ✅ 黄金法则：绝不直接 `reset + force push`！
 ✅ 安全方案：用 `revert` 生成“反向提交”
