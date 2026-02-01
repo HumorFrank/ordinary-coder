@@ -1263,7 +1263,7 @@ const store = useCounterStore()
 ## 创建并切换分支
 
 ::: code-group
-```git [创建分支]
+```bash [创建分支]
 git branch dev
 ```
 ```bash [切换分支]
