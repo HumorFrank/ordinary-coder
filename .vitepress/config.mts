@@ -6,6 +6,7 @@ import {
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
+  base: "/ordinary-coder/",
   title: "前端防脱发指南",
   description: "试图记录今天学废、明天就会忘掉的前端知识，给未来的自己留条活路。",
   markdown: {
