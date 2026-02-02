@@ -33,7 +33,7 @@ export default defineConfig({
     ],
 
     socialLinks: [
-      { icon: "github", link: "https://github.com/vuejs/vitepress" },
+      { icon: "github", link: "https://github.com/HumorFrank/ordinary-coder" },
     ],
 
     // 配置大纲显示 2-3 级标题
