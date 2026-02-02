@@ -862,6 +862,71 @@ type Res = MyAwaited<Promise<Promise<number>>>; // number
 
 :::
 
+### Symbol 函数
+
+> 作用：主要用于定义对象的唯一属性名，`避免属性名冲突`。
+
+1️⃣ 使用规则
+- `Symbol` 一种新的原始数据类型，通过 `Symbol()` 函数创建。
+- `Symbol` 不能与其他类型直接运算（如 +），只能显式转换为字符串或布尔值。
+- 作为对象属性时，不会被常规遍历方法枚举出来，可用 `Object.getOwnPropertySymbols()`。
+- 作为属性名时，不能用点语法访问，必须用方括号 `[]` 访问，如`obj[sym] = value;`
+- 全局注册的 `Symbol（Symbol.for/ Symbol.keyFor）`可跨文件共享。
+
+2️⃣ 经典用法
+::: code-group
+```js [唯一性.js]
+// 唯一性：每个 Symbol 都是唯一的，即使描述相同。
+const a = Symbol('desc');
+const b = Symbol('desc');
+console.log(a === b); // false
+```
+```js [作为对象属性.js]
+// 作为对象属性：防止属性名冲突，常用于对象“私有”属性。
+const key = Symbol('id');
+const obj = {
+  [key]: 123,
+  name: 'Tom'
+}
+console.log(obj[key]); // 123
+```
+```js [定义常量枚举值.js]
+// 用 Symbol 定义状态常量，含义明确
+const STATUS = {
+  RED: Symbol('red'),
+  GREEN: Symbol('green')
+};
+
+function getColor(color){
+  switch(color){
+    case STATUS.RED: return '红色';
+    case STATUS.GREEN: return '绿色';
+  }
+}
+getColor(STATUS.RED)
+```
+```js [内置 Symbol 用法.js]
+// 内置 Symbol 用法（如自定义迭代器）
+const obj = {
+  [Symbol.iterator]() {
+    let i = 0;
+    return {
+      next() {
+        return i < 3 ? { value: i++, done: false } : { done: true };
+      }
+    }
+  }
+};
+for (const v of obj) console.log(v); // 0 1 2
+```
+
+:::
+
+3️⃣ 使用场景
+
+⚠️ 注意事项
+> Symbol 是原始数据类型，不是对象，所以`不能`用 `new Symbol()` 创建，否则会报错
+
 ## JavaScript
 
 ### JS学习技巧
