@@ -791,6 +791,76 @@ type Res = MyAwaited<Promise<Promise<number>>>; // number
   - `func?.(...args)`：函数或对象方法是否存在 
 - `??`：Null 判断运算符，ES2020 新增的一个运算符，只有运算符左侧的值为`null/undefined`时，才会返回右侧的值。
   - `const name = res.nickName ?? 'frank';` 默认值只有在左侧属性值为`null/undefined`时，才会生效
+### Set & Map 数据结构
+
+::: details Set & WeakSet
+
+1️⃣ `Set`：ES6 新增的数据结构，类似于数组，但成员值唯一、无重复。
+> 常用方法
+>> -  `add(value)`：添加元素
+>> -  `delete(value)`：删除元素
+>> -  `has(value)`：判断元素是否存在
+>> -  `clear()`：清空所有元素
+>> -  `size`：元素个数
+
+> 遍历：支持 forEach、for...of、keys、values、entries
+
+> 特点
+>> 只存储值，没有键，值唯一。
+
+2️⃣ `WeakSet`：结构与 Set 类似，但`只能存储对象`（不能存储原始值），且对象为弱引用。
+> 常用方法
+>> - `add(value)`
+>> - `delete(value)`
+>> - `has(value)`
+
+⚠️ 注意事项
+> - `Set`本身是一个`构造函数`，用来`生成` Set 数据结构。
+
+:::
+
+::: details Map & WeakMap
+
+1️⃣ `Map`：ES6 新增的数据结构，键值对集合，键和值都可以是任意类型。。
+> 常用方法
+>> -  `set(key, value)`：设置键值对
+>> -  `get(key)`：获取键值
+>> -  `has(key)`：判断键是否存在
+>> -  `delete(key)`：删除键值对
+>> -  `clear()`：清空所有
+>> -  `size`键值对数量
+
+> 遍历：支持 forEach、for...of、keys、values、entries
+
+> 特点
+>> 键可以是对象，顺序按插入顺序。
+
+2️⃣ `WeakMap`：键值对集合，`键必须是对象`，值可以是任意类型，键为弱引用。
+> 常用方法
+>> - `set(key, value)`：设置键值对
+>> - `get(key)`：获取键值
+>> - `has(key)`：判断键是否存在
+>> - `delete(key)`：删除键值对
+
+> 特点
+>> - 不能遍历（无 size、无 forEach）。
+>> - 键对象被垃圾回收后自动移除。
+>> - 适合存储与对象相关的私有数据。
+
+:::
+
+::: details 区别与联系总结表
+
+| 特性     | Set   | WeakSet | Map    | WeakMap         |
+|--------|-------|---------|--------|-----------------|
+| 成员     | 只存值   | 只存对象   |  Record<any,any> | Record<object,any> |
+| 唯一     | 是     | 是       | 键唯一    | 键唯一             |
+| 可遍历    | 是     | 否       | 是      | 否               |
+| 弱引用    | 否     | 是       | 否      | 是               |
+| 垃圾回收影响 | 否     | 是       | 否      | 是               |
+| 应用场景   | 唯一值集合 | 临时对象集合  | 映射关系   | 关联私有数据          |
+
+:::
 
 ## JavaScript
 
