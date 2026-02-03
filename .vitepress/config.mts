@@ -28,6 +28,7 @@ export default defineConfig({
           { text: "对抗遗忘曲线", link: "/docs/memory/memory" },
           { text: "Bug 制造与修复", link: "/docs/bug/bug" },
           { text: "面向资料编程", link: "/docs/salary/salary" },
+          { text: "面向玄学部署", link: "/docs/deploy/deploy" },
         ],
       },
     ],
