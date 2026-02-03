@@ -2,6 +2,52 @@
 
 > 面试官问我怎么造火箭，进去让我拧螺丝？但我真的准备了造火箭的资料。"
 
+## 前端框架
+- Vue
+- React
+- AngularJS：支持已于 2022 年 1 月正式结束，由继承者 Angular 代替
+- Svelte
+
+## Web 开发构建工具
+- `webpack`
+- `Rollup`
+- `esbuild`：一款 Go 编写的 JS 打包和压缩工具
+- `vite`
+  - < 8.0：使用 esbuild 进行开发环境依赖预打包，使用 Rollup 进行生产构建
+  - >= 8.0：Rolldown，目标是将这两个过程统一到一个高性能的打包工具中，以降低复杂性
+- `Rolldown`：一款 JS 模块打包器，可以将 JS 模块打包成单个文件。
+- `Turbopack`：一款 Rust 编写，用于构建高性能 JS 应用的工具。
+- `Rspack`：一款基于 Rust 的高性能构建引擎，具备与 Webpack 生态系统的互操作性
+- `Parcel`：一个快速、零配置的前端打包工具
+- `Rome`：一款由 Facebook 工程师创建的新一代 JS 工具链。
+- `swc`：一款基于 Rust 编写的 JS 和 TS 编译器
+- `Gulp`：一款基于Node.js的自动化构建工具，用于简化开发过程中的任务处理
+- `Snowpack`：一款新兴的 JS/WebAssembly 打包工具，专注于快速构建现代 web 应用程序。
+
+## 依赖管理工具
+- `npm`
+- `yarn`
+- `pnpm`
+- ...
+
+## JavaScript引擎
+- `V8 引擎`
+> 由 Google 开发，开源。
+
+- `JavaScriptCore 引擎`
+> 由 Apple 开发，开源。
+
+## CSS 预处理语言
+- `Less`
+- `Scss/Sass`
+- `Stylus`
+
+## 原子化CSS
+- `Tailwind CSS`
+- `Unocss`
+- `AtomicCSS`
+- `Tachyons`
+
 ## 图表
 
 ### ECharts5
@@ -308,3 +354,38 @@ Taro UI是一个基于Taro框架的多端 UI 组件库，可以在微信小程�
 
 - 官方文档：[官方文档地址](https://vant-ui.github.io/vant-weapp/#/home)
 - 仓库资源：[github地址](https://github.com/youzan/vant-weapp)
+
+## 常用库
+
+### 浮点数精度库
+- [number-precision](https://github.com/nefe/number-precision)：使用 JavaScript 精确执行加、减、乘、除运算。
+- [big.js](https://github.com/MikeMcl/big.js)：用于任意精度十进制和非十进制算术的 JavaScript 库。
+- [decimal.js](https://github.com/MikeMcl/decimal.js)：JavaScript 的任意精度 Decimal 类型。
+- [mathjs](https://github.com/josdejong/mathjs)：一个功能强大的 JavaScript 和 Node.js 数学库。 
+- [bignumber.js](https://github.com/MikeMcl/bignumber.js)：用于任意精度十进制和非十进制算术运算的 JavaScript 库。
+- [numeral](https://github.com/adamwdraper/Numeral-js)：一个用于格式化和操作数字的 JavaScript 库。
+
+### 日期库
+- `dayjs`：一个轻量级的日期库，支持链式调用和链式操作。
+- `date-fns`：一个功能丰富的日期库，支持多种日期格式和时区。
+- `date-fns-tz`：一个扩展了 `date-fns` 的日期库，支持时区操作。
+- `moment`：一个功能强大的日期库，支持多种日期格式和时区。
+- `dateformat`：一个简单易用的日期格式化库。
+
+### Lodash替代库
+- [Lodash](https://github.com/lodash/lodash)：是一个一致性、模块化、高性能的 JavaScript 实用工具库
+- [lodash-es](https://github.com/lodash/lodash)：lodash 的 ES 模块版本，适合现代前端项目，本质还是 lodash。
+- [remeda](https://github.com/remeda/remeda)：现代、类型安全、专为 TypeScript 优化的函数式工具库。
+- [radash](https://github.com/rayepps/radash)：轻量、现代、类型友好，API 设计更贴合现代 JS/TS 习惯。
+- [rambda](https://github.com/selfrefactor/rambda)：轻量、函数式、tree-shaking 友好，部分 API 与 lodash 类似。
+
+### CSS动画库
+- [Hover.css](https://ianlunn.github.io/Hover)：开箱即用的鼠标悬停动画库
+- [Animate.css](https://animate.style/)：一款跨浏览器的简单便捷的CSS动画库
+- [CSShake](https://elrumordelaluz.github.io/csshake/)：一个能够提供震动和晃动Dom元素的CSS库
+- [hint.css](https://kushagra.dev/lab/hint/)：一个纯 CSS 工具提示库，适用于您精美的网站
+- [kite.css](https://hiloki.github.io/kitecss/)：一个灵活的布局辅助 CSS 库。
+- [Three Dots](https://nzbin.github.io/three-dots/)：一组仅使用单个元素创建的 CSS 加载动画
+
+## 效率工具
+- [Angrytools](https://angrytools.com/)：Flexbox、Grid等免费网络生成工具，助您加速开发
