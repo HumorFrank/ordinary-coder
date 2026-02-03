@@ -27,7 +27,7 @@ export default defineConfig({
           { text: "CV 工程师", link: "/docs/cv/cv" },
           { text: "对抗遗忘曲线", link: "/docs/memory/memory" },
           { text: "Bug 制造与修复", link: "/docs/bug/bug" },
-          { text: "面向工资编程", link: "/docs/salary/salary" },
+          { text: "面向资料编程", link: "/docs/salary/salary" },
         ],
       },
     ],

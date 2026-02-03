@@ -791,6 +791,7 @@ type Res = MyAwaited<Promise<Promise<number>>>; // number
   - `func?.(...args)`：函数或对象方法是否存在 
 - `??`：Null 判断运算符，ES2020 新增的一个运算符，只有运算符左侧的值为`null/undefined`时，才会返回右侧的值。
   - `const name = res.nickName ?? 'frank';` 默认值只有在左侧属性值为`null/undefined`时，才会生效
+
 ### Set & Map 数据结构
 
 ::: details Set & WeakSet
