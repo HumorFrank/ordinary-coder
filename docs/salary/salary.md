@@ -339,14 +339,6 @@ Taro UI是一个基于Taro框架的多端 UI 组件库，可以在微信小程�
 - 官方文档：[官方文档地址](https://uniapp.dcloud.net.cn/)
 - 仓库资源：[github地址](https://github.com/dcloudio/uni-app)
 
-### Kbone
-一个致力于微信小程序和 Web 端同构的解决方案
-
-📙 资源地址
-
-- 官方文档：[官方文档地址](https://wechat-miniprogram.github.io/kbone/docs/)
-- 仓库资源：[github地址](https://github.com/Tencent/kbone)
-
 ### Vant-weapp
 轻量、可靠的小程序 UI 组件库
 
@@ -354,6 +346,30 @@ Taro UI是一个基于Taro框架的多端 UI 组件库，可以在微信小程�
 
 - 官方文档：[官方文档地址](https://vant-ui.github.io/vant-weapp/#/home)
 - 仓库资源：[github地址](https://github.com/youzan/vant-weapp)
+
+### Mpvue
+一个使用 Vue.js 开发小程序的前端框架。
+
+📙 资源地址
+
+- 官方文档：[官方文档地址](http://mpvue.com/)
+- 仓库资源：[github地址](https://github.com/mpvue/mpvue-docs)
+
+### Wepy
+一个最受欢迎的小程序框架。。
+
+📙 资源地址
+
+- 官方文档：[官方文档地址](https://wepyjs.github.io/wepy-docs/index.html)
+- 仓库资源：[github地址](https://github.com/Tencent/wepy)
+
+### Kbone
+一个致力于微信小程序和 Web 端同构的解决方案
+
+📙 资源地址
+
+- 官方文档：[官方文档地址](https://wechat-miniprogram.github.io/kbone/docs/)
+- 仓库资源：[github地址](https://github.com/Tencent/kbone)
 
 ## 常用库
 
