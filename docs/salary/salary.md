@@ -407,5 +407,8 @@ Taro UI是一个基于Taro框架的多端 UI 组件库，可以在微信小程�
 - [kite.css](https://hiloki.github.io/kitecss/)：一个灵活的布局辅助 CSS 库。
 - [Three Dots](https://nzbin.github.io/three-dots/)：一组仅使用单个元素创建的 CSS 加载动画
 
+### CSS样式库
+- [normalize.css](https://github.com/necolas/normalize.css)： 一个用于重置浏览器内置样式的库
+
 ## 效率工具
 - [Angrytools](https://angrytools.com/)：Flexbox、Grid等免费网络生成工具，助您加速开发
