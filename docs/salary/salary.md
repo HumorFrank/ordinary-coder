@@ -9,10 +9,10 @@
 
 ## 前端框架
 
-- Vue
-- React
-- AngularJS：支持已于 2022 年 1 月正式结束，由继承者 Angular 代替
-- Svelte
+- `Vue`
+- `React`
+- `AngularJS`：支持已于 2022 年 1 月正式结束，由继承者 Angular 代替
+- `Svelte`
 
 ## Web 开发构建工具
 
@@ -54,6 +54,8 @@
 - `Stylus`
 
 ## 原子化CSS
+
+### 原子化库
 
 - `Tailwind CSS`
 - `Unocss`

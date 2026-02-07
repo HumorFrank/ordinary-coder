@@ -2,9 +2,9 @@
 
 > 一路复制粘贴成为高级工程师的秘籍
 
-# JavaScript
+## JavaScript
 
-## sleep&setTimeout
+### sleep&setTimeout
 
 1️⃣ 代码
 ::: code-group

@@ -29,6 +29,7 @@ export default defineConfig({
           { text: "Bug 制造与修复", link: "/docs/bug/bug" },
           { text: "面向资料编程", link: "/docs/salary/salary" },
           { text: "面向玄学部署", link: "/docs/deploy/deploy" },
+          { text: "程序员单词发音", link: "/docs/words/words" },
         ],
       },
     ],
