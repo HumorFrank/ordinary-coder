@@ -13,6 +13,7 @@
     "docs:preview": "vitepress preview"
   },
   "dependencies": {
+    "@vue-flow/core": "^1.48.2",
     "vitepress-plugin-group-icons": "^1.7.1"
   }
 }
