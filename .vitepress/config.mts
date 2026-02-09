@@ -30,6 +30,7 @@ export default defineConfig({
           { text: "面向资料编程", link: "/docs/salary/salary" },
           { text: "面向玄学部署", link: "/docs/deploy/deploy" },
           { text: "程序员单词发音", link: "/docs/words/words" },
+          { text: "语义版本规范", link: "/docs/semver/semver" },
         ],
       },
     ],
