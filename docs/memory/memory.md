@@ -84,8 +84,29 @@ VITE_APP_WEB_IMAGE='你的网站或者APP logo地址（如：https://example.com
 > `Diff算法`的核心：针对具有`相同父节点`的`同层新旧子节点`进行比较，而不是使用逐层搜索递归遍历的方式。
 
 ⚠️ 注意事项
+> 时间复杂度为`O(n)`。
 
-- 时间复杂度为`O(n)`。
+### emit
+
+> [官方参考文档](https://cn.vuejs.org/guide/components/events.html): 组件事件
+
+1️⃣ emit 自定义事件命名规范
+> 小驼峰命名（camelCase ），如`emit('someEvent')`
+
+2️⃣ 模板编写
+> 推荐使用 `kebab-case` (短横线连字符) 形式
+
+⚠️ 注意事项
+
+::: warning TIP
+所有传入 `$emit()` 的额外参数都会被直接传向监听器。举例来说，`$emit('foo', 1, 2, 3) `触发后，监听器函数将会收到这三个参数值。
+:::
+
+::: danger TIP
+
+若一个`原生事件`的名字 (例如 click) `被定义`在 `emits` 选项中，则监听器`只会监听`组件触发的 `click` 事件而`不会再响应原生的 click 事件`。
+
+:::
 
 ### 虚拟 DOM (Virtual DOM)
 
