@@ -62,6 +62,17 @@
 | TailwindCSS | /ˈteɪlwɪnd css/                                                                   | /ˈteɪlwɪnd css/                                                                           | CSS 框架                  |
 | rollup      | [🔊](https://dict.youdao.com/dictvoice?audio=rollup&type=1) /ˈrəʊlʌp/             | [🔊](https://dict.youdao.com/dictvoice?audio=rollup&type=2) /ˈroʊlʌp/                     | 模块打包工具              |
 
+## AI
+
+| 单词     | 正确发音（英）                                                               | 正确发音（美）                                                             | 中文释义 |
+| -------- | ---------------------------------------------------------------------------- | -------------------------------------------------------------------------- | -------- |
+| Claude   | [🔊](https://dict.youdao.com/dictvoice?audio=Claude&type=1) /klɔːd/          | [🔊](https://dict.youdao.com/dictvoice?audio=Claude&type=2) /klɔːd/        | AI       |
+| Gemini   | [🔊](https://dict.youdao.com/dictvoice?audio=Gemini&type=1) /ˈdʒemɪnaɪ/      | [🔊](https://dict.youdao.com/dictvoice?audio=Gemini&type=2) /ˈdʒemɪnaɪ/    | AI       |
+| Copilot  | [🔊](https://dict.youdao.com/dictvoice?audio=Copilot&type=1) /ˈkəʊˌpaɪlət/   | [🔊](https://dict.youdao.com/dictvoice?audio=Copilot&type=2) /ˈkoʊˌpaɪlət/ | AI       |
+| Cursor   | [🔊](https://dict.youdao.com/dictvoice?audio=Cursor&type=1) /ˈkɜːsə(r)/      | [🔊](https://dict.youdao.com/dictvoice?audio=Cursor&type=2) /ˈkɜːrsər/     | AI       |
+| Codex    | [🔊](https://dict.youdao.com/dictvoice?audio=Codex&type=1) /ˈkəʊdeks/        | [🔊](https://dict.youdao.com/dictvoice?audio=Codex&type=2) /ˈkoʊdeks/      | AI       |
+| Composer | [🔊](https://dict.youdao.com/dictvoice?audio=Composer&type=1) /kəmˈpəʊzə(r)/ | [🔊](https://dict.youdao.com/dictvoice?audio=Composer&type=2) /kəmˈpoʊzər/ | AI       |
+
 ## 后端（Back end）
 
 | 单词       | 正确发音（英）                                                                                   | 正确发音（美）                                                                                     | 中文释义                 |
