@@ -84,6 +84,7 @@ VITE_APP_WEB_IMAGE='你的网站或者APP logo地址（如：https://example.com
 > `Diff算法`的核心：针对具有`相同父节点`的`同层新旧子节点`进行比较，而不是使用逐层搜索递归遍历的方式。
 
 ⚠️ 注意事项
+
 > 时间复杂度为`O(n)`。
 
 ### emit
@@ -91,9 +92,11 @@ VITE_APP_WEB_IMAGE='你的网站或者APP logo地址（如：https://example.com
 > [官方参考文档](https://cn.vuejs.org/guide/components/events.html): 组件事件
 
 1️⃣ emit 自定义事件命名规范
+
 > 小驼峰命名（camelCase ），如`emit('someEvent')`
 
 2️⃣ 模板编写
+
 > 推荐使用 `kebab-case` (短横线连字符) 形式
 
 ⚠️ 注意事项
@@ -1099,6 +1102,114 @@ for (const v of obj) console.log(v); // 0 1 2
 
 > Debugger/断点调试 + 在线js编辑器（https://playcode.io/javascript-compiler）
 
+### bind/call/apply
+
+> `bind/call/apply`都是 `Function.prototype` 的方法，都用于显式设置函数执行时 `this` 指向，同时可传入参数。
+
+#### bind
+
+- 用法: `const bound = fn.bind(thisArg, arg1, ...)`
+- 行为: 不立即执行，返回一个新函数；调用该新函数时 `this` 被固定为 `thisArg`。
+- 返回值: 新函数（bound function）。
+
+#### call
+
+- 用法: `fn.call(thisArg, arg1, arg2, ...)`
+- 行为: 立即调用 `fn`，`this` 指向` thisArg`，其余参数逐一传入。
+- 返回值: `fn` 的返回值。
+- 要点: 参数逐个列出，适合已知数量参数的直接调用。
+
+#### apply
+
+- 用法: `fn.apply(thisArg, argsArray)`
+- 行为: 立即调用 `fn`，`this`指向 `thisArg`，参数从数组/类数组展开。
+- 返回值: `fn` 的返回值。
+- 要点: 当参数已在数组或类数组中时很方便；等价于 `fn(...argsArray)`（ES6+）。
+
+#### 对比
+
+| 函数    | 执行时机             | 参数传递                     | 常见用途                              |
+| ------- | -------------------- | ---------------------------- | ------------------------------------- |
+| `bind`  | 返回新函数 | 可预设部分参数，调用时可追加 | 事件处理器、回调中保持 `this`、偏函数 |
+| `call`  | 立即执行             | 逐个列出                     | 调用函数并显式设置 `this`             |
+| `apply` | 立即执行             | 数组/类数组                  | 当参数已经是数组时                    |
+
+#### 常见误区与注意点
+
+- `bind 不会改变函数内部作用域链` — 仅固定调用时的 `this`。
+- `bind 产生新函数`，重复 bind 会浪费内存并影响比较（引用不同）。
+- `apply 参数必须可迭代/类数组`，传 `null/undefined` 时相当于空数组。
+- `构造调用与 bind`: 用 `new` 调用 `bound` 函数时，`thisArg` 被忽略，实例为新创建对象。
+- 对于箭头函数，`call/apply/bind` 无效。
+
+#### 函数选择
+
+- 需要立即执行且参数逐个列出：`call`。
+- 需要立即执行且参数为数组：`apply`。
+- 需要返回固定 `this` 的可重用函数或做偏函数：`bind`。
+- 参数形式
+  - `call(thisArg, a, b, ...)`，立即执行。
+  - `apply(thisArg, [a,b,...])`，立即执行。
+  - `bind(thisArg, preArgs...)`，返回新函数（延迟执行）。
+
+#### 示例
+
+::: code-group
+
+```js [bind.js]
+// 1.方法借用,将类数组转为数组
+function listArgs() {
+  return Array.prototype.slice.call(arguments);
+}
+listArgs(1, 2, 3); // [1,2,3]
+// 现代写法：Array.from(arguments) 或 [...arguments]
+
+// 2.bind 创建偏函数与保持 this
+function multiply(a, b) {
+  return a * b;
+}
+const double = multiply.bind(null, 2);
+double(5); // 10
+
+const obj = {
+  x: 42,
+  getX() {
+    return this.x;
+  },
+};
+const getX = obj.getX;
+getX(); // undefined (或 window.x) ——失去 this
+const boundGetX = getX.bind(obj);
+boundGetX(); // 42
+
+// 3.bind 与 new 的交互:
+function Person(name) {
+  this.name = name;
+}
+const BoundPerson = Person.bind({ fake: true }, "Alice");
+const p = new BoundPerson();
+p.name; // "Alice" — 实例化成功，this 被新对象替代，预设参数仍然生效
+```
+
+```js [call.js]
+function greet(greeting) {
+  return greeting + ", " + this.name;
+}
+const person = { name: "张三" };
+greet.call(person, "你好"); // "你好, 张三"
+```
+
+```js [apply.js]
+function sum(a, b, c) {
+  return a + b + c;
+}
+const arr = [1, 2, 3];
+sum.apply(null, arr); // 6
+// 等价于: sum(...arr)
+```
+
+:::
+
 ### 模块化规范
 
 #### 分类
@@ -1609,7 +1720,7 @@ const store = useCounterStore();
 
 ## Git
 
-## 创建并切换分支
+### 创建并切换分支
 
 ::: code-group
 

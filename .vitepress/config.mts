@@ -18,8 +18,7 @@ export default defineConfig({
   },
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
-    nav: [{ text: "Home", link: "/" }],
-
+    nav: [{ text: "首页", link: "/" }],
     sidebar: [
       {
         text: "试图记录会忘掉的前端知识",
