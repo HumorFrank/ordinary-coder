@@ -31,6 +31,7 @@ export default defineConfig({
           { text: "面向玄学部署", link: "/docs/deploy/deploy" },
           { text: "程序员单词发音", link: "/docs/words/words" },
           { text: "语义版本规范", link: "/docs/semver/semver" },
+          { text: "魔幻的包管理器", link: "/docs/pkg-manage/pkg-manage" },
         ],
       },
     ],
@@ -42,9 +43,9 @@ export default defineConfig({
     socialLinks: [
       { icon: "github", link: "https://github.com/HumorFrank/ordinary-coder" },
     ],
-    // 配置大纲显示 2-3 级标题
+    // 配置大纲显示 1~3 级标题
     outline: {
-      level: [2, 3], // 或者使用 'deep' 显示所有级别
+      level: [1, 3], // 或者使用 'deep' 显示所有级别
       label: '页面导航' // 可选：修改大纲的标题
     }
   },
