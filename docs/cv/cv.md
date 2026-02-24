@@ -2,6 +2,42 @@
 
 > 一路复制粘贴成为高级工程师的秘籍
 
+## CSS
+
+### 溢出显示省略号
+
+必须同时满足以下，`三个核心条件`（缺一不可）
+
+- `强制不换行`：让文本在同一行显示。
+- `隐藏溢出内容`：超出容器宽度的部分不可见。
+- `显示省略号`：用 `...` 代替被修剪的文本。
+
+```css [css]
+.font-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+```
+
+::: info 补充条件
+`宽度限制`
+- 元素必须有宽度（`width/max-width`）
+- 或者在 `Flex/Grid` 布局中受父级约束，否则容器会被文本撑开，上述属性就失效了。
+
+:::
+
+### 多行省略号
+
+```css [css]
+.font-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* 限制行数 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+```
+
 ## JavaScript
 
 ### 位运算符
