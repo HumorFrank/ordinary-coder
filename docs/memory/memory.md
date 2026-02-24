@@ -275,6 +275,36 @@ watchEffect(callback, {
 
 > 凡遇到`"子组件需要突破父组件 CSS 视觉限制"`的情况，`<Teleport>` 即为最佳的解决方案。
 
+### defineEmits&defineExpose
+> `defineEmits` & `defineExpose` & `自组件内部事件`，三者的关系和执行顺序
+
+1️⃣ 场景 1：用户点击了子组件内部的按钮（最常见）
+> 顺序: `用户点击` -> `内部 click` -> `emit` -> `父组件处理`。
+
+2️⃣ 场景 2：父组件主动调用（父调子）
+> 顺序: `父组件直接调用 ref 方法` -> `子组件 click` -> `emit` -> `父组件监听到事件`。
+ 
+3️⃣ Example
+```ts
+// 1. 定义对外发射的信号
+const emit = defineEmits<{ (e: "openApp"): void }>();
+
+// 2. 定义内部逻辑
+// 这个函数既可以被模板点击触发，也可以被父组件通过 Ref 触发
+function onClickOpen() {
+  // 这里可以加逻辑，比如 console.log('准备打开App');
+  emit("openApp"); // 发射信号
+}
+
+// 3. 暴露给父组件，若不需要父组件能主动控制子组件，则可以不用暴露出这个内部click
+// 如果没有这行，父组件就无法通过 ref.value.onClickOpen() 调用上面的函数
+// defineExpose 纯粹是为了让父组件能主动控制子组件。
+// 让外部（父组件）能主动调用子组件内部的方法或获取变量。
+defineExpose({
+  onClickOpen,
+});
+```
+
 ### 过渡和动画
 
 > Vue 提供了两个`内置组件`，可以帮助制作基于状态变化的过渡和动画：`<Transition>` 和 `<TransitionGroup>`
