@@ -19,6 +19,7 @@ export default defineConfig({
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [{ text: "首页", link: "/" }],
+    // 配置侧边栏，按照目录结构组织文档
     sidebar: [
       {
         text: "试图记录会忘掉的前端知识",
@@ -33,11 +34,14 @@ export default defineConfig({
         ],
       },
     ],
-
+    // 配置搜索功能，使用本地搜索提供者
+    search: {
+      provider: "local",
+    },
+    // 配置社交链接
     socialLinks: [
       { icon: "github", link: "https://github.com/HumorFrank/ordinary-coder" },
     ],
-
     // 配置大纲显示 2-3 级标题
     outline: {
       level: [2, 3], // 或者使用 'deep' 显示所有级别
