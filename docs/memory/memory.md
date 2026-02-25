@@ -2,6 +2,10 @@
 
 > 试图记录今天学废、明天就会忘掉的前端知识。
 
+## 开发备忘清单【速查表】
+[Quick Reference](https://quickref.me/zh-CN/index.html)
+> 为开发人员分享快速参考备忘清单【速查表】。这是英文版 [Reference](https://github.com/Fechin/reference) 的中文版本，目的是为了方便自己的技术栈查阅，如果您提供一个清单，我将抽空搬运，立即撸起来 :)。如果您发现此处的备忘单不合适，您可以通过提交 PR 来修复它或提供更好的备忘清单，只针对【中文】用户。
+
 ## Markdown教程
 
 > [Markdown教程](https://markdown.com.cn/)
