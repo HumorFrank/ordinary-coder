@@ -1,0 +1,35 @@
+/* ======================================================================== */
+/* 右侧大纲栏 (Aside Outline) - 添加"本页目录"图标 */
+/* ======================================================================== */
+
+.VPDocAsideOutline .outline-title {
+  /* 使用 Flexbox 让图标和文字垂直居中 */
+  display: flex;
+  align-items: center;
+  /* 调整字号和颜色，使其更像 Vite 官方 */
+  color: var(--vp-c-text-2) !important; /* 次级文本颜色 */
+}
+
+/* 使用伪元素添加图标 */
+.VPDocAsideOutline .outline-title::before {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px; /* 图标与文字的间距 */
+  background-color: var(--vp-c-text-2); /* 图标颜色跟随文字 */
+  
+  /* 使用 SVG Mask 实现图标 (这是一个简单的列表图标) */
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01'/%3E%3C/svg%3E");
+  
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+/* 移除可能存在的默认 border-left (以防万一) */
+.VPDocAsideOutline {
+  padding-left: 0 !important;
+}

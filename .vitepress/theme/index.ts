@@ -1,6 +1,7 @@
 import Theme from 'vitepress/theme'
 import 'virtual:group-icons.css'
 import '@vue-flow/core/dist/style.css'
+import './custom-outline.css'
 import AtomicCssFlow from './components/AtomicCssFlow.vue'
 import UnoCssFlow from './components/UnoCssFlow.vue'
 import TailwindFlow from './components/TailwindFlow.vue'

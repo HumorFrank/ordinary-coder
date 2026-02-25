@@ -37,6 +37,19 @@ export default defineConfig({
         ],
       },
     ],
+    // 启用最后更新时间
+    lastUpdated: {
+      text: '最后更新于',
+      formatOptions: {
+        dateStyle: 'short',
+        timeStyle: 'medium'
+      }
+    },
+    // 启用文档页脚（上一页/下一页）
+    docFooter: {
+      prev: '上一页',
+      next: '下一页'
+    },
     // 配置搜索功能，使用本地搜索提供者
     search: {
       provider: "local",
@@ -47,9 +60,9 @@ export default defineConfig({
     ],
     // 配置大纲显示 1~3 级标题
     outline: {
-      level: [1, 3], // 或者使用 'deep' 显示所有级别
-      label: '页面导航' // 可选：修改大纲的标题
-    }
+      level: [1, 3], // Vite 默认通常是显示 h1~h3
+      label: '本页目录' // 修改文本为 "本页目录"
+    },
   },
   vite:{
     plugins: [
