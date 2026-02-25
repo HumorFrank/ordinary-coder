@@ -33,6 +33,7 @@ export default defineConfig({
           { text: "语义版本规范", link: "/docs/semver/semver" },
           { text: "魔幻的包管理器", link: "/docs/pkg-manage/pkg-manage" },
           { text: "Emmet 指南", link: "/docs/emmet/emmet" },
+          { text: "VSCode常用插件", link: "/docs/vscode-plugins/index" },
         ],
       },
     ],
