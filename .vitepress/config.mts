@@ -32,6 +32,7 @@ export default defineConfig({
           { text: "程序员单词发音", link: "/docs/words/words" },
           { text: "语义版本规范", link: "/docs/semver/semver" },
           { text: "魔幻的包管理器", link: "/docs/pkg-manage/pkg-manage" },
+          { text: "Emmet 指南", link: "/docs/emmet/emmet" },
         ],
       },
     ],
