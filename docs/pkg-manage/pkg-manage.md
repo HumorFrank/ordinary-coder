@@ -162,7 +162,37 @@ npm init -y
 
 ### workspaces
 
-## 参考资料
+## 安全漏洞和依赖审计
 
+### 相关命令
+```sh [npm]
+# 检查直接依赖 devDependencies、bundledDependencies 和 optionalDependencies
+# 要求报告已知漏洞，但不检查 peerDependencies。
+npm audit
+
+# 去重，减少包树中的重复
+npm dedupe # alias: ddp
+
+# 比较2个不同版本的npm包的差异
+npm diff --diff=<spec-a> --diff=<spec-b> 
+# npm diff --diff=abbrev@1.1.0 --diff=abbrev@1.1.1
+
+# 快速打开包/依赖的官方在线文档，在网页浏览器中为包打开文档
+npm docs <pkgname>
+
+# 访问 npm 库的延迟
+npm ping
+
+# 移除多余的包裹，多余包是指 node_modules 文件夹中存在但未被列为任何包依赖列表的包。
+npm prune
+
+# 在浏览器中打开软件包仓库(github)页面
+npm repo <pkgname>
+```
+### 安全漏洞
+- [GitHub 咨询数据库](https://github.com/advisories)
+- [漏洞报告解读](https://docs.npmjs.com/about-audit-reports)
+
+## 参考资料
 - [npm之package.json](https://docs.npmjs.com/cli/v11/configuring-npm/package-json)：本文档包含了关于 `package.json` 文件所需内容的全部信息。
 - [package.json 的基础知识](https://nodesource.com/blog/the-basics-of-package-json)：package.json 的基础知识
