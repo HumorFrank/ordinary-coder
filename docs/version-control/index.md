@@ -1,6 +1,105 @@
 # Git
 > [Git](https://git-scm.com/book/zh/v2/起步-关于版本控制) 是一个`免费且开源`的`分布式版本控制系统`设计用于处理从小型到 非常大型且高效且快速的项目。
 
+## 初始化仓库
+要对一个目录使用git进行版本管理，必须先将该目录设置为git仓库。
+```sh [初始化]
+# 使用 git init 命令初始化一个新的git仓库。
+## 该命令会在当前目录下创建一个.git 目录，该目录就是git仓库，里面记录了仓库的所有信息。
+## 该目录不可删除，一旦删除，该仓库就不存在了。
+git init
+
+```
+
+## 配置
+
+### 配置命令
+```sh
+# 查看当前生效的所有配置
+git config -l
+
+# 查看当前生效的某个配置的值
+git config key(键)
+
+# 更新配置
+git config --范围 键 “值”
+```
+
+### 配置范围
+- `local`：【常见】 默认，仅对当前仓库(目录)有效
+- `global`：【常见】对当前用户的所有仓库有效
+- worktress：仅对当前工作树有效
+- system：对所有用户有效
+
+::: tip 优先级从高到低
+`wroktree` > `local` > `global` > `system`
+
+:::
+
+### 常见配置（key）
+- `user.name`：【必配】配置用户名，后续提交代码会使用该用户名。
+- `user.email`：【必配】配置邮箱，后续提交代码会使用该邮箱。
+- `core.editor`：配置默认文本编辑器。
+- `core.ignorecase`：配置是否忽略文件名大小写，默认`true`，即忽略大小写。
+- `init.defaultbranch`：配置初始化后默认的分支名。
+
+```sh
+git config --global user.name 'Your Name'
+git config --global user.email 'your.email@example.com'
+git config --global core.editor 'code --wait'
+git config --global core.ignorecase false
+git config --global init.defaultbranch 'BranchName'
+```
+
+## gitignore 文件
+```gitignore [.gitignore]
+# 依赖
+node_modules/
+
+# 构建产物
+dist/
+build/
+.output/
+
+# 测试与覆盖率
+coverage/
+.nyc_output/
+
+# 日志
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 环境变量（按需保留 .env）
+.env.local
+.env.*.local
+
+# 缓存
+.cache/
+.vite/
+.turbo/
+.eslintcache
+*.tsbuildinfo
+
+# IDE / 编辑器
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+
+# 临时文件
+*.tmp
+*.temp
+```
 ## 创建并切换分支
 
 ::: code-group
