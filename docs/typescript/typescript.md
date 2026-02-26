@@ -2,9 +2,12 @@
 
 ## 常见类型
 
-1️⃣ 种类
+### 种类
 
-- 基本类型：string ｜ number ｜ boolean
+- 基本类型
+  - string 
+  - number 
+  - boolean
 - Arrays
 - Functions
 - Object
@@ -19,7 +22,7 @@
   - unknown
   - never
 
-2️⃣ Example
+### Example
 
 ```ts [index.ts]
 // 字面量类型
@@ -58,13 +61,13 @@ enum DirectionString {
 
 ## 非空断言与断言
 
-1️⃣ 介绍
+### 介绍
 
 - 非空断言：`!`，非空断言运算符是一个后缀运算符
   - ⚠️ 只有在`确定`值不能为 `null` 或 `undefined` 时才使用
 - 类型断言：`as`
 
-2️⃣ Example
+### Example
 
 ```ts [index.ts] [as.ts]
 // 类型断言 //
@@ -76,7 +79,7 @@ let input: string | null = document.getElementById("input")?.value;
 let inputValue: string = input!;
 ```
 
-3️⃣ 特性对比表
+### 特性对比表
 
 - `非空断言（!）`
   - 目的：强制跳过空检查
@@ -100,12 +103,12 @@ let inputValue: string = input!;
 
 ## type & interface
 
-1️⃣ 基础
+### 基础
 
 - `type`：类型别名
 - `interface`：接口
 
-2️⃣ 区别
+### 区别
 
 - 类型定义
   - type：可用于`基本/联合/元组/对象类型`等的类型定义。
@@ -123,7 +126,7 @@ let inputValue: string = input!;
   - type：不能参与`声明合并`
   - interface：可以进行`声明合并`
 
-⚠️ 注意事项
+### 注意事项 ⚠️
 
 - interface 接口合并
   - 接口的`非函数的成员应该是唯一`的。若它们不是唯一的，那么它们`必须是相同的类型`。
@@ -216,60 +219,56 @@ function request(url: string, method: HttpMethod) {
 - `Exclude<T, U>`：从联合类型`T`中，排除可以赋值给`U`的类型，保留剩余类型。
 - `InstanceType<Type>`: 构造一个由`Type`中的构造函数的`实例类型`组成的类型。
 
-## 高频实用符号
+## 高频符号
 
+### 可选（?）
 > `?`：可选属性或者参数或者条件类型，用于标记 `属性或参数是可选的`（可能不存在）
->
-> > - 条件类型：（条件 ? true-表达式 : false-表达式）
-> >   > - `SomeType extends OtherType ? TrueType : FalseType;`（`T extends U ? X : Y`）
-> >   > - 当 `extends` 左边的类型可以赋值给右边的类型时，你将获得` TrueType` 类型；
-> >   > - 否则你将获得` FalseType` 类型。
-> > - 可选参数：`testFunction(name:string,account?:number)`
-> > - 属性：`const props = defineProps<{title?:string; icon?: string;}>()`
 
-> `!`：非空断言运算符
->
-> > 明确知晓 变量不会是 `null` 或者 `undefined`（info!.name：明确知晓info不为 `null`或者`undefined`）。
+1️⃣ 条件类型：（条件 ? true-表达式 : false-表达式）
 
-> `|`：联合类型
->
-> > 表示一个值可以是 `多种类型之一`（`A | B `表示 `A` 或 `B`）。
+  > - `SomeType extends OtherType ? TrueType : FalseType;`（`T extends U ? X : Y`）
+  > - 当 `extends` 左边的类型可以赋值给右边的类型时，你将获得` TrueType` 类型；
+  > - 否则你将获得` FalseType` 类型。
 
-> `&`：交叉类型
->
-> > 表示一个值必须 `同时满足多个类型`（`A & B` 表示 `A` 和 `B` 的组合）。
+2️⃣ 可选参数
+> `testFunction(name:string,account?:number)`
 
-> `??`：空值合并运算符
->
-> > 如果左侧是 `null` 或 `undefined`，则返回右侧的默认值，否则返回左侧的值。
+3️⃣ 属性
+> `const props = defineProps<{title?:string; icon?: string;}>()`
 
-> `&&`: 逻辑与运算符
->
-> > 当左侧为 `false` 时，直接返回左侧的值，否则返回右侧的值。
+### 非空断言运算符（!）
+1️⃣ `!`：非空断言运算符
+> 明确知晓 变量不会是 `null` 或者 `undefined`（info!.name：明确知晓info不为 `null`或者`undefined`）。
 
-> `||`：逻辑或运算符
->
-> > 当左侧为 `true` 时，直接返回左侧的值，否则返回右侧的值。
+### 联合类型（|）
+> `|`：联合类型，表示一个值可以是 `多种类型之一`（`A | B `表示 `A` 或 `B`）。
 
-> `...`：展开运算符
->
-> > 在 TS 中，还能用于 `合并类型`(对象类型不能直接使用展开运算符 `...` 来合并，你需要使用交叉类型 `&`来合并多个对象类型)。
+### 交叉类型（&）
+> `&`：交叉类型，表示一个值必须 `同时满足多个类型`（`A & B` 表示 `A` 和 `B` 的组合）。
 
-> `as`：类型断言
->
-> > `强制告诉 TS 某个值的类型`（类似于强制类型转换）。
+### 空值合并运算符（??）
+> `??`：空值合并运算符， 如果左侧是 `null` 或 `undefined`，则返回右侧的默认值，否则返回左侧的值。
 
-> `keyof`：索引类型查询
->
-> > 获取 `某个类型的所有键（属性名）的联合类型`。(keyof T)
+### 逻辑与运算符（&&）
+> `&&`: 逻辑与运算符，当左侧为 `false` 时，直接返回左侧的值，否则返回右侧的值。
 
-> `typeof`：类型查询
->
-> > 获取 `某个值的类型`（返回的是 `TS` 类型）。(typeof obj)
+### 逻辑或运算符（||）
+> `||`：逻辑或运算符, 当左侧为 `true` 时，直接返回左侧的值，否则返回右侧的值。
 
-> `in`：映射类型的键遍历
->
-> > 在 `映射类型（Mapped Types）` 中 `遍历键`。([K in Keys]: T)
+### 展开运算符（...）
+> `...`：展开运算符, 在 TS 中，还能用于 `合并类型`(对象类型不能直接使用展开运算符 `...` 来合并，你需要使用交叉类型 `&`来合并多个对象类型)。
+
+### 类型断言（as）
+> `as`：类型断言,`强制告诉 TS 某个值的类型`（类似于强制类型转换）。
+
+### 索引类型查询（keyof）
+> `keyof`：索引类型查询，获取 `某个类型的所有键（属性名）的联合类型`。(keyof T)
+
+### typeof
+> `typeof`：类型查询，获取 `某个值的类型`（返回的是 `TS` 类型）。(typeof obj)
+
+### 映射类型的键遍历（in）
+> `in`：映射类型的键遍历，在 `映射类型（Mapped Types）` 中 `遍历键`。([K in Keys]: T)
 
 ## 条件类型（?）
 
