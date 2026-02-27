@@ -512,6 +512,13 @@ Taro UI是一个基于Taro框架的多端 UI 组件库，可以在微信小程�
 | `Web Crypto API` | 浏览器原生     | AES-GCM/SHA-256/等    | 即时通讯（E2E加密），对性能和包体积敏感的项目。        |
 | `sm-crypto`      | 国密算法       | SM2/SM3/SM4           | 政府、金融、国企及任何需通过等保测评、密评的国内项目。 |
 
+## 音效资源
+- [Myinstants](https://myinstants.net/): 音效按钮与表情包音板。
+
 ## 效率工具
 
 - [Angrytools](https://angrytools.com/)：Flexbox、Grid等免费网络生成工具，助您加速开发
+
+### 其他
+- [纸由我 PaperMe](https://paperme.toolooz.com/): 多种纸张模板，满足不同场景的需求。
+- [Pacdora](https://www.pacdora.cn): Pacdora - 最大的样机和刀版模板平台
