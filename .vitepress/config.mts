@@ -60,9 +60,9 @@ export default defineConfig({
     socialLinks: [
       { icon: "github", link: "https://github.com/HumorFrank/ordinary-coder" },
     ],
-    // 配置大纲显示 1~3 级标题
+    // 配置大纲显示 1~4 级标题
     outline: {
-      level: [1, 3], // Vite 默认通常是显示 h1~h3
+      level: [1, 4], // Vite 默认通常是显示 h1~h4
       label: '本页目录' // 修改文本为 "本页目录"
     },
   },

@@ -148,3 +148,74 @@ Tips removed
 | ---------- | ------ | ------------------------------------ | ------------------------ |
 | setTimeout | 非阻塞 | 设定间隔，代码会继续往下执行         | 不阻塞，间隔结束执行回调 |
 | sleep      | 阻塞   | 结合 `async/await`使用，等待时间结束 | 暂停等待间隔时间结束     |
+### String
+
+#### padStart
+
+> `padStart()` 方法用另一个字符串填充当前字符串(如果需要的话，会重复填充)，以便产生的字符串达到给定的长度。从当前字符串的`左侧`开始填充。
+
+1️⃣ 语法
+
+```js
+str.padStart(targetLength [, padString])
+```
+
+- **参数**
+  - `targetLength`: 当前字符串需要填充到的目标长度。
+    - 如果这个数值小于当前字符串的长度，则返回当前字符串本身。
+  - `padString` (可选): 填充字符串。
+    - 如果字符串太长，使填充后的字符串长度超过了目标长度，则只保留最左侧的部分，其他部分会被截断。
+    - 此参数的默认值为 " "（U+0020）。
+
+- **返回值**
+  - 在原字符串开头填充指定的填充字符串直到目标长度所形成的新字符串。
+
+2️⃣ 示例
+
+```js
+// 1. 基础用法
+const str = "5";
+console.log(str.padStart(2, "0")); // "05"
+
+// 2. 默认填充空格
+const str2 = "Hello";
+console.log(str2.padStart(10)); // "     Hello"
+
+// 3. 目标长度小于原字符串长度（不做任何改变）
+const str3 = "JavaScript";
+console.log(str3.padStart(5, ".")); // "JavaScript"
+
+// 4. 填充字符串过长（会被截断）
+const str4 = "123";
+console.log(str4.padStart(6, "abcdef")); // "abc123" (只用了 "abc")
+
+// 5. 填充字符串不够长（会重复填充）
+const str5 = "abc";
+console.log(str5.padStart(10, "12")); // "1212121abc" (重复 "12")
+```
+
+3️⃣ 常见应用场景
+
+- **日期/时间补零** (MM-DD, HH:mm:ss)
+
+```js
+const month = new Date().getMonth() + 1;
+const formattedMonth = String(month).padStart(2, '0'); // "01", "02", ... "12"
+```
+
+- **数字编号补零** (001, 002...)
+
+```js
+const fileIndex = 1;
+// "file_001.txt"
+const fileName = `file_${String(fileIndex).padStart(3, '0')}.txt`; 
+```
+
+- **脱敏显示/掩码** (****5678)
+
+```js
+const phoneNumber = "13812345678";
+const last4Digits = phoneNumber.slice(-4);
+const maskedNumber = last4Digits.padStart(phoneNumber.length, '*');
+console.log(maskedNumber); // "*******5678"
+```
