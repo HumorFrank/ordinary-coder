@@ -22,6 +22,7 @@
 
 ::: info 补充条件
 `宽度限制`
+
 - 元素必须有宽度（`width/max-width`）
 - 或者在 `Flex/Grid` 布局中受父级约束，否则容器会被文本撑开，上述属性就失效了。
 
@@ -39,6 +40,38 @@
 ```
 
 ## JavaScript
+
+### 去除元素标记
+
+```js [removeTag.js]
+// 去除字符串里元素标记
+const removeTag = (fragment) =>
+  new DOMParser().parseFromString(fragment, "text/html").body.textContent || "";
+// test
+removeTag(`<div>Hello World</div>`); // Hello World
+```
+
+### 筛选对象属性
+
+```js [pick.js]
+const pick = (obj, ...props) =>
+  Object.fromEntries(Object.entries(obj).filter(([k]) => props.includes(k)));
+// test
+pick({ a: 1, b: 2, c: 3 }, "a", "b"); // {a:1,b:2}
+```
+
+### 解析URL中的参数
+
+```js [parseURL.js]
+const parseQuery = (url) => {
+  const q = {};
+  url.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => (q[k] = v));
+  return q;
+};
+// test
+console.log(parseQuery("http://example.com/?a=10&b=20")); // {a:10,b:20}
+console.log(parseQuery("a=1&b=2")); // {a:1,b:2}
+```
 
 ### 位运算符
 
@@ -148,6 +181,7 @@ Tips removed
 | ---------- | ------ | ------------------------------------ | ------------------------ |
 | setTimeout | 非阻塞 | 设定间隔，代码会继续往下执行         | 不阻塞，间隔结束执行回调 |
 | sleep      | 阻塞   | 结合 `async/await`使用，等待时间结束 | 暂停等待间隔时间结束     |
+
 ### String
 
 #### padStart
@@ -200,7 +234,7 @@ console.log(str5.padStart(10, "12")); // "1212121abc" (重复 "12")
 
 ```js
 const month = new Date().getMonth() + 1;
-const formattedMonth = String(month).padStart(2, '0'); // "01", "02", ... "12"
+const formattedMonth = String(month).padStart(2, "0"); // "01", "02", ... "12"
 ```
 
 - **数字编号补零** (001, 002...)
@@ -208,14 +242,14 @@ const formattedMonth = String(month).padStart(2, '0'); // "01", "02", ... "12"
 ```js
 const fileIndex = 1;
 // "file_001.txt"
-const fileName = `file_${String(fileIndex).padStart(3, '0')}.txt`; 
+const fileName = `file_${String(fileIndex).padStart(3, "0")}.txt`;
 ```
 
-- **脱敏显示/掩码** (****5678)
+- **脱敏显示/掩码** (\*\*\*\*5678)
 
 ```js
 const phoneNumber = "13812345678";
 const last4Digits = phoneNumber.slice(-4);
-const maskedNumber = last4Digits.padStart(phoneNumber.length, '*');
+const maskedNumber = last4Digits.padStart(phoneNumber.length, "*");
 console.log(maskedNumber); // "*******5678"
 ```
