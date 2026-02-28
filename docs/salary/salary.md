@@ -519,6 +519,15 @@ Taro UI是一个基于Taro框架的多端 UI 组件库，可以在微信小程�
 
 - [Angrytools](https://angrytools.com/)：Flexbox、Grid等免费网络生成工具，助您加速开发
 
-### 其他
-- [纸由我 PaperMe](https://paperme.toolooz.com/): 多种纸张模板，满足不同场景的需求。
-- [Pacdora](https://www.pacdora.cn): Pacdora - 最大的样机和刀版模板平台
+## 其他
+- [纸由我 PaperMe](https://paperme.toolooz.com/)
+> 多种纸张模板，满足不同场景的需求。
+
+- [Pacdora](https://www.pacdora.cn)
+> Pacdora - 最大的样机和刀版模板平台
+
+- [ChromeAppHeroes](https://github.com/zhaoolee/ChromeAppHeroes)
+> 🌈谷粒-Chrome插件英雄榜, 为优秀的Chrome插件写一本中文说明书, 让Chrome插件英雄们造福人类
+
+- [StarsAndClown](https://github.com/zhaoolee/StarsAndClown)
+> ☀️Github星聚弃疗榜, 让吃瓜群众也能享受Github带来的乐趣~Github
