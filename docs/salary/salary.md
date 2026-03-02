@@ -503,6 +503,43 @@ Taro UI是一个基于Taro框架的多端 UI 组件库，可以在微信小程�
 
 - [normalize.css](https://github.com/necolas/normalize.css)： 一个用于重置浏览器内置样式的库
 
+### 远程调试
+- [PageSpy](https://www.pagespy.org/docs)
+> PageSpy 是货拉拉大前端开源的一款用来调试远程 Web 项目的工具。
+
+- [Chii](https://github.com/liriliri/chii)
+> Chii是一款与weinre类似的远程调试工具，它主要将web inspector替换为最新的chrome devtools frontend。
+
+### 抓包&代理
+- [Charles](https://www.charlesproxy.com/documentation/)
+> Charles是一个HTTP代理服务器、HTTP监视器以及反转代理服务器。
+
+- [Whistle](https://github.com/avwo/whistle)
+> Whistle是一个基于Node.js的跨平台抓包调试工具，适用于Mac、Windows等桌面系统以及服务端等命令行系统。
+
+- [Fiddler](https://www.telerik.com/fiddler)
+> Fiddler是一个HTTP协议的调试代理工具，以代理服务器的方式监听系统的HTTP网络数据流动
+
+### Mock数据
+- [Mock.js](https://github.com/nuysoft/Mock)
+> Mock.js是一个用于生成随机数据、模拟 Ajax 请求的 JavaScript 库。
+
+- [faker.js](https://github.com/faker-js/faker)
+> Faker.js是一个JavaScript库，用于生成大量假数据。
+
+- [Chance.js](https://github.com/chancejs/chancejs)
+> Chance.js 是一个用于生成随机数据的 JavaScript 库。
+
+### 接口调试
+- [Postman](https://learning.postman.com/docs/introduction/overview/)
+> Postman是一个接口测试工具，也可以用来模拟各种HTTP请求。
+
+- [Hoppscotch](https://github.com/hoppscotch/hoppscotch)
+> Hoppscotch 是一款强大的开源 API 工具，它的原名为 Postwoman，是知名 API 开发和测试工具 Postman 的开源替代品。
+
+- [Insomnia](https://github.com/Kong/insomnia)
+> Insomnia 是一款开源的、跨平台的 API 客户端工具，支持多种协议如 GraphQL、REST、WebSockets 等。
+
 ### 前端加密库
 
 | 加密库               | 主要用途       | 支持算法              | 适用场景                                               |
@@ -519,6 +556,9 @@ Taro UI是一个基于Taro框架的多端 UI 组件库，可以在微信小程�
 
 - [Angrytools](https://angrytools.com/)：Flexbox、Grid等免费网络生成工具，助您加速开发
 
+## 激活工具
+- [IntelliJ IDEA](https://www.kdaiyu.com/3.jetbra.in/)
+
 ## 其他
 - [纸由我 PaperMe](https://paperme.toolooz.com/)
 > 多种纸张模板，满足不同场景的需求。
@@ -531,3 +571,33 @@ Taro UI是一个基于Taro框架的多端 UI 组件库，可以在微信小程�
 
 - [StarsAndClown](https://github.com/zhaoolee/StarsAndClown)
 > ☀️Github星聚弃疗榜, 让吃瓜群众也能享受Github带来的乐趣~Github
+
+- [fastclick](https://github.com/ftlabs/fastclick)
+> 消除 click 移动浏览器300ms延迟
+
+- [矢量插图](https://free-designs.delesign.com/free-designs/graphics/)
+> 使用我们的免版税设计应用于您的网站、社交媒体、博客、电子邮件通讯等。
+
+- [开源插图](https://undraw.co/illustrations)
+> 一个不断更新的美丽 svg 图片合集，你可以完全免费使用，无需署名。
+
+- [12免抠图](https://pnghut.com/)
+> 免费透明 PNG 图片，任何项目都能免费下载超过 1000 万张 PNG 图片。
+
+- [Foodiesfeed](https://pnghut.com/)
+> 免费美食照片
+
+- [istockphoto](https://www.istockphoto.com/hk)
+> 免费美食照片
+
+- [在线样机](https://mockups.pixeltrue.com/)
+> 在线样机、在线贴图、免费下载
+
+- [在线3C样机](https://deviceshots.com/)
+> 免费设计设备模型，附上你网站或移动应用的截图。
+
+- [tinypng图片压缩](https://tinypng.com/)
+> 智能 AVIF、WebP、PNG 和 JPEG 压缩，实现更快的网站。
+
+- [WebGradients](https://webgradients.com/)
+> WebGradients 是一个免费的 180 条线性渐变合集，你可以使用。
