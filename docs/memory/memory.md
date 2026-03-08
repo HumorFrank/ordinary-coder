@@ -651,8 +651,9 @@ li:not(:last-child) {
   - `$attrs` 对象包含了除组件所声明的 `props` 和 `emits` 之外的所有其他 attribute。
 - `在 JS 中访问透传 Attributes`：你可以在 `<script setup>`; 中使用 `useAttrs() API` 来访问一个组件的所有透传 attribute。
 
-### 组件 v-model
+### 自定义组件 v-model
 
+#### 实现原理
 - Vue 3.0-（`value prop` 以及 `input` 事件）
   - 将其 `value` attribute 绑定到一个名叫 `value` 的 `prop` 上
   - 在其 `input` 事件被触发时，将新的值通过自定义的 `input` 事件抛出
@@ -661,6 +662,81 @@ li:not(:last-child) {
   - 一个名为 `modelValue` 的 `prop`，本地 `ref` 的值与其同步；
   - 一个名为 `update:modelValue` 的事件，当本地 `ref` 的值发生变更时触发
   - ⚠️ 若为 `defineModel` prop 设置了一个 `default` 值且父组件没有为该 prop 提供任何值，会导致`父组件与子组件之间不同步`。
+
+#### 实现 v-model
+
+🈯️ 实现原理
+> `props.modelValue/$emit('update:modelValue')` 实现
+> - 方式1：`props.modelValue/$emit('update:modelValue')`
+> - 方式2：宏 `defineModel()`
+
+✅ Example
+
+::: code-group
+```vue [原始写法-TestChild.vue]
+<!-- v-model，原始写法，代码更多，更复杂 ⚠️ -->
+<script setup lang="ts">
+const props = defineProps<{
+  modelValue: string;
+}>();
+
+/**
+ * 定义事件，包含 update:modelValue 事件
+ */
+const emit = defineEmits(['update:modelValue']);
+/**
+ * 定义 currentValue 变量，并将其初始值设置为 props.modelValue
+ */
+const currentValue = ref(props.modelValue);
+
+/**
+ * 当 props.modelValue 变化时，更新 currentValue
+ */
+watch(() => props.modelValue, (val) => {
+  currentValue.value = val;
+});
+
+/**
+ * 当 currentValue 变化时，如果与 props.modelValue 不同，则更新 props.modelValue
+ */
+watch(currentValue, (val) => {
+  if (val !== props.modelValue) {
+    emit('update:modelValue', val);
+  }
+});
+</script>
+
+<template>
+  <div v-bind="$attrs">
+    <input  v-model="currentValue"/>
+  </div>
+</template>
+```
+```vue [宏写法-TestChild.vue]
+<!-- v-model，宏写法（defineModel），更简洁、更优雅 ✅ -->
+<script setup lang="ts">
+const modelValue = defineModel<string>({ required: true });
+</script>
+
+<template>
+   <div v-bind="$attrs">
+    <input  v-model="currentValue"/>
+  </div>
+</template>
+```
+```vue [组件使用-parent.vue]
+<script setup lang="ts">
+import TestChild from '@/components/TestChild.vue';
+const curDay = ref<string>('');
+</script>
+
+<template>
+  <div class="container-box">
+    <TestChild class="my-2"  v-model="curDay" />
+  </div>
+</template>
+```
+:::
 
 ### watch/watchEffect
 
