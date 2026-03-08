@@ -2092,27 +2092,6 @@ const store = useCounterStore();
 - `whistle`：跨平台 (macOS/Windows/Linux)
 - `Charles`：Mac 原生之选
 
-## 辅助开发资源
-
-### 开发资源
-
-- [Pixelrepo.com](https://pixelrepo.com/browse)：像素仓库
-- [Cssbuttons.io](https://cssbuttons.io/)：button
-- [UIVerse](https://uiverse.io/)：最大的开源用户界面库
-
-### DOM/HTML标准
-
-- [DOM标准](https://htmlspecs.com/dom/)
-- [HTML标准](https://htmlspecs.com/)
-
-### github 官方API
-
-- [github-api](https://api.github.com/)
-
-### pnpm/npm/yarn
-
-- 快速查看依赖文：`pnpm home <package-name>`
-
 ## 进阶——源码学习
 
 - [Marvin](https://canyuegongzi.github.io/)

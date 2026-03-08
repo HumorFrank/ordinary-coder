@@ -559,6 +559,29 @@ Taro UI是一个基于Taro框架的多端 UI 组件库，可以在微信小程�
 ## 激活工具
 - [IntelliJ IDEA](https://www.kdaiyu.com/3.jetbra.in/)
 
+
+## 辅助开发资源
+
+### 开发资源
+
+- [Pixelrepo.com](https://pixelrepo.com/browse)：像素仓库
+- [Cssbuttons.io](https://cssbuttons.io/)：button
+- [UIVerse](https://uiverse.io/)：最大的开源用户界面库
+
+### DOM/HTML标准
+
+- [DOM标准](https://htmlspecs.com/dom/)
+- [HTML标准](https://htmlspecs.com/)
+
+### github 官方API
+
+- [github-api](https://api.github.com/)
+
+### pnpm/npm/yarn
+
+- 快速查看依赖文：`pnpm home <package-name>`
+
+
 ## 其他
 - [纸由我 PaperMe](https://paperme.toolooz.com/)
 > 多种纸张模板，满足不同场景的需求。
