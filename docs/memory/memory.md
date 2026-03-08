@@ -680,7 +680,7 @@ li:not(:last-child) {
   - ⚠️注意事项
     > - 仅会在其同步执行期间，才追踪依赖。
     > - 异步回调时，只有在第一个 `await` 正常工作前访问到的属性才会被追踪。
-    >   ㊙️ 调试
+    > - ㊙️ 调试    
 
 ```ts [index.ts]
 watch(source, callback, {
@@ -705,6 +705,30 @@ watchEffect(callback, {
 ⚠️ 注意事项
 
 > 侦听器的 `onTrack` 和 `onTrigger` 选项`仅`会在`开发模式`下工作。
+
+📚 **watch(ref) 与 watch(() => ref.value)**
+- 1️⃣ `watch(currentValue, callback)`
+> 直接传 `ref` 对象，Vue 会自动解包 `.value`
+> - `推荐写法`，简洁直观
+> - Vue 内部识别到是 `ref`，自动追踪 `.value` 变化
+> - `newVal/oldVal` 直接是解包后的值
+```ts
+watch(currentValue, (newVal, oldVal) => {
+  console.log(newVal); // 直接拿到值
+});
+```
+- 2️⃣ `watch(() => currentValue.value, callback)`
+> 传一个 `getter` 函数，getter 形式更适合需要`派生/组合`值的场景。
+> - 功能上`等价`，也能正常监听
+> - 更适合`复合计算`场景，比如 `() => currentValue.value + otherRef.value`
+> - 或者监听`响应式对象的某个属性`时`必须`用 getter：`watch(() => state.count, ...)`
+
+```ts
+watch(currentValue, (newVal) => {
+  console.log('Selected day range:', newVal);
+});
+```
+
 
 ### Teleport（节点传送）
 
