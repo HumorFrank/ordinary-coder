@@ -545,9 +545,9 @@ li:not(:last-child) {
 
 > [官方参考文档](https://cn.vuejs.org/guide/components/events.html): 组件事件
 
-1️⃣ emit 自定义事件命名规范
-
-> 小驼峰命名（camelCase ），如`emit('someEvent')`
+1️⃣ emit 自定义事件命名规范，`必须`采用`小驼峰（camelCase）`命名法
+- ✅ `emit('onSortTap')`
+- ❌ `emit('on-sort-tap')`
 
 2️⃣ 模板编写
 
@@ -651,6 +651,19 @@ li:not(:last-child) {
   - `$attrs` 对象包含了除组件所声明的 `props` 和 `emits` 之外的所有其他 attribute。
 - `在 JS 中访问透传 Attributes`：你可以在 `<script setup>`; 中使用 `useAttrs() API` 来访问一个组件的所有透传 attribute。
 
+### DOM 内的模板和template选项
+#### DOM 内的模板
+> 指的是 `HTML` 直接写在页面的` DOM 结构`中。
+> - DOM内模板的特征：直接在 `index.html` 的挂载点内部编写。
+> - DOM内模板的解析时机与环境：由`浏览器`的 `HTML 解析器`进行解析。
+> - DOM内模板的限制：DOM内模板受浏览器HTML规范限制
+
+#### template 选项
+> 指的是在 `Vue` 组件定义中，通过 `template` 属性传入的`字符串模板`。
+> - 特征：在 `vue 实例`/`组件配置`中定义字符串/在 SFC 的 `<template>` 标签中定义。
+> - 解析时机与环境：由 `Vue 的模板编译器`进行解析。
+
+
 ### 自定义组件 v-model
 
 #### 实现原理
@@ -663,18 +676,159 @@ li:not(:last-child) {
   - 一个名为 `update:modelValue` 的事件，当本地 `ref` 的值发生变更时触发
   - ⚠️ 若为 `defineModel` prop 设置了一个 `default` 值且父组件没有为该 prop 提供任何值，会导致`父组件与子组件之间不同步`。
 
-#### 实现 v-model
+#### vue2 vs vue3
 
-🈯️ 实现原理
-> `props.modelValue/$emit('update:modelValue')` 实现
-> - 方式1：`props.modelValue/$emit('update:modelValue')`
-> - 方式2：宏 `defineModel()`
+| 特性         | Vue2                | Vue3                        |
+| ------------ | ------------------- | --------------------------- |
+| 默认 prop    | `value`             | `modelValue`                |
+| 默认事件     | `input`             | `update:modelValue`         |
+| 自定义 prop  | `model` 选项        | 直接使用 `v-model:propName` |
+| 多个 v-model | 使用 `.sync` 修饰符 | 原生支持多个 `v-model`      |
+| 修饰符       | 有限支持            | 完整的修饰符支持            |
+| TypeScript   | 支持                | 一般                        |
 
-✅ Example
+#### v-model(vue2)
 
-::: code-group
-```vue [原始写法-TestChild.vue]
-<!-- v-model，原始写法，代码更多，更复杂 ⚠️ -->
+1️⃣ 默认绑定
+- prop -> `value`
+- 事件 -> `input`
+
+2️⃣ 自定义属性和事件
+- model 对象，与 props 同级
+  - `prop`：自定义 prop
+  - `event`：自定义事件(`update:自定义prop`)
+
+3️⃣ 自定义组件和属性Example
+```vue [CustomChild.vue]
+<template>
+  <div>
+    <input 
+      :value="title" 
+      @input="$emit('update:title', $event.target.value)"
+    >
+    <button @click="$emit('update:show', false)">关闭</button>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'CustomChild',
+  model: {
+    prop: 'title',      // 自定义 prop
+    event: 'update:title' // 自定义事件
+  },
+  props: {
+    title: String,
+    show: Boolean
+  }
+}
+</script>
+```
+
+```vue [parent.vue]
+<template>
+  <div>
+    <!-- 方式1：直接使用 v-model -->
+    <CustomChild v-model="pageTitle" />
+    
+    <!-- 方式2：显式绑定（多个 v-model） -->
+    <CustomChild 
+      :title="pageTitle" 
+      @update:title="pageTitle = $event"
+      :show="isShow"
+      @update:show="isShow = $event"
+    />
+    
+    <!-- 方式3：使用 .sync 修饰符（Vue2 推荐） -->
+    <CustomChild 
+      :title.sync="pageTitle"
+      :show.sync="isShow"
+    />
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      pageTitle: 'Vue2 教程',
+      isShow: true
+    }
+  }
+}
+</script>
+```
+
+#### v-model(vue3)
+
+> [defineModel()](https://cn.vuejs.org/api/sfc-script-setup.html#definemodel)
+
+㊙️ defineModel 底层机制 (Vue 3.4)
+
+> defineModel 是一个便利宏。编译器将其展开为以下内容：
+> - 一个名为 `modelValue` 的 `prop`，本地 `ref` 的值与其同步；
+> - 一个名为 `update:modelValue` 的事件，当本地 `ref` 的值发生变更时触发。
+
+✍️ 宏 `defineModel()`
+- `defineModel()` 返回的值是一个 `ref`。
+- 它可以像其他 `ref` 一样`被访问`以`及修改`。
+- 它能起到在父组件和当前变量之间的双向绑定的作用：
+  - 它的 `.value` 和父组件的 `v-model` 的`值同步`；
+  - 当它`被子组件变更`了，会`触发父组件绑定的值`一起`更新`；
+
+🈯️ 实现
+
+- 方式1：`props.modelValue/defineEmits(['update:modelValue'])`
+- 方式2：宏 `defineModel()`
+
+❇️ 自定义属性和事件（使用 v-model 参数）
+
+```vue [parent.vue]
+<template>
+  <div>
+    <!-- 使用自定义的 v-model:propName -->
+    <CustomInput v-model:title="pageTitle" label="文章标题："/>
+    <p>标题内容：{{ pageTitle }}</p>
+  </div>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+import CustomInput from './components/CustomInput.vue'
+
+const pageTitle = ref('')
+</script>
+```
+
+```vue [CustomInput.vue]
+<template>
+  <div>
+    <label>{{ label }}</label>
+    <!-- :value="title"  使用自定义 prop 名 -->
+    <!-- update:title 使用自定义事件名 -->
+    <input 
+      :value="title"
+      @input="$emit('update:title', $event.target.value)"
+    >
+  </div>
+</template>
+
+<script setup>
+// 定义自定义的 prop
+defineProps({
+  title: String, // 自定义 prop 名，不是 modelValue
+  label: String
+})
+
+// 定义自定义事件
+defineEmits(['update:title'])  // 自定义事件名，格式固定为 update:propName
+</script>
+```
+
+
+1️⃣ v-model，原始写法，代码更多，更复杂 ⚠️
+
+```vue [TestChild.vue]
 <script setup lang="ts">
 const props = defineProps<{
   modelValue: string;
@@ -683,7 +837,7 @@ const props = defineProps<{
 /**
  * 定义事件，包含 update:modelValue 事件
  */
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(["update:modelValue"]);
 /**
  * 定义 currentValue 变量，并将其初始值设置为 props.modelValue
  */
@@ -692,51 +846,58 @@ const currentValue = ref(props.modelValue);
 /**
  * 当 props.modelValue 变化时，更新 currentValue
  */
-watch(() => props.modelValue, (val) => {
-  currentValue.value = val;
-});
+watch(
+  () => props.modelValue,
+  (val) => {
+    currentValue.value = val;
+  },
+);
 
 /**
  * 当 currentValue 变化时，如果与 props.modelValue 不同，则更新 props.modelValue
  */
 watch(currentValue, (val) => {
   if (val !== props.modelValue) {
-    emit('update:modelValue', val);
+    emit("update:modelValue", val);
   }
 });
 </script>
 
 <template>
   <div v-bind="$attrs">
-    <input  v-model="currentValue"/>
+    <input v-model="currentValue" />
   </div>
 </template>
 ```
-```vue [宏写法-TestChild.vue]
-<!-- v-model，宏写法（defineModel），更简洁、更优雅 ✅ -->
+
+2️⃣ v-model，宏写法（defineModel），更简洁、更优雅 ✅
+
+```vue [defineModel.vue]
 <script setup lang="ts">
-const modelValue = defineModel<string>({ required: true });
+const model = defineModel<string>({ required: true });
 </script>
 
 <template>
-   <div v-bind="$attrs">
-    <input  v-model="currentValue"/>
+  <div v-bind="$attrs">
+    <input v-model="model" />
   </div>
 </template>
 ```
-```vue [组件使用-parent.vue]
+
+3️⃣ 父组件
+
+```vue [parent.vue]
 <script setup lang="ts">
-import TestChild from '@/components/TestChild.vue';
-const curDay = ref<string>('');
+import TestChild from "@/components/TestChild.vue";
+const curDay = ref<string>("");
 </script>
 
 <template>
   <div class="container-box">
-    <TestChild class="my-2"  v-model="curDay" />
+    <TestChild class="my-2" v-model="curDay" />
   </div>
 </template>
 ```
-:::
 
 ### watch/watchEffect
 
@@ -1090,6 +1251,35 @@ count.value++;
 
 - `hooks` 内部使用了 `vue` 相关 `API`
 - `utils` 内部没有使用 `vue`相关 `API` 。
+
+### 执行类型检查
+
+✅ 执行类型检查标准命令
+```bash
+npx vue-tsc --noEmit # Vue 3 + TypeScript 执行类型检查标准命令
+```
+
+1️⃣ 命令拆解
+
+- `npx`：Node.js 的包运行工具。它会从你项目的 `.bin` 中寻找可执行文件并运行它。
+- `vue-tsc`：只负责 “找茬”（查错）。
+  - 专门为 Vue 单文件组件（SFC, `.vue` 文件）设计的 TypeScript 编译器包装器。
+  - 标准的 `tsc` 无法理解 `.vue` 文件中的 `<template>` 和 `<script setup>`，而 `vue-tsc` 可以将这些内容解析为 TS 能够理解的形式，从而检查模板中的变量类型错误。
+- `--noEmit`
+  - 这是 TS 编译器的一个标志（Flag）。
+  - 含义：只进行类型检查，不生成任何输出文件（如 `.js/.d.ts`文件）。
+
+2️⃣ 具体作用
+
+执行该命令后，终端会扫描整个项目：
+
+- `检查 .ts 文件`：常规的 TypeScript 逻辑检查。
+- `检查 .vue 文件`
+  - 检查 `<script>` 里的逻辑。
+  - `关键点`：检查 `<template>` 里的绑定（例如 `@click="fn"` 中的 `fn` 是否存在，`:prop="val"` 中的类型是否匹配）。
+- `结果`
+  - 若有任何类型错误，命令会报错并列出文件和行号，构建流程通常会因此终止。
+  - 若没有错误，命令静默结束（返回 `exit code 0`），表示检查通过。
 
 ## ES6
 
