@@ -751,6 +751,28 @@ li:not(:last-child) {
 
 > `defineAsyncComponent`
 
+### 泛型组件
+
+1️⃣ 泛型组件的使用场景：子组件的 `某个值的类型` 需要根据父组件传递过来的 数据的某个属性值自动推断。
+
+> - A组件使用：sortBy（排序字段），枚举 `enum SortByA = 'A' | 'B' | 'C'`
+> - B组件使用：sortBy（排序字段），枚举 `enum SortByB = 'D' | 'E' | 'F'｜'G' | 'H'`
+
+2️⃣ 范型应用场景：当组件`“结构固定、数据类型可变”`时，用 Vue `泛型组件最合适`。
+
+- `列表/表格类组件`
+  > 展示逻辑一样，但每个业务的 item 类型不同（User、Order、Game）。
+- `选择器/下拉菜单`
+  > value 可能是 'id' | 'name'、枚举、数字等，泛型可让 v-model 和 emit 类型自动联动。
+- `排序/筛选组件`
+  > 像你现在这个，sortBy 依赖父组件传入项，泛型能从 items.value 推断，避免写死枚举。
+- `表单字段包装组件`
+  > 同一套 UI，modelValue 可能是 string | number | Date，泛型能保证输入输出一致。
+- `通用数据加载组件`（分页、无限滚动）
+  > 请求返回类型不固定，泛型保证 list、onSelect、插槽参数全程类型安全。
+- `不太需要泛型的情况`
+  > 组件只服务单一业务、类型不会变化、团队更看重简单而非类型约束。
+
 ### 透传 Attributes
 
 > “透传 attribute”指的是传递给一个组件，却没有被该组件声明为 props 或 emits 的 attribute 或者 v-on 事件监听器。
@@ -762,6 +784,357 @@ li:not(:last-child) {
 - `v-bind="$attrs"`：透传进来的 attribute 可以在模板的表达式中直接用 `$attrs` 访问到。
   - `$attrs` 对象包含了除组件所声明的 `props` 和 `emits` 之外的所有其他 attribute。
 - `在 JS 中访问透传 Attributes`：你可以在 `<script setup>`; 中使用 `useAttrs() API` 来访问一个组件的所有透传 attribute。
+
+### 插槽入门到放弃
+
+#### 插槽概述
+
+插槽（Slot）是 Vue 中用于内容分发的一种机制，它允许父组件向子组件的指定位置注入模板内容。插槽是`组件复合和复用`的重要工具，类似于 Web Components 中的 `<slot>` 元素。
+
+#### 插槽的基本种类
+
+- 1️⃣ `默认插槽（匿名插槽）`：最基本的插槽类型，没有名称的插槽。
+- 2️⃣ `具名插槽`：具有名称的插槽，允许在子组件中定义多个不同的插槽位置。
+- 3️⃣ `作用域插槽`：允许子组件将数据传递给插槽内容，使父组件能够访问子组件的作用域。
+
+##### 默认插槽
+
+1️⃣ 定义
+
+> 最基本的插槽类型，没有名称的插槽。
+
+2️⃣ 特点
+
+- 一个组件`只能有一个`默认插槽
+- 父组件中未指定 `v-slot` 的内容都会进入默认插槽
+
+3️⃣ Example
+
+```vue
+<!-- 子组件 ChildComponent.vue -->
+<template>
+  <div class="container">
+    <header>头部</header>
+    <main>
+      <!-- 默认插槽位置 -->
+      <slot></slot>
+    </main>
+    <footer>底部</footer>
+  </div>
+</template>
+
+<!-- 父组件 -->
+<template>
+  <ChildComponent>
+    <!-- 这里的内容会插入到子组件的默认插槽中 -->
+    <p>这是插入的内容</p>
+    <div>可以插入多个元素</div>
+  </ChildComponent>
+</template>
+```
+
+##### 具名插槽
+
+1️⃣ 定义
+
+> 具有名称的插槽，允许在子组件中定义多个不同名称不同位置的插槽。
+
+2️⃣ 特点
+
+- 允许在子组件中定义多个不同名称的插槽
+- 简写语法：`v-slot:header `可以简写为 `#header`
+
+3️⃣ Example
+
+```vue
+<!-- 子组件 Layout.vue -->
+<template>
+  <div class="layout">
+    <header>
+      <slot name="header">默认头部内容</slot>
+    </header>
+    <main>
+      <slot></slot>
+      <!-- 默认插槽 -->
+    </main>
+    <footer>
+      <slot name="footer">默认底部内容</slot>
+    </footer>
+  </div>
+</template>
+
+<!-- 父组件 -->
+<template>
+  <Layout>
+    <!-- v-slot 指令指定插槽名称 -->
+    <template v-slot:header>
+      <h1>页面标题</h1>
+      <nav>导航菜单</nav>
+    </template>
+
+    <!-- 默认插槽内容 -->
+    <article>主要内容</article>
+
+    <!-- 具名插槽的简写语法 -->
+    <template #footer>
+      <p>版权信息</p>
+    </template>
+  </Layout>
+</template>
+```
+
+##### 作用域插槽
+
+1️⃣ 定义
+
+> 允许子组件将数据传递给插槽内容，使父组件能够访问子组件的作用域。
+
+2️⃣ 特点
+
+- 允许在子组件中定义多个不同名称的插槽
+- 简写语法：`v-slot:header `可以简写为 `#header`
+
+3️⃣ Example
+
+```vue
+<!-- 子组件 UserList.vue -->
+<template>
+  <ul>
+    <li v-for="user in users" :key="user.id">
+      <slot :user="user" :index="index" :is-admin="user.role === 'admin'">
+        <!-- 默认显示内容 -->
+        {{ user.name }}
+      </slot>
+    </li>
+  </ul>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      users: [
+        { id: 1, name: "张三", role: "admin" },
+        { id: 2, name: "李四", role: "user" },
+        { id: 3, name: "王五", role: "user" },
+      ],
+    };
+  },
+};
+</script>
+
+<!-- 父组件 -->
+<template>
+  <UserList>
+    <!-- 接收插槽传递的数据 -->
+    <template #default="slotProps">
+      <div class="user-item">
+        <span class="name">{{ slotProps.user.name }}</span>
+        <span v-if="slotProps.isAdmin" class="badge">管理员</span>
+        <span class="index">#{{ slotProps.index + 1 }}</span>
+      </div>
+    </template>
+  </UserList>
+</template>
+```
+
+4️⃣ 解构插槽 Prop
+
+```vue
+<template #default="{ user, index, isAdmin }">
+  <div>{{ user.name }} - {{ index }} - {{ isAdmin }}</div>
+</template>
+```
+
+#### 插槽的高级用法
+
+- 1️⃣ `动态插槽名`：使用动态的插槽名称。
+- 2️⃣ `具名作用域插槽`：结合具名插槽和作用域插槽。
+- 3️⃣ `渲染作用域`：插槽内容可以访问到父组件的数据作用域，因为插槽内容本身是在父组件模板中定义的。但插槽内容`无法访问`子组件的数据，除非使用作用域插槽。
+  - 父组件模板中的表达式只能访问父组件的作用域；
+  - 子组件模板中的表达式只能访问子组件的作用域。
+- 4️⃣ `默认内容`：在外部没有提供任何内容的情况下，可以为插槽指定默认内容。
+
+
+::: code-group
+```vue [动态插槽名.vue]
+<template>
+  <BaseLayout>
+    <template #[dynamicSlotName]> 动态插槽内容 </template>
+  </BaseLayout>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      dynamicSlotName: "header",
+    };
+  },
+};
+</script>
+```
+
+```vue [具名作用域插槽.vue]
+<!-- 子组件 DataTable.vue -->
+<template>
+  <table>
+    <thead>
+      <tr>
+        <th v-for="column in columns" :key="column.key">
+          <slot :name="`header-${column.key}`" :column="column">
+            {{ column.title }}
+          </slot>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="(row, rowIndex) in data" :key="rowIndex">
+        <td v-for="column in columns" :key="column.key">
+          <slot
+            :name="`cell-${column.key}`"
+            :row="row"
+            :column="column"
+            :row-index="rowIndex"
+          >
+            {{ row[column.key] }}
+          </slot>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</template>
+
+<!-- 父组件使用 -->
+<template>
+  <DataTable :columns="columns" :data="tableData">
+    <template #header-name="{ column }">
+      <strong>👤 {{ column.title }}</strong>
+    </template>
+
+    <template #cell-status="{ row }">
+      <span :class="row.status === 'active' ? 'active' : 'inactive'">
+        {{ row.status }}
+      </span>
+    </template>
+  </DataTable>
+</template>
+```
+
+```vue [渲染作用域.vue]
+<!-- 父组件 -->
+<template>
+  <ChildComponent>
+    <!-- 这里可以访问父组件的 message -->
+    <div>{{ parentMessage }}</div>
+    <!-- ❌ 不能直接访问子组件的 childData -->
+  </ChildComponent>
+</template>
+```
+
+```vue [默认内容.vue]
+<!-- 子组件 -->
+<template>
+  <button class="custom-button">
+    <slot>
+      <!-- 默认内容 -->
+      默认按钮
+    </slot>
+  </button>
+</template>
+```
+:::
+
+#### 实际应用场景
+
+::: code-group
+
+```vue [检查插槽是否存在.vue]
+<template>
+  <div class="modal">
+    <!-- 只有提供了 header 插槽时才显示头部 -->
+    <div class="modal-header" v-if="$slots.header">
+      <slot name="header"></slot>
+    </div>
+
+    <div class="modal-body">
+      <slot></slot>
+    </div>
+
+    <!-- 只有提供了 footer 插槽时才显示底部 -->
+    <div class="modal-footer" v-if="$slots.footer">
+      <slot name="footer"></slot>
+    </div>
+  </div>
+</template>
+```
+
+```vue [灵活的插槽设计.vue]
+<template>
+  <div class="data-display">
+    <!-- 提供多种插槽组合方式 -->
+    <slot name="header" :data="data" :loading="loading">
+      <div class="default-header">
+        <h3>{{ title }}</h3>
+        <button v-if="!loading" @click="refresh">刷新</button>
+      </div>
+    </slot>
+
+    <slot name="content" :data="data" :loading="loading" :error="error">
+      <div v-if="loading">加载中...</div>
+      <div v-else-if="error">加载失败: {{ error }}</div>
+      <div v-else class="default-content">
+        {{ data }}
+      </div>
+    </slot>
+
+    <slot name="footer" :data="data">
+      <div class="default-footer">共 {{ data?.length || 0 }} 条数据</div>
+    </slot>
+  </div>
+</template>
+```
+
+:::
+
+#### Vue2与Vue3异同
+
+::: code-group
+```vue [Vue2语法.vue]
+<!-- 具名插槽 -->
+<template slot="header">内容</template>
+
+<!-- 作用域插槽 -->
+<template slot-scope="props">{{ props.item }}</template>
+
+<!-- 同时使用 -->
+<template slot="item" slot-scope="{ item }">{{ item }}</template>
+```
+
+```vue [Vue3语法.vue]
+<!-- 统一使用 v-slot 指令 -->
+<template v-slot:header>内容</template>
+<template #default="{ item }">{{ item }}</template>
+<template #item="{ item }">{{ item }}</template>
+```
+
+:::
+
+#### 性能考虑
+
+- `避免不必要的插槽内容`：使用 `v-if` 配合 `$slots` 检查插槽是否存在
+- `合理使用作用域插槽`：作用域插槽会有额外的渲染开销
+- `动态插槽名`：尽量使用静态插槽名，动态插槽名会阻止编译优化
+
+#### 总结
+
+插槽是 Vue 组件设计中的核心特性，主要优势包括
+
+- `内容分发`：灵活地将内容插入到组件指定位置
+- `组件复用`：创建可高度定制的通用组件
+- `逻辑分离`：组件负责结构和逻辑，父组件负责内容呈现
+- `双向通信`：通过作用域插槽实现子向父的数据传递
+- `组合能力`：多个插槽组合使用，实现复杂布局
 
 ### DOM 内的模板和template选项
 
@@ -2414,3 +2787,8 @@ const store = useCounterStore();
 
 - [Marvin](https://canyuegongzi.github.io/)
 - [vue-toastification](https://github.com/Maronato/vue-toastification#readme)
+
+## 开发辅助资源
+
+- [pixabay](https://pixabay.com/zh/): 精彩的免版税图片和免版税库存,任何项目都可使用的免费素材
+- [Debounce vs Throttle](https://kettanaito.com/blog/debounce-vs-throttle): 防抖与节流两者混淆终极图解指南。
