@@ -85,6 +85,93 @@ VITE_APP_WEB_IMAGE='你的网站或者APP logo地址（如：https://example.com
 
 ## CSS
 
+### 外边距折叠
+
+🈯️ 定义
+
+> 在标准文档流中，两个或多个垂直相邻的块级元素之间，其相邻的外边距（margin）有时会合并成一个单一的外边距，这种现象被称为`"外边距折叠"`。
+
+✅ 数学计算规则
+
+- 若两个外边距都是正数，最终间距取最大值。
+- 若一正一负，最终间距取正数减去负数的绝对值（即两者之和）。
+- 若都是负数，最终间距取绝对值最大的负数（即最负的值）。
+
+1️⃣ 详解
+
+> 两个垂直相邻的块级元素，如果上方的元素设置了 `margin-bottom: 10px`，下方的元素设置了 `margin-top: 10px`，则他们的外边距是`20px`吗？
+>
+> - 答案：不是`20px`，在普通的文档流中这两个`margin`不会相加变成`20px`，而是会`取两者中的最大值`。
+
+2️⃣ 计算逻辑，具体计算逻辑如下
+
+- 上方元素的下外边距：`10px`
+- 下方元素的上外边距：`10px`
+- 比较：两者数值相同，最大值即为`10px`。
+- 结果：最终的间距为 `10px`。
+
+3️⃣ 例外情况
+
+> 只有当你触发某些`BFC（块级格式化上下文）`机制时，margin才不会折叠。
+>
+> - 例如，如果给两个元素外面包了一层父容器，并设置父容器为 `display: flex` 或 `overflow: hidden`，那么这两个子元素的`margin`就`不会折叠`。
+
+4️⃣ Example
+
+```vue
+<template>
+  <p class="my-5">文本</p>
+  <main class="mt-5">文本</main>
+</template>
+```
+
+### margin 塌陷
+
+🈯️ 定义
+
+> `margin塌陷`（又称`父级塌陷`）是CSS`外边距折叠中`的一种特殊情况。它特指`父子元素之间的外边距合并`问题。
+
+1️⃣ 现象描述
+
+> 在标准的文档流中，如果父元素没有设置上内边距（`padding-top`）或上边框（`border-top`），那么给第一个子元素设置的上外边距（`margin-top`）不会把子元素推离父元素，而是会把整个父元素一起推下去。
+
+2️⃣ Example
+
+```vue
+<template>
+  <div class="parent">
+    <div class="child">子元素</div>
+  </div>
+</template>
+<style>
+.parent {
+  width: 300px;
+  height: 300px;
+  background-color: lightblue;
+  /* 注意：这里没有设置 border 或 padding */
+}
+
+.child {
+  margin-top: 50px; /* 我们希望子元素距离父元素顶部50px */
+  background-color: pink;
+}
+</style>
+```
+
+> 效果
+>
+> - 你期望的结果：子元素距离父元素顶部50px，父元素还在原地。
+> - 实际发生的结果：父元素带着子元素一起整体向下移动了50px。
+
+3️⃣ 解决方案
+
+> 要解决margin塌陷，核心原则是`把父元素和子元素的上边缘隔开`
+>
+> - 给父元素设置边框（border）
+> - 给父元素设置内边距（padding）
+> - 给父元素设置溢出隐藏（overflow: hidden/auto）
+> - 使用浮动或绝对定位
+
 ### 实现元素隐藏的方式
 
 #### display: non
@@ -228,24 +315,28 @@ VITE_APP_WEB_IMAGE='你的网站或者APP logo地址（如：https://example.com
 (二) 🔥 实战应用场景
 
 ::: code-group
+
 ```css [表格斑马纹.css]
 /* 偶数行背景变灰 */
 tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 ```
+
 ```css [实现 Tab 切换或开关.css]
 /* 利用 input[type="checkbox"] 和 :checked 状态控制兄弟元素的样式。 */
 input[type="checkbox"]:checked + .toggle-content {
   display: block; /* 选中时显示内容 */
 }
 ```
+
 ```css [排除最后一个元素的边框.css]
 /* 列表中间有分割线，但最后一个不需要。 */
 li:not(:last-child) {
   border-bottom: 1px solid #ccc;
 }
 ```
+
 :::
 
 #### 伪元素
@@ -271,7 +362,6 @@ li:not(:last-child) {
 - `::placeholder` - 输入框的占位符文本样式。
 
 (二) 🔥 实战应用场景
-
 
 ::: code-group
 
@@ -314,6 +404,7 @@ li:not(:last-child) {
   background: #888;
 }
 ```
+
 :::
 
 #### 注意事项
@@ -368,6 +459,7 @@ li:not(:last-child) {
 ```
 
 ### filter
+
 > [filter](https://developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Properties/filter) 属性将模糊或颜色偏移等图形效果应用于元素。滤镜通常用于调整图像、背景和边框的渲染。
 
 ::: tip TIP
@@ -375,54 +467,73 @@ li:not(:last-child) {
 :::
 
 #### blur()
+
 > 将高斯模糊应用于输入图像。
 
 #### brightness()
+
 > 调整输入图像的对比度
+>
 > - `0%`， 将使图像变灰；
 > - `100%`，则无影响；
 > - `>100%`，将增强对比度；
 
 #### contrast()
+
 > 调整输入图像的对比度
+>
 > - `0%`，将使图像变灰；
 > - `100%`，则无影响；
 > - `超过 100%`，将增强对比度。
 
 #### drop-shadow()
+
 > 使用 `<shadow>` 参数沿图像的轮廓生成阴影效果。阴影语法类似于`<box-shadow>`
 
 #### grayscale()
+
 > 将图像转换为灰度图
+>
 > - `100%`， 则完全转为灰度图像；
-> - `0%`，  则图像无变化;
+> - `0%`， 则图像无变化;
 > - `100% > n% > 0%`，则是该效果的线性乘数。
 
 #### hue-rotate()
+
 > 应用色相旋转。`<angle>` 值设定图像会被调整的色环角度值。值为 `0deg`，则图像无变化。
 
 #### invert()
+
 > 反转输入图像。
+>
 > - `100%`，则图像完全反转，
 > - `0%`，则图像无变化。
 > - 0`% 和 100% 之间`，则是该效果的线性乘数。
+
 #### opacity()
+
 > 应用透明度。
+>
 > - `0%`, 则使图像完全透明
 > - `100%`, 则图像无变化。
 
 #### saturate()
+
 > 改变图像饱和度。
+>
 > - `0%`，则是完全不饱和，
 > - `100%`，则图像无变化。
 > - `超过 100%`，则增加饱和度。
 
 #### sepia()
+
 > 将图像转换为深褐色。
+>
 > - `100%`，则完全是深褐色的。
 > - `0%`，图像无变化。
 
 #### 组合函数
+
 > 你可以`组合任意`数量的`函数`来控制渲染。滤镜将按`声明顺序依次`应用。
 
 ## Vue
@@ -546,6 +657,7 @@ li:not(:last-child) {
 > [官方参考文档](https://cn.vuejs.org/guide/components/events.html): 组件事件
 
 1️⃣ emit 自定义事件命名规范，`必须`采用`小驼峰（camelCase）`命名法
+
 - ✅ `emit('onSortTap')`
 - ❌ `emit('on-sort-tap')`
 
@@ -652,21 +764,26 @@ li:not(:last-child) {
 - `在 JS 中访问透传 Attributes`：你可以在 `<script setup>`; 中使用 `useAttrs() API` 来访问一个组件的所有透传 attribute。
 
 ### DOM 内的模板和template选项
+
 #### DOM 内的模板
+
 > 指的是 `HTML` 直接写在页面的` DOM 结构`中。
+>
 > - DOM内模板的特征：直接在 `index.html` 的挂载点内部编写。
 > - DOM内模板的解析时机与环境：由`浏览器`的 `HTML 解析器`进行解析。
 > - DOM内模板的限制：DOM内模板受浏览器HTML规范限制
 
 #### template 选项
+
 > 指的是在 `Vue` 组件定义中，通过 `template` 属性传入的`字符串模板`。
+>
 > - 特征：在 `vue 实例`/`组件配置`中定义字符串/在 SFC 的 `<template>` 标签中定义。
 > - 解析时机与环境：由 `Vue 的模板编译器`进行解析。
-
 
 ### 自定义组件 v-model
 
 #### 实现原理
+
 - Vue 3.0-（`value prop` 以及 `input` 事件）
   - 将其 `value` attribute 绑定到一个名叫 `value` 的 `prop` 上
   - 在其 `input` 事件被触发时，将新的值通过自定义的 `input` 事件抛出
@@ -690,38 +807,38 @@ li:not(:last-child) {
 #### v-model(vue2)
 
 1️⃣ 默认绑定
+
 - prop -> `value`
 - 事件 -> `input`
 
 2️⃣ 自定义属性和事件
+
 - model 对象，与 props 同级
   - `prop`：自定义 prop
   - `event`：自定义事件(`update:自定义prop`)
 
 3️⃣ 自定义组件和属性Example
+
 ```vue [CustomChild.vue]
 <template>
   <div>
-    <input 
-      :value="title" 
-      @input="$emit('update:title', $event.target.value)"
-    >
+    <input :value="title" @input="$emit('update:title', $event.target.value)" />
     <button @click="$emit('update:show', false)">关闭</button>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'CustomChild',
+  name: "CustomChild",
   model: {
-    prop: 'title',      // 自定义 prop
-    event: 'update:title' // 自定义事件
+    prop: "title", // 自定义 prop
+    event: "update:title", // 自定义事件
   },
   props: {
     title: String,
-    show: Boolean
-  }
-}
+    show: Boolean,
+  },
+};
 </script>
 ```
 
@@ -730,20 +847,17 @@ export default {
   <div>
     <!-- 方式1：直接使用 v-model -->
     <CustomChild v-model="pageTitle" />
-    
+
     <!-- 方式2：显式绑定（多个 v-model） -->
-    <CustomChild 
-      :title="pageTitle" 
+    <CustomChild
+      :title="pageTitle"
       @update:title="pageTitle = $event"
       :show="isShow"
       @update:show="isShow = $event"
     />
-    
+
     <!-- 方式3：使用 .sync 修饰符（Vue2 推荐） -->
-    <CustomChild 
-      :title.sync="pageTitle"
-      :show.sync="isShow"
-    />
+    <CustomChild :title.sync="pageTitle" :show.sync="isShow" />
   </div>
 </template>
 
@@ -751,11 +865,11 @@ export default {
 export default {
   data() {
     return {
-      pageTitle: 'Vue2 教程',
-      isShow: true
-    }
-  }
-}
+      pageTitle: "Vue2 教程",
+      isShow: true,
+    };
+  },
+};
 </script>
 ```
 
@@ -766,10 +880,12 @@ export default {
 ㊙️ defineModel 底层机制 (Vue 3.4)
 
 > defineModel 是一个便利宏。编译器将其展开为以下内容：
+>
 > - 一个名为 `modelValue` 的 `prop`，本地 `ref` 的值与其同步；
 > - 一个名为 `update:modelValue` 的事件，当本地 `ref` 的值发生变更时触发。
 
 ✍️ 宏 `defineModel()`
+
 - `defineModel()` 返回的值是一个 `ref`。
 - 它可以像其他 `ref` 一样`被访问`以`及修改`。
 - 它能起到在父组件和当前变量之间的双向绑定的作用：
@@ -787,16 +903,16 @@ export default {
 <template>
   <div>
     <!-- 使用自定义的 v-model:propName -->
-    <CustomInput v-model:title="pageTitle" label="文章标题："/>
+    <CustomInput v-model:title="pageTitle" label="文章标题：" />
     <p>标题内容：{{ pageTitle }}</p>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import CustomInput from './components/CustomInput.vue'
+import { ref } from "vue";
+import CustomInput from "./components/CustomInput.vue";
 
-const pageTitle = ref('')
+const pageTitle = ref("");
 </script>
 ```
 
@@ -806,10 +922,7 @@ const pageTitle = ref('')
     <label>{{ label }}</label>
     <!-- :value="title"  使用自定义 prop 名 -->
     <!-- update:title 使用自定义事件名 -->
-    <input 
-      :value="title"
-      @input="$emit('update:title', $event.target.value)"
-    >
+    <input :value="title" @input="$emit('update:title', $event.target.value)" />
   </div>
 </template>
 
@@ -817,14 +930,13 @@ const pageTitle = ref('')
 // 定义自定义的 prop
 defineProps({
   title: String, // 自定义 prop 名，不是 modelValue
-  label: String
-})
+  label: String,
+});
 
 // 定义自定义事件
-defineEmits(['update:title'])  // 自定义事件名，格式固定为 update:propName
+defineEmits(["update:title"]); // 自定义事件名，格式固定为 update:propName
 </script>
 ```
-
 
 1️⃣ v-model，原始写法，代码更多，更复杂 ⚠️
 
@@ -917,7 +1029,7 @@ const curDay = ref<string>("");
   - ⚠️注意事项
     > - 仅会在其同步执行期间，才追踪依赖。
     > - 异步回调时，只有在第一个 `await` 正常工作前访问到的属性才会被追踪。
-    > - ㊙️ 调试    
+    > - ㊙️ 调试
 
 ```ts [index.ts]
 watch(source, callback, {
@@ -943,29 +1055,44 @@ watchEffect(callback, {
 
 > 侦听器的 `onTrack` 和 `onTrigger` 选项`仅`会在`开发模式`下工作。
 
-📚 **watch(ref) 与 watch(() => ref.value)**
-- 1️⃣ `watch(currentValue, callback)`
+#### watch(ref) 与 watch(() => ref.value)
+
+1️⃣ `watch(currentValue, callback)`
+
 > 直接传 `ref` 对象，Vue 会自动解包 `.value`
+>
 > - `推荐写法`，简洁直观
 > - Vue 内部识别到是 `ref`，自动追踪 `.value` 变化
 > - `newVal/oldVal` 直接是解包后的值
+
 ```ts
 watch(currentValue, (newVal, oldVal) => {
   console.log(newVal); // 直接拿到值
 });
 ```
-- 2️⃣ `watch(() => currentValue.value, callback)`
+
+2️⃣ `watch(() => currentValue.value, callback)`
+
 > 传一个 `getter` 函数，getter 形式更适合需要`派生/组合`值的场景。
+>
 > - 功能上`等价`，也能正常监听
 > - 更适合`复合计算`场景，比如 `() => currentValue.value + otherRef.value`
 > - 或者监听`响应式对象的某个属性`时`必须`用 getter：`watch(() => state.count, ...)`
 
 ```ts
 watch(currentValue, (newVal) => {
-  console.log('Selected day range:', newVal);
+  console.log("Selected day range:", newVal);
 });
 ```
 
+3️⃣ 核心区别
+
+|            | `watch(ref)`                     | `watch(() => ref.value)`                   |
+| ---------- | -------------------------------- | ------------------------------------------ |
+| 适用场景   | 监听单个 `ref`                   | 监听 `reactive` 属性 / 派生值              |
+| 简洁度     | 更简洁                           | 稍冗余                                     |
+| 深度监听   | `watch(ref, cb, { deep: true })` | 同样可用                                   |
+| 监听多个源 | `watch([refA, refB], cb)`        | `watch(() => refA.value + refB.value, cb)` |
 
 ### Teleport（节点传送）
 
@@ -1255,6 +1382,7 @@ count.value++;
 ### 执行类型检查
 
 ✅ 执行类型检查标准命令
+
 ```bash
 npx vue-tsc --noEmit # Vue 3 + TypeScript 执行类型检查标准命令
 ```
