@@ -427,147 +427,331 @@ type Res = MyAwaited<Promise<Promise<number>>>; // number
 - `infer R`：`类型推断`，`Array<infer U>`，提取数组元素类型
 - `extends never`：`过滤`，返回 `never`，表示在联合类型中删除该项
 
-## 可借鉴 Example
+## 从类型创建类型
 
-```ts [qr-code-styling/types.ts]
-import { DOMWindow, JSDOM } from "jsdom";
-import nodeCanvas from "canvas";
-export interface UnknownObject {
-  [key: string]: any;
+> [从类型创建类型](https://www.typescriptlang.org/docs/handbook/2/types-from-types.html)
+
+### 泛型
+
+#### 开始
+
+```ts
+// 如果没有泛型，我们就必须给恒等函数指定一个特定类型
+function identity(arg: number): number {
+  return arg;
 }
-export type DotType =
-  | "dots"
-  | "rounded"
-  | "classy"
-  | "classy-rounded"
-  | "square"
-  | "extra-rounded";
-export type CornerDotType = "dot" | "square" | DotType;
-export type CornerSquareType = "dot" | "square" | "extra-rounded" | DotType;
-export type FileExtension = "svg" | "png" | "jpeg" | "webp";
-export type GradientType = "radial" | "linear";
-export type DrawType = "canvas" | "svg";
-export type ShapeType = "square" | "circle";
-export type Window = DOMWindow;
-export type Gradient = {
-  type: GradientType;
-  rotation?: number;
-  colorStops: {
-    offset: number;
-    color: string;
-  }[];
+
+/**
+ * 但是我们不能写死这个类型，而是想要这个函数变为一个通用函数
+ * - 则需要一种方法来捕获参数的类型，以便我们也能用它来表示返回值
+ * 现在，我们向恒等函数添加了一个类型变量 Type 。
+ * 这个 Type 允许我们捕获用户提供的类型（例如 number ），以便稍后使用该信息。
+ * 再次使用 Type 作为返回类型，我们可以看到参数和返回类型现在使用的是相同的类型。
+ * ⚠️ 我们称这个版本的 identity 函数是通用的，因为它适用于多种类型。
+ */
+function identity<Type>(arg: Type): Type {
+  return arg;
+}
+
+/**
+ * 通过两种方式调用它
+ * - 第一种方式是将所有参数（包括类型参数）传递给函数
+ * - 第二种方式是使用类型参数推断，即我们希望编译器根据我们传入的参数类型自动设置 Type 的值
+ *  - ⚠️ 注意：虽然类型参数推断有助于保持代码简洁易读，但在编译器无法推断类型时（例如在更复杂的示例中），您可能需要像第一种方式示例那样显式传递类型参数。
+ */
+// 方式一：将所有参数（包括类型参数）传递给函数
+let output = identity<string>("myString"); // 在这里，我们将 Type 明确设置为 string，作为函数调用的参数之一，使用 `<>` 而不是 `()` 来表示参数。
+
+// 方式2：使用类型参数推断
+let output = identity("myString"); // 请注意，我们无需在尖括号 (`<>`) 中显式传递类型；编译器会自动读取值 "myString" ，并将 Type 设置为其类型。
+```
+
+#### 泛型类型
+
+```ts
+/** 范型接口 */
+interface GenericIdentityFn {
+  <Type>(arg: Type): Type;
+}
+
+function identity<Type>(arg: Type): Type {
+  return arg;
+}
+
+let myIdentity: GenericIdentityFn = identity;
+
+/** 将泛型参数移至整个接口的参数 */
+interface GenericIdentityFn<Type> {
+  (arg: Type): Type;
+}
+
+function identity<Type>(arg: Type): Type {
+  return arg;
+}
+
+let myIdentity: GenericIdentityFn<number> = identity;
+```
+
+#### 泛型类
+
+> 泛型类的结构与泛型接口类似。泛型类在类名后用尖括号 ( `<>` ) 列出泛型类型参数列表。
+
+```ts
+class GenericNumber<NumType> {
+  zeroValue: NumType;
+  add: (x: NumType, y: NumType) => NumType;
+}
+
+let myGenericNumber = new GenericNumber<number>();
+myGenericNumber.zeroValue = 0;
+myGenericNumber.add = function (x, y) {
+  return x + y;
 };
-export interface DotTypes {
-  [key: string]: DotType;
+```
+
+⚠️ 注意事项
+
+- 类的类型包含两个方面：静态方面和实例方面。
+- 泛型类仅在其实例方面是泛型的，而非静态方面，因此在使用类时，静态成员`不能使用类`的`类型参数`。
+- 与接口一样，将类型参数放在类本身上，可以确保类的所有属性都使用相同的类型。
+
+#### 范型约束
+
+> 我们希望范型函数`能够处理所有类型的数据`，而`不是所有类型都适用`，并且该类型必须具有 某个 属性。只要类型具有此属性，我们就允许它使用，但必须至少具有此属性。为此，我们必须将此要求作为对 `Type` 约束条件。
+
+```ts
+interface Lengthwise {
+  length: number;
 }
-export interface GradientTypes {
-  [key: string]: GradientType;
+// 创建了一个包含单个 .length 属性的接口，然后使用该接口和 ` extends 关键字来表示我们的约束条件
+function loggingIdentity<Type extends Lengthwise>(arg: Type): Type {
+  console.log(arg.length); // Now we know it has a .length property, so no more error
+  return arg;
 }
-export interface CornerDotTypes {
-  [key: string]: CornerDotType;
+
+// 由于通用函数现在受到限制，它将不再适用于所有类型
+loggingIdentity(3); // Argument of type 'number' is not assignable to parameter of type 'Lengthwise'.
+
+// 相反，我们需要传入类型具备所有必需属性的值
+loggingIdentity({ length: 10, value: 3 });
+```
+
+#### 在泛型约束中使用类型参数
+
+> 可以声明一个受另一个类型参数约束的类型参数。
+
+```ts
+// 例如，这里我们想根据对象名称获取其属性。为了确保不会意外获取 obj 中不存在的属性，我们将在两个类型之间添加约束(读取的key，必须是Type中存在的key)
+function getProperty<Type, Key extends keyof Type>(obj: Type, key: Key) {
+  return obj[key];
 }
-export interface CornerSquareTypes {
-  [key: string]: CornerSquareType;
+
+let x = { a: 1, b: 2, c: 3, d: 4 };
+
+getProperty(x, "a");
+getProperty(x, "m");
+// Argument of type '"m"' is not assignable to parameter of type '"a" | "b" | "c" | "d"'.
+```
+
+#### 在泛型中使用类类型
+
+> 在 TypeScript 中使用泛型创建工厂时，必须通过构造函数来引用类类型
+
+```ts
+// 基类
+class Animal {
+  numLegs = 4;
 }
-export interface DrawTypes {
-  [key: string]: DrawType;
+
+// 不同的“管理员”类型
+class BeeKeeper {
+  hasMask = true;
 }
-export interface ShapeTypes {
-  [key: string]: ShapeType;
+
+class ZooKeeper {
+  nametag = "Mikle";
 }
-export type TypeNumber =
-  | 0  | 1  | 2  | 3  | 4  | 5  | 6  | 7  | 8  | 9  | 10  | 11  | 12    | 13 
-  | 14  | 15  | 16  | 17  | 18  | 19  | 20  | 21  | 22  | 23  | 24  
-  | 25  | 26  | 27  | 28  | 29  | 30  | 31  | 32  | 33  | 34  | 35  
-  | 36  | 37  | 38  | 39  | 40;
-export type ErrorCorrectionLevel = "L" | "M" | "Q" | "H";
-export type Mode = "Numeric" | "Alphanumeric" | "Byte" | "Kanji";
-export interface QRCode {
-  addData(data: string, mode?: Mode): void;
-  make(): void;
-  getModuleCount(): number;
-  isDark(row: number, col: number): boolean;
-  createImgTag(cellSize?: number, margin?: number): string;
-  createSvgTag(cellSize?: number, margin?: number): string;
-  createSvgTag(opts?: {
-    cellSize?: number;
-    margin?: number;
-    scalable?: boolean;
-  }): string;
-  createDataURL(cellSize?: number, margin?: number): string;
-  createTableTag(cellSize?: number, margin?: number): string;
-  createASCII(cellSize?: number, margin?: number): string;
-  renderTo2dContext(context: CanvasRenderingContext2D, cellSize?: number): void;
+
+// 子类会携带各自特有属性
+class Bee extends Animal {
+  keeper: BeeKeeper = new BeeKeeper();
 }
-export type Options = {
-  type?: DrawType;
-  shape?: ShapeType;
-  width?: number;
-  height?: number;
-  margin?: number;
-  data?: string;
-  image?: string;
-  nodeCanvas?: typeof nodeCanvas;
-  jsdom?: typeof JSDOM;
-  qrOptions?: {
-    typeNumber?: TypeNumber;
-    mode?: Mode;
-    errorCorrectionLevel?: ErrorCorrectionLevel;
-  };
-  imageOptions?: {
-    saveAsBlob?: boolean;
-    hideBackgroundDots?: boolean;
-    imageSize?: number;
-    crossOrigin?: string;
-    margin?: number;
-  };
-  dotsOptions?: {
-    type?: DotType;
-    color?: string;
-    gradient?: Gradient;
-    roundSize?: boolean;
-  };
-  cornersSquareOptions?: {
-    type?: CornerSquareType;
-    color?: string;
-    gradient?: Gradient;
-  };
-  cornersDotOptions?: {
-    type?: CornerDotType;
-    color?: string;
-    gradient?: Gradient;
-  };
-  backgroundOptions?: {
-    round?: number;
-    color?: string;
-    gradient?: Gradient;
-  };
-};
-export type FilterFunction = (row: number, col: number) => boolean;
-export type DownloadOptions = {
-  name?: string;
-  extension?: FileExtension;
-};
-export type DrawArgs = {
-  x: number;
-  y: number;
-  size: number;
-  rotation?: number;
-  getNeighbor?: GetNeighbor;
-};
-export type BasicFigureDrawArgs = {
-  x: number;
-  y: number;
-  size: number;
-  rotation?: number;
-};
-export type RotateFigureArgs = {
-  x: number;
-  y: number;
-  size: number;
-  rotation?: number;
-  draw: () => void;
-};
-export type GetNeighbor = (x: number, y: number) => boolean;
-export type ExtensionFunction = (svg: SVGElement, options: Options) => void;
+
+class Lion extends Animal {
+  keeper: ZooKeeper = new ZooKeeper();
+}
+
+// 泛型工厂：传入“类构造函数”，返回对应实例
+function createInstance<A extends Animal>(c: new () => A): A {
+  return new c();
+}
+
+const lion = createInstance(Lion);
+lion.keeper.nametag; // 类型推导为 ZooKeeper
+
+const bee = createInstance(Bee);
+bee.keeper.hasMask; // 类型推导为 BeeKeeper
+```
+
+> 说明
+>
+> - 这里参数类型必须写成 `new () => A`，因为我们传入的不是实例本身，而是“类的构造函数”。
+> - `A` 只描述实例类型；`new () => A` 才能描述“可被 new、并且返回 A 实例”的类类型。
+> - 如果只写 `A`，函数体里的 `new c()` 在类型层面就不成立。
+
+#### 范型参数默认值
+
+1️⃣ 通用参数默认值遵循以下规则
+
+- 如果类型参数有默认值，则该类型参数被视为可选参数。
+- 必需类型参数不能跟在可选类型参数之后。
+- 类型参数的默认类型必须满足类型参数的约束（如果存在）。
+- 指定类型参数时，只需为必需的类型参数指定类型参数即可。未指定的类型参数将解析为其默认类型。
+- 如果指定了默认类型，但推理无法选择候选类型，则推断出默认类型。
+- 与现有类或接口声明合并的类或接口声明可能会为现有类型参数引入默认值。
+- 与现有类或接口声明合并的类或接口声明可以引入新的类型参数，只要它指定了默认值即可。
+
+2️⃣ Example
+
+```ts
+// 例如，一个创建新 HTMLElement 的函数。不带任何参数调用该函数会生成一个 HTMLDivElement；
+// 如果将一个元素作为第一个参数调用该函数，则会生成一个与该参数类型相同的元素。
+// 您还可以选择性地传递一个子元素列表。以前，您必须将函数定义为
+declare function create(): Container<HTMLDivElement, HTMLDivElement[]>;
+declare function create<T extends HTMLElement>(element: T): Container<T, T[]>;
+declare function create<T extends HTMLElement, U extends HTMLElement>(
+  element: T,
+  children: U[],
+): Container<T, U[]>;
+
+// 使用通用参数默认值，我们可以将其简化为
+declare function create<
+  T extends HTMLElement = HTMLDivElement,
+  U extends HTMLElement[] = T[],
+>(element?: T, children?: U): Container<T, U>;
+
+const div = create(); // const div: Container<HTMLDivElement, HTMLDivElement[]>
+const p = create(new HTMLParagraphElement()); // const p: Container<HTMLParagraphElement, HTMLParagraphElement[]>
+
+// 1) 什么都不传：用默认
+const c1 = create();
+// T = HTMLDivElement
+// U = HTMLDivElement[]
+
+// 2) 传 span 元素：T 被推成 HTMLSpanElement，U 默认变成 HTMLSpanElement[]
+const span = document.createElement("span");
+const c2 = create(span);
+
+// 3) 显式传 children：U 会按传入数组推导
+const div = document.createElement("div");
+const children = [document.createElement("p"), document.createElement("a")];
+const c3 = create(div, children);
+// T = HTMLDivElement
+// U = (HTMLParagraphElement | HTMLAnchorElement)[]
+```
+
+3️⃣ 逐段拆解(使用通用参数默认值)
+
+- 1.`declare function ...`
+  - `declare` 表示“只声明类型，不提供实现”。
+  - 常见于 `.d.ts` 类型定义文件，告诉 TS：这个函数存在，按这个签名用就行。
+- 2.泛型参数 `T`
+  - `T extends HTMLElement`: 约束 `T` 必须是 `HTMLElement` 或其子类型（如 `HTMLDivElement`、`HTMLSpanElement`）。
+  - `= HTMLDivElement`
+    - 默认类型是 `HTMLDivElement`。
+    - 如果调用时推不出 `T`，就用 `HTMLDivElement`。
+- 3.泛型参数 `U`
+  - `U extends HTMLElement[]`: `U` 必须是 `HTMLElement 数组类型`。
+  - `= T[]`
+    - 默认是 `T` 的数组。
+    - 如果 `T` 是 `HTMLSpanElement`，默认 `U` 就是 `HTMLSpanElement[]`。
+- 4.参数列表
+  - `element?: T`，可选参数，类型是 `T`
+  - `children?: U`，可选参数，类型是 `U`
+- 5.返回值 `Container<T, U>`
+  - 返回类型和输入的泛型绑定。
+  - 你传什么 `T/U`，返回值里就保留对应的精确类型信息。
+
+#### 协变和逆变
+
+#### 总结
+
+- 在类型系统中，属性更多的类型是子类型；
+  - ⚠️ 在联合类型（`|`）中，类型更少是子类型（如：`'a' | 'b' | 'c'` 是 `'a' | 'b'` 的父类型）。
+- 在集合论中，属性更少的集合是子集。
+
+### 类型键运算符(keyof)
+
+> `类型键运算符` - 使用 `keyof` 运算符创建新类型
+
+### 类型运算符(typeof)
+
+> `typeof 类型运算符` - 使用 `typeof` 运算符创建新类型
+
+### 索引访问类型
+
+> `索引访问类型` - 使用 `Type['a']` 语法访问类型的子集
+
+### 条件类型
+
+> `条件类型` ——在类型系统中充当 if 语句的类型
+
+### 映射类型
+
+> `映射类型` - 通过映射现有类型中的每个属性来创建类型
+
+### 模板字面量类型
+
+> `模板字面量类型` - 通过模板字面量字符串更改属性的映射类型
+
+## Enums 枚举
+
+### 规范
+
+- 枚举名称：大驼峰命名（PascalCase）
+- 枚举内容
+  - `Key`：大驼峰/全大写（多个单词下划线分隔），`Down/DOWN`
+  - `Value`：数字/字符串，`1/'1'`、`'up'/'UP'`
+  - `格式`: `key = value`
+- ⚠️ 全项目一致：大驼峰命名（PascalCase）/ 全大写，全项目统一一种即可。
+
+### 注意事项
+
+- 1️⃣ 数值枚举
+  - 连续数值
+    - 若使用默认，同时不给自定义数值，则开始数值默认是从 0 开始。（类似数组索引）
+    - 若需要自定义数值，则给定第一个开始数值，所有成员从此点自动递增 1。
+  - 非连续数值：给每个 Key 的 Value 都指定数值就好
+- 2️⃣ 字符串枚举: Value可以为`全小写/全大写`字符串
+- 3️⃣ 异构枚举: 枚举可以与字符串和数字成员混合使用(不推荐)
+  - 枚举内容：一些是 `Key = Value（数值）`；一些是 `Key = Value（字符串）`；
+- 4️⃣ 常量枚举（const 枚举）：枚举通过 const 修饰符来定义
+  - const 枚举只能使用常量枚举表达式，并且与普通枚举不同，其在编译期间会被完全移除。
+  - const 枚举不能有计算成员。
+- 5️⃣ 对象与枚举：当一个带有 `as const` 对象就足够时，你可能不需要枚举
+
+```ts
+/**
+ * 常量枚举
+ */
+const enum EDirection {
+  Up,
+  Down,
+  Left,
+  Right,
+}
+
+/**
+ * 常量对象写法(TS 类型上的常量对象)
+ */
+//  const 只保证变量绑定不被重新赋值，不能 ODirection = {}。
+const ODirection = {
+  Up: 0,
+  Down: 1,
+  Left: 2,
+  Right: 3,
+} as const;
+// as const，在 TypeScript 类型层面把属性变成只读字面量类型
+// 1.Up 的类型是 0，不是 number
+// 2.整个对象属性是 readonly
 ```
