@@ -25,7 +25,18 @@ export default defineConfig({
         text: "试图记录会忘掉的前端知识",
         items: [
           { text: "CV 工程师", link: "/docs/cv/cv" },
-          { text: "对抗遗忘曲线", link: "/docs/memory/memory" },
+          { 
+            text: "对抗遗忘曲线", 
+            link: "/docs/memory/memory",
+            items: [
+              { text: "HTML", link: "/docs/memory/html" },
+              { text: "CSS", link: "/docs/memory/css" },
+              { text: "JavaScript", link: "/docs/memory/javascript" },
+              { text: "ES6", link: "/docs/memory/es6" },
+              { text: "Vue", link: "/docs/memory/vue" },
+              { text: "Pinia", link: "/docs/memory/pinia" },
+            ]
+           },
           { text: "Bug 制造与修复", link: "/docs/bug/bug" },
           { text: "面向资料编程", link: "/docs/salary/salary" },
           { text: "面向玄学部署", link: "/docs/deploy/deploy" },
