@@ -1,5 +1,21 @@
-# HTML（网页结构）
+# HTML（页面结构）
 > 网页的“结构工程师”，负责搭建页面的骨架和内容。
+
+## 指南
+- [HTML 规范](https://html.spec.whatwg.org/)
+- [MDN HTML 文档](https://developer.mozilla.org/zh-CN/docs/Web/HTML)
+> HTML(超文本标记语言HyperText Markup Language)是构成 Web 世界的一砖一瓦。
+- [W3 教程](https://w3schools.org.cn/)
+> 拥有全球最大的网页开发者网站。
+- [DOM](https://htmlspecs.com/dom/)
+> DOM 定义了一个平台中立的模型，用于事件、活动中止和节点树。
+- [MDN Web 文档术语表](https://developer.mozilla.org/zh-CN/docs/Glossary)
+> Web 技术文档和代码中含有大量的术语和缩写。
+- [Web Reference](https://webreference.com/html/)
+> Web 的原创（创建于 1995 年！）和最受尊敬的 Web 开发资源之一
+- [htmlreference](https://htmlreference.io/)
+> 一个免费的 HTML 指南。它包含所有元素和属性 。
+- [Html特殊字符编码对照表](https://www.jb51.net/onlineread/htmlchar.htm)
 
 ## 元数据（meta）
 

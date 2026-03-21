@@ -1,5 +1,10 @@
-# CSS（网页样式）
+# CSS（页面样式）
 > 网页的“化妆师/邪术”，专治“丑”，一行代码就能让页面从素颜秒变女神，时尚潮流全靠它。
+
+## 指南
+- [Ctrip webkit CSS library](http://ic4.github.io/webkitcss/)
+- [CSS Reference](https://tympanus.net/codrops/css_reference/)
+> 这是一个详尽的 CSS 参考书，包含所有重要的属性和信息，帮助你从基础学习 CSS
 
 ## 外边距折叠
 

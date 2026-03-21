@@ -1,4 +1,4 @@
-# JavaScript（网页行为动作）
+# JavaScript（页面行为动作）
 > 网页的“魔法师”，让静态页面动起来。没有它，网页只能“躺平”；有了它，页面会“跳舞”。
 
 ## JS学习技巧
@@ -350,7 +350,7 @@ sum.apply(null, arr); // 6
 
 ## 模块化规范
 
-## 分类
+### 分类
 
 - `CJS(CommonJS)`：Node.js采用的规范，主要用于`服务端`。
 - `AMD`：专门为`浏览器端`设计的`异步加载规范`，代表库是`RequireJS`。
@@ -358,7 +358,7 @@ sum.apply(null, arr); // 6
 - `UMD`：通用模块定义，为了解决跨平台（浏览器和 Node.js）兼容问题。
 - `ESM`(ES Modules)：ES2015 (ES6) 推出的官方标准，旨在统一前后端
 
-## CommonJS
+### CommonJS
 
 1️⃣ 特点
 
@@ -372,7 +372,7 @@ sum.apply(null, arr); // 6
 - 导出：`module.exports = {}` 或 `exports.xxx = xxx`
 - 导入：`const xxx = require('xxx')`
 
-## AMD
+### AMD
 
 1️⃣ 特点
 
@@ -384,7 +384,7 @@ sum.apply(null, arr); // 6
 - 导出：`difine(id?,dependencies?,factory)`
 - 导入：`requires([dependencies],callback)`
 
-## CMD
+### CMD
 
 1️⃣ 特点
 
@@ -396,7 +396,7 @@ sum.apply(null, arr); // 6
 - `define(function(require, exports, module) { ... })`
 - AMD vs CMD：AMD 推崇依赖前置（提前执行），CMD 推崇依赖就近（延迟执行）。
 
-## UMD
+### UMD
 
 1️⃣ 原理
 
@@ -409,7 +409,7 @@ sum.apply(null, arr); // 6
   `module.exports`
 - AMD和CommonJS 都不支持，挂载到全局对象上（`window/global`）
 
-## ESM
+### ESM
 
 1️⃣ 特点
 
@@ -422,7 +422,7 @@ sum.apply(null, arr); // 6
 - 导出：`export const x= 1`/`export default {}`
 - 导入：`import {x} from '@/utils'`/`import x from '@/utils'`
 
-## 对比总结
+### 对比总结
 
 | 分类     | 加载方式       | 运行/编译时 | 核心语法                               | 备注                                |
 | :------- | :------------- | :---------- | :------------------------------------- | :---------------------------------- |
@@ -436,6 +436,8 @@ sum.apply(null, arr); // 6
 
 - 防抖（Debounce）：延迟执行，`仅最后一次操作停止后生效`（频繁操作，会重新计时，仅最后一次点击后，达到间隔时间才生效）
 - 节流（Throttle）：`降低频率`（频繁操作，节流时间不变，满足设定的节流时间就执行）
+
+> [【Debounce vs Throttle】](https://kettanaito.com/blog/debounce-vs-throttle): 防抖与节流两者混淆终极图解指南。
 
 ## 延时函数
 
@@ -518,3 +520,5 @@ sum.apply(null, arr); // 6
     - 都是 `-0`
     - 都是 `NaN`
     - 都有相同的值，非零且都不是 `NaN`
+
+

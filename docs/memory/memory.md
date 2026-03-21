@@ -256,4 +256,3 @@
 ## 开发辅助资源
 
 - [pixabay](https://pixabay.com/zh/): 精彩的免版税图片和免版税库存,任何项目都可使用的免费素材
-- [Debounce vs Throttle](https://kettanaito.com/blog/debounce-vs-throttle): 防抖与节流两者混淆终极图解指南。

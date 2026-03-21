@@ -1,6 +1,11 @@
 # ES6
 > JavaScript 的“健身教练”，让老 JS 变得更强壮、更优雅，语法糖多到让你甜到掉牙。
 
+## 指南
+- [ES5](https://yanhaijing.com/es5/#about)
+- [ES6](https://262.ecma-international.org/6.0/)
+- [ECMAScript 6入门](https://es6.ruanyifeng.com/)
+
 ## 运算符的扩展
 
 - `**`：指数运算符，ES2016 新增的一个运算符。
