@@ -1,5 +1,480 @@
 # JavaScript（页面行为动作）
+
 > 网页的“魔法师”，让静态页面动起来。没有它，网页只能“躺平”；有了它，页面会“跳舞”。
+
+## 设计模式
+
+### 单例与多例
+
+#### 单例模式
+
+1️⃣ 定义
+
+> 【单例模式】：确保`一个类只有一个实例`，并`提供一个全局访问点`，`无论`在程序中`何处调用`，`返回`的都`是同一个对象实例`。
+
+2️⃣ 核心特点
+
+- `唯一性`：全局只有一个实例
+- `延迟实例化`：在需要时才创建
+- `全局访问点`：提供统一访问方式
+
+3️⃣ 实现方式
+
+::: code-group
+
+```js [对象字面量（最简单的单例）.js]
+const AppConfig = {
+  appName: 'MyApp',
+  version: '1.0.0',
+  appURL: 'https://api.example.com',
+
+  getAppInfo(){
+    return `${this.appName} v${this.version}`
+  }
+
+  setAppURL(url) {
+    this.appURL = url
+  }
+}
+
+// used
+console.log(AppConfig.getAppInfo())
+AppConfig.setAppURL('https://new-api.exmaple.com')
+```
+
+```js [闭包实现（更安全）.js]
+const Singleton = (function () {
+  let instance = null;
+
+  class SingleClass {
+    constructor(name) {
+      this.name = name;
+    }
+
+    sayHello() {
+      return console.log(`Hello, I'm ${this.name}`);
+    }
+  }
+
+  return {
+    getInstance(name) {
+      if (!instance) {
+        instance = new SingleClass(name);
+      }
+      return instance;
+    },
+  };
+})();
+
+// used
+const s1 = Singleton.getInstance("First");
+const s2 = Singleton.getInstance("Second");
+
+console.log(s1 === s2); // true
+console.log(s1.name); // 'First'
+```
+
+```js [ES6 Class 实现.js]
+class Singleton {
+  constructor() {
+    if (Singleton.instance) {
+      return Singleton.instance;
+    }
+    // 初始化代码：保存实例
+    Singleton.instance = this;
+  }
+}
+const a = new Singleton();
+const b = new Singleton();
+console.log(a === b); // true
+```
+
+:::
+
+4️⃣ 应用场景
+
+::: code-group
+
+```js [全局状态管理（Vuex/Redux）.js]
+class Store {
+  constructor() {
+    if (Store.instance) {
+      return Store.instance;
+    }
+
+    this.state = {};
+    this.reducers = {};
+    Store.instance = this;
+  }
+
+  dispatch(action) {
+    const reducer = this.reducers[action.type];
+    if (reducer) {
+      this.state = reducer(this.state, action.payload);
+    }
+  }
+}
+
+const store1 = new Store();
+const store2 = new Store();
+console.log(store1 === store2); // true - 全局唯一状态管理
+```
+
+```js [日志记录器.js]
+class Logger {
+  constructor() {
+    if (Logger.instance) {
+      return Logger.instance;
+    }
+
+    this.logs = [];
+    Logger.instance = this;
+  }
+
+  info(message) {
+    const log = { level: "INFO", message, timestamp: new Date() };
+    this.logs.push(log);
+    console.log(`[INFO] ${message}`);
+  }
+
+  error(message) {
+    const log = { level: "ERROR", message, timestamp: new Date() };
+    this.logs.push(log);
+    console.error(`[ERROR] ${message}`);
+  }
+
+  getLogs() {
+    return this.logs;
+  }
+}
+
+// 在任何地方使用同一个logger
+const logger1 = new Logger();
+const logger2 = new Logger();
+logger1.info("App started");
+logger2.info("User logged in");
+console.log(logger1.getLogs().length); // 2
+```
+
+:::
+
+#### 多例模式
+
+1️⃣ 定义
+
+> 【多例模式】：是单例模式的扩展，允许`一个类有多个实例`，但`每个实例有唯一标识`，通过标识获取对应的实例，相当于“有名字的单例”。
+
+2️⃣ 核心特点
+
+- `有限实例`：实例数量受控
+- `键值映射`：通过key获取对应实例
+- 每个key对应唯一实例
+
+3️⃣ 实现方式
+
+::: code-group
+
+```js [经典实现.js]
+class Multiton {
+  static instances = {};
+  constructor(key) {
+    if (Multiton.instances[key]) {
+      return Multiton.instances[key];
+    }
+    this.key = key;
+    Multiton.instances[key] = this;
+  }
+}
+// used
+const a = new Multiton('foo');
+const b = new Multiton('bar');
+const c = new Multiton('foo');
+console.log(a === c); // true
+console.log(a === b); // false
+```
+
+```js [Map 实现.js]
+class Multiton {
+  static instances = new Map();
+
+  constructor(key, name) {
+    if (Multiton.instances.has(key)) {
+      return Multiton.instances.get(key);
+    }
+
+    this.key = key;
+    this.name = name;
+    Multiton.instances.set(key, this);
+  }
+
+  static getInstance(key, name) {
+    if (!Multiton.instances.has(key)) {
+      new Multiton(key, name);
+    }
+    return Multiton.instances.get(key);
+  }
+
+  sayHello() {
+    console.log(`Hello from ${this.name} (${this.key})`);
+  }
+}
+
+// 使用
+const db1 = Multiton.getInstance("mysql", "MySQL DB");
+const db2 = Multiton.getInstance("mysql", "MySQL DB Again");
+const db3 = Multiton.getInstance("redis", "Redis Cache");
+
+console.log(db1 === db2); // true - 相同key返回相同实例
+console.log(db1 === db3); // false - 不同key返回不同实例
+db1.sayHello(); // Hello from MySQL DB (mysql)
+db3.sayHello(); // Hello from Redis Cache (redis)
+```
+
+```js [工厂模式实现.js]
+class DatabaseConnection {
+  constructor(config) {
+    this.config = config;
+    this.connectedAt = new Date();
+  }
+
+  connect() {
+    console.log(`Connected to ${this.config.type} at ${this.config.host}`);
+  }
+}
+
+class ConnectionManager {
+  static connections = new Map();
+
+  static getConnection(type, config) {
+    const key = `${type}:${config.host}`;
+
+    if (!this.connections.has(key)) {
+      const connection = new DatabaseConnection({ type, ...config });
+      this.connections.set(key, connection);
+      console.log(`Created new ${type} connection to ${config.host}`);
+    }
+
+    return this.connections.get(key);
+  }
+
+  static getAllConnections() {
+    return Array.from(this.connections.values());
+  }
+}
+
+// 使用
+const mysql1 = ConnectionManager.getConnection("mysql", {
+  host: "localhost",
+  port: 3306,
+});
+const mysql2 = ConnectionManager.getConnection("mysql", {
+  host: "localhost",
+  port: 3306,
+});
+const mysql3 = ConnectionManager.getConnection("mysql", {
+  host: "remote.com",
+  port: 3306,
+});
+const redis = ConnectionManager.getConnection("redis", {
+  host: "localhost",
+  port: 6379,
+});
+
+console.log(mysql1 === mysql2); // true
+console.log(mysql1 === mysql3); // false
+console.log(ConnectionManager.getAllConnections().length); // 3
+```
+
+:::
+
+4️⃣ 应用场景
+
+::: code-group
+
+```js [多环境配置管理.js]
+class EnvironmentConfig {
+  constructor(env) {
+    this.env = env;
+    this.config = this.loadConfig(env);
+  }
+
+  loadConfig(env) {
+    const configs = {
+      development: { apiUrl: "http://localhost:3000", debug: true },
+      staging: { apiUrl: "https://staging.api.com", debug: true },
+      production: { apiUrl: "https://api.com", debug: false },
+    };
+    return configs[env];
+  }
+
+  get(key) {
+    return this.config[key];
+  }
+}
+
+class ConfigManager {
+  static instances = new Map();
+
+  static getInstance(env) {
+    if (!this.instances.has(env)) {
+      this.instances.set(env, new EnvironmentConfig(env));
+    }
+    return this.instances.get(env);
+  }
+}
+
+// 使用
+const devConfig = ConfigManager.getInstance("development");
+const prodConfig = ConfigManager.getInstance("production");
+const anotherDev = ConfigManager.getInstance("development");
+
+console.log(devConfig === anotherDev); // true
+console.log(devConfig.get("apiUrl")); // http://localhost:3000
+console.log(prodConfig.get("apiUrl")); // https://api.com
+```
+
+:::
+
+#### 单例| vs 多例
+
+| 对比维度   | 单例模式                     | 多例模式                                      |
+| ---------- | ---------------------------- | --------------------------------------------- |
+| 实例数量   | 全局唯一1个实例              | 有限个实例，通过key区分                       |
+| 存储结构   | 单个变量/属性                | Map/对象存储多个实例                          |
+| 适用场景   | 全局共享资源（配置/日志）    | 需要区分不同维度的资源（多环境配置/多数据源） |
+| 内存占用   | 最少（1个实例）              | 较多（多个实例）                              |
+| 线程安全   | 需要注意（JS单线程天然安全） | 同样安全                                      |
+| 实现复杂度 | 简单                         | 稍复杂                                        |
+| 扩展性     | 差，无法扩展                 | 好，可动态添加新类型                          |
+
+#### 缓存系统案例
+
+::: code-group
+```js [单例缓存.js]
+class SingletonCache {
+  constructor() {
+    if (SingletonCache.instance) {
+      return SingletonCache.instance;
+    }
+    
+    this.cache = new Map();
+    SingletonCache.instance = this;
+  }
+  
+  set(key, value) {
+    this.cache.set(key, value);
+  }
+  
+  get(key) {
+    return this.cache.get(key);
+  }
+  
+  clear() {
+    this.cache.clear();
+  }
+}
+
+// 全局只有一个缓存池
+const cache = new SingletonCache();
+```
+```js [多例缓存（区分用户）.js]
+class UserCache {
+  constructor(userId) {
+    this.userId = userId;
+    this.cache = new Map();
+  }
+  
+  set(key, value) {
+    this.cache.set(key, value);
+  }
+  
+  get(key) {
+    return this.cache.get(key);
+  }
+}
+
+class CacheManager {
+  static userCaches = new Map();
+  
+  static getUserCache(userId) {
+    if (!this.userCaches.has(userId)) {
+      this.userCaches.set(userId, new UserCache(userId));
+    }
+    return this.userCaches.get(userId);
+  }
+}
+
+// 每个用户独立的缓存空间
+const user1Cache = CacheManager.getUserCache(1);
+const user2Cache = CacheManager.getUserCache(2);
+user1Cache.set('theme', 'dark');
+user2Cache.set('theme', 'light');
+console.log(user1Cache.get('theme')); // dark
+console.log(user2Cache.get('theme')); // light
+```
+:::
+
+#### 总结
+- `单例`适合`全局唯一`对象，`多例`适合`“每类唯一”`对象。
+- 单例更简单，易于实现；多例更灵活，适合分组管理。
+
+#### 注意事项
+
+::: code-group
+```js [单例的陷阱.js]
+// ❌ 不要过度使用单例
+class Utils {
+  // 如果没有任何状态需要共享，不需要用单例
+}
+
+// ✅ 只有需要维护状态时才使用
+class UserSession {
+  constructor() {
+    if (UserSession.instance) return UserSession.instance;
+    this.user = null;
+    UserSession.instance = this;
+  }
+}
+```
+```js [多例的key设计.js]
+// ❌ 不好的key设计
+const key = `${type}${host}${port}`; // 容易冲突
+
+// ✅ 好的key设计
+const key = `${type}:${host}:${port}`; // 明确分隔
+```
+```js [现代框架中的单例.js]
+// Vue 3 Composition API 中的单例
+import { reactive } from 'vue';
+
+const store = reactive({
+  count: 0,
+  increment() {
+    this.count++;
+  }
+});
+
+export default store; // 导入即单例
+```
+```js [ 测试时的注意事项.js]
+// 单例会导致测试间状态污染
+class Counter {
+  constructor() {
+    if (Counter.instance) return Counter.instance;
+    this.count = 0;
+    Counter.instance = this;
+  }
+  
+  increment() { this.count++; }
+}
+
+// 测试时需要重置
+beforeEach(() => {
+  Counter.instance = null; // 重置单例
+});
+```
+
+:::
 
 ## JS学习技巧
 
@@ -520,5 +995,3 @@ sum.apply(null, arr); // 6
     - 都是 `-0`
     - 都是 `NaN`
     - 都有相同的值，非零且都不是 `NaN`
-
-
