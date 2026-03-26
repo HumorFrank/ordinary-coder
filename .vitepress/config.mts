@@ -34,6 +34,7 @@ export default defineConfig({
               { text: "JavaScript", link: "/docs/memory/javascript" },
               { text: "ES6", link: "/docs/memory/es6" },
               { text: "Vue", link: "/docs/memory/vue" },
+              { text: "Vue Router", link: "/docs/memory/vue-router" },
               { text: "Pinia", link: "/docs/memory/pinia" },
             ]
            },
