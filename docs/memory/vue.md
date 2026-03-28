@@ -1114,7 +1114,7 @@ defineProps({
 
 ### computed 与 纯函数
 
-1️⃣ 计算属性的函数（推荐用纯函数替代）
+1️⃣ 计算属性的函数（推荐用纯函数/Methods替代）
 
 ```ts
 // TODO: 计算属性的函数写法 (❌ 不推荐)  - 没有缓存
@@ -1138,10 +1138,10 @@ isHostStreamer('123')  // 再次执行，没有缓存
 > `computed` 通常用于声明式地`定义派生状态`，而`不是返回函数`。这种写法会让代码阅读者困惑。
 :::
 
-2️⃣ 纯函数
+2️⃣ 纯函数/Methods
 
 ```ts
-// ✅ 推荐使用纯函数写法 - 替代计算属性的函数写法
+// ✅ 推荐使用纯函数/Methods写法 - 替代计算属性的函数写法
 function isHostStreamer (hostId: string | undefined) {
   return hostId && hostId !== '0';
 }
