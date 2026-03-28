@@ -1110,7 +1110,60 @@ defineProps({
 </template>
 ```
 
-## computed
+## computed 计算属性
+
+### computed 与 纯函数
+
+1️⃣ 计算属性的函数（推荐用纯函数替代）
+
+```ts
+// ❌ 计算属性的函数写法 - 没有缓存
+const isHostStreamer = computed(() => (hostId: string | undefined) => {
+  return hostId && hostId !== '0';
+});
+
+// 每次调用都会重新执行内部函数
+isHostStreamer('123')  // 执行
+isHostStreamer('123')  // 再次执行，没有缓存
+```
+::: warning ⚠
+
+🅰 为什么语法上合法？
+> Vue 3 的 `computed` 可以接受一个返回函数的 `getter`，这样创建的是一个`计算属性的函数`，而不是计算属性的值。这种写法在某些场景下是允许的。(虽然其在`语法上是合法的`，但是`不推荐`这样写)
+
+🅱 为什么不推荐？
+- ① 失去了计算属性的核心优势
+> 计算属性的主要特点是`缓存`，这样写返回的是一个函数，每次调用都会重新执行，失去了缓存的意义
+- ② 语义混乱
+> `computed` 通常用于声明式地`定义派生状态`，而`不是返回函数`。这种写法会让代码阅读者困惑。
+:::
+
+2️⃣ 纯函数
+
+```ts
+// ✅ 推荐使用纯函数写法 - 替代计算属性的函数写法
+function isHostStreamer (hostId: string | undefined) {
+  return hostId && hostId !== '0';
+}
+```
+
+3️⃣ 真正的计算属性
+
+```ts
+// ✅ 计算属性推荐写法，保留其【缓存】特性 
+const isHostStreamer = computed(() => {
+  return props.hostId && props.hostId !== '0';
+}); 
+
+// ✅ 直接返回
+const isHostStreamer = computed(() => props.hostId && props.hostId !== '0'); 
+```
+
+4️⃣ 总结
+- 若是`参数化判断/需要传递参数`，使用`普通函数/Methods`;
+- 若是`依赖响应式数据`，使用`真正`的` computed`;
+
+### Example
 
 ::: code-group
 
