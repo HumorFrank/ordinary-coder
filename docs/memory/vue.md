@@ -1,4 +1,5 @@
 # Vue
+
 > 前端界的“拼装大师”，数据和界面说合就合，开发效率像开挂一样，适合“懒人”与“强迫症”共同拥有。
 
 ## 生命周期
@@ -418,8 +419,8 @@ export default {
   - 子组件模板中的表达式只能访问子组件的作用域。
 - 4️⃣ `默认内容`：在外部没有提供任何内容的情况下，可以为插槽指定默认内容。
 
-
 ::: code-group
+
 ```vue [动态插槽名.vue]
 <template>
   <BaseLayout>
@@ -506,6 +507,7 @@ export default {
   </button>
 </template>
 ```
+
 :::
 
 ## 实际应用场景
@@ -563,6 +565,7 @@ export default {
 ## Vue2与Vue3异同
 
 ::: code-group
+
 ```vue [Vue2语法.vue]
 <!-- 具名插槽 -->
 <template slot="header">内容</template>
@@ -1119,47 +1122,51 @@ defineProps({
 ```ts
 // TODO: 计算属性的函数写法 (❌ 不推荐)  - 没有缓存
 const isHostStreamer = computed(() => (hostId: string | undefined) => {
-  return hostId && hostId !== '0';
+  return hostId && hostId !== "0";
 });
 
 // 每次调用都会重新执行内部函数
-isHostStreamer('123')  // 执行
-isHostStreamer('123')  // 再次执行，没有缓存
+isHostStreamer("123"); // 执行
+isHostStreamer("123"); // 再次执行，没有缓存
 ```
+
 ::: warning ⚠
 
 🅰 为什么语法上合法？
+
 > Vue 3 的 `computed` 可以接受一个返回函数的 `getter`，这样创建的是一个`计算属性的函数`，而不是计算属性的值。这种写法在某些场景下是允许的。(虽然`语法上是合法的`，但是`不推荐`)
 
 🅱 为什么不推荐？
+
 - ① 失去了计算属性的核心优势
-> 计算属性的主要特点是`缓存`，这样写返回的是一个函数，每次调用都会重新执行，失去了缓存的意义
+  > 计算属性的主要特点是`缓存`，这样写返回的是一个函数，每次调用都会重新执行，失去了缓存的意义
 - ② 语义混乱
-> `computed` 通常用于声明式地`定义派生状态`，而`不是返回函数`。这种写法会让代码阅读者困惑。
-:::
+  > `computed` 通常用于声明式地`定义派生状态`，而`不是返回函数`。这种写法会让代码阅读者困惑。
+  > :::
 
 2️⃣ 纯函数/Methods
 
 ```ts
 // ✅ 推荐使用纯函数/Methods写法 - 替代计算属性的函数写法
-function isHostStreamer (hostId: string | undefined) {
-  return hostId && hostId !== '0';
+function isHostStreamer(hostId: string | undefined) {
+  return hostId && hostId !== "0";
 }
 ```
 
 3️⃣ 真正的计算属性
 
 ```ts
-// ✅ 计算属性推荐写法，保留其【缓存】特性 
+// ✅ 计算属性推荐写法，保留其【缓存】特性
 const isHostStreamer = computed(() => {
-  return props.hostId && props.hostId !== '0';
-}); 
+  return props.hostId && props.hostId !== "0";
+});
 
 // ✅ 直接返回
-const isHostStreamer = computed(() => props.hostId && props.hostId !== '0'); 
+const isHostStreamer = computed(() => props.hostId && props.hostId !== "0");
 ```
 
 4️⃣ 总结
+
 - 若是`参数化判断/需要传递参数`，使用`普通函数/Methods`;
 - 若是`依赖响应式数据`，使用`真正`的` computed`;
 
@@ -1261,11 +1268,455 @@ count.value++;
 
 > 计算属性的 `onTrack` 和 `onTrigger` 选项`仅`会在`开发模式`下工作。
 
-## hooks & utils
+## composables/utils/store
 
-`hooks` 目录下的文件是 `hooks` ，`utils` 目录下的文件是 `utils` 。
+### 易混淆事项
 
-- `hooks` 内部使用了 `vue` 相关 `API`
+- Vue 中没有`Hooks`的概念，官方称之为 `组合式函数 (Composables)`。
+- `Hooks` 是 React 中的概念。
+
+### 核心原则
+
+- `Utils`：无状态、纯函数、可测试
+- `Composables`：有状态、组件级、逻辑复用
+- `Store`：全局共享/需要共享状态、跨组件、响应式
+
+### 核心应用原则
+- 能用 `Composables` 解决的，不用 `Store`（保持简单）
+- 需要在多个不相关的组件间共享的状态，用 `Store`
+- 可以组合使用：`Store` 管理全局数据，`Composables` 封装业务逻辑
+
+### 核心特征
+
+1️⃣ Composables 的核心特征
+
+- ✅ 有状态：使用 `ref/reactive/computed` 等响应式 API 创建和管理状态
+- ✅ 有副作用：使用 `onMounted/onUnmounted/watch/watchEffect` 等处理副作用
+- ✅ 组件级隔离：每次调用创建独立的状态副本，互不影响
+- ✅ 可组合：`Composables`之间可以互相调用和组合，实现逻辑复用
+- ✅ 生命周期绑定：状态随组件挂载而创建，随组件卸载而销毁，自动清理资源
+- ✅ 响应式自动追踪：自动追踪依赖变化，无需手动声明依赖数组
+- ✅ 灵活调用时机：可在条件语句、循环中任意调用，无顺序限制
+
+2️⃣ Store 的核心特征
+
+- ✅ 全局共享：应用内多个组件访问同一份数据源，避免重复请求与状态不一致
+- ✅ 响应式：数据变化时，依赖该数据的组件自动触发更新
+- ✅ 可持久化：常与 `localStorage/sessionStorage`或后端配合，实现状态持久化
+- ✅ 跨组件通信：任意组件间可直接共享状态，无需通过 `props` 或事件逐层传递
+- ✅ 支持 DevTools：可追踪状态变化，提升开发体验
+- ✅ 支持异步操作：通常支持异步 action（如 API 请求），并管理加载、成功、失败等状态
+
+3️⃣ Utils 的核心特征
+
+- ✅ 纯函数优先：多为纯函数无副作用，相同输入得到相同输出，也可能包含少量副作用
+- ✅ 无状态：不持有或修改外部状态(即不维护内部状态)，只依赖传入的参数
+- ✅ 可测试：易于单元测试
+- ✅ 通用性：可在任何地方调用（组件/store/Composables），不依赖特定框架或业务上下文
+- ✅ 同步为主：通常是同步函数，若涉及异步，一般会明确返回 `Promise` 并保持行为可预测
+- ✅ 职责单一：每个工具函数只做一件事，便于组合与复用
+
+4️⃣ 三者关系图解
+
+```txt
+┌─────────────────────────────────────────────────────────────┐
+│                        组件层                                │
+│  ┌──────────────────────────────────────────────────────┐  │
+│  │                   Vue 单文件组件 (SFC)                │  │
+│  │          <template> + <script setup> + <style>       │  │
+│  └──────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────┘
+                            ↓ 使用
+┌─────────────────────────────────────────────────────────────┐
+│                     Composables 层                          │
+│  ┌──────────────────────────────────────────────────────┐  │
+│  │   封装可复用的响应式逻辑（基于组合式 API）              │  │
+│  │   • useUser()        • useCart()                     │  │
+│  │   • useForm()        • useFetch()                    │  │
+│  │   • useLocalStorage  • useDebounce()                 │  │
+│  └──────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────┘
+              ↓ 使用                    ↓ 使用
+┌─────────────────────────┐  ┌─────────────────────────────┐
+│       Store 层           │  │        Utils 层             │
+│  ┌───────────────────┐  │  │  ┌───────────────────────┐  │
+│  │  Pinia 状态管理    │  │  │  │ 纯函数工具库           │  │
+│  │ • userStore       │  │  │  │ • formatDate()        │  │
+│  │ • cartStore       │  │  │  │ • validateEmail()     │  │
+│  │ • useUserStore()  │  │  │  │ • deepMerge()         │  │
+│  │ (组合式 store)    │  │  │   │ • throttle()          │  │
+│  └───────────────────┘  │  │  │ • camelCase()         │  │
+└─────────────────────────┘  │  └───────────────────────┘  │
+                             └─────────────────────────────┘
+```
+
+🎯 核心原则
+
+| 层级        | 核心原则                                                        |
+| ----------- | --------------------------------------------------------------- |
+| Composables | `"封装有状态的逻辑复用"` — 将响应式状态、方法、生命周期组合在一起 |
+| Store       | `"管理全局共享状态"` — 确保应用单一数据源，跨组件通信             |
+| Utils       | `"提供无副作用的工具"` — 保持纯函数特性，可随处调用               |
+
+5️⃣ 职责边界总结
+
+| 职责         | Composables                               | Store (Pinia)                   | Utils                           |
+| ------------ | ----------------------------------------- | ------------------------------- | ------------------------------- |
+| 管理组件状态 | ✅ 核心职责(ref/reactive 封装)            | ❌ 不直接管理                   | ❌ 不涉及                       |
+| 管理全局状态 | ❌ 不推荐(会导致状态分散)                 | ✅ 核心职责(单一数据源)         | ❌ 不涉及                       |
+| 副作用处理   | ✅ 核心职责 (watch/onMounted/onUnmounted) | ✅ 支持(actions 中处理)         | ❌ 纯函数，无副作用             |
+| 生命周期管理 | ✅ 核心职责 (onMounted/onUnmounted 等)    | ❌ 不涉及(store 无生命周期)     | ❌ 不涉及                       |
+| 状态持久化   | ⚠️ 需手动实现(可封装 useLocalStorage)     | ✅ 内置支持(Pinia 插件生态)     | ❌ 只提供工具函数               |
+| 业务逻辑复用 | ✅ 核心场景(跨组件复用逻辑)               | ⚠️ 可选(store 间可互相调用)     | ❌ 不涉及                       |
+| 数据验证     | ⚠️ 可选(可封装验证逻辑)                   | ⚠️ 可选(action 中验证)          | ✅ 核心职责(validator 函数)     |
+| 数据格式化   | ⚠️ 可选(computed 格式化)                  | ⚠️ 可选(getter 格式化)          | ✅ 核心职责(formatter 函数)     |
+| API 调用     | ✅ 推荐做法(封装请求逻辑 + 状态)          | ✅ 可接受(action 中调用)        | ❌ 只提供基础工具(如 http 封装) |
+| 响应式依赖   | ✅ 强依赖(基于响应式 API)                 | ✅ 强依赖(store 本身就是响应式) | ❌ 无依赖                       |
+
+🔄 调用关系
+
+```txt
+组件 (SFC)
+   ↓ 使用
+Composables ←→ Store ←→ Store
+   ↓ 调用        ↓ 调用
+Utils ←--------Utils
+
+------------------------------------------
+
+Composables 可以调用 Utils（数据格式化、验证）
+Composables 可以调用 Store（访问全局状态）
+Store 可以调用 Utils（数据处理）
+Store 可以调用 Store（跨 store 通信）
+Utils 不能调用 Composables 或 Store（会引入副作用和依赖）
+```
+
+6️⃣ Example
+
+::: code-group
+```ts [Utils 的特征]
+// utils/format.ts
+// 特征1：纯函数（无副作用）
+export function formatDate(date: Date | string, format: string): string {
+  // ❌ 不访问外部状态
+  // ❌ 不修改传入参数
+  // ✅ 相同输入总是相同输出
+  const d = new Date(date);
+  const map: Record<string, string> = {
+    YYYY: d.getFullYear().toString(),
+    MM: (d.getMonth() + 1).toString().padStart(2, "0"),
+    DD: d.getDate().toString().padStart(2, "0"),
+  };
+
+  return format.replace(/YYYY|MM|DD/g, (matched) => map[matched]);
+}
+
+// 特征2：无状态工具函数
+export function debounce<T extends (...args: any[]) => any>(
+  fn: T,
+  delay: number,
+): (...args: Parameters<T>) => void {
+  let timer: NodeJS.Timeout | null = null;
+
+  return function (this: any, ...args: Parameters<T>) {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(() => {
+      fn.apply(this, args);
+      timer = null;
+    }, delay);
+  };
+}
+
+// 特征3：数据转换和验证
+export const validators = {
+  isEmail: (email: string): boolean => {
+    return /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/.test(email);
+  },
+
+  isPhone: (phone: string): boolean => {
+    return /^1[3-9]\d{9}$/.test(phone);
+  },
+
+  isUrl: (url: string): boolean => {
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
+    }
+  },
+};
+
+// 特征4：常量定义
+export const HTTP_STATUS = {
+  OK: 200,
+  CREATED: 201,
+  BAD_REQUEST: 400,
+  UNAUTHORIZED: 401,
+  NOT_FOUND: 404,
+  SERVER_ERROR: 500,
+} as const;
+
+// 特征5：辅助函数
+export function deepClone<T>(obj: T): T {
+  return JSON.parse(JSON.stringify(obj));
+}
+
+export function isEmpty(value: any): boolean {
+  if (value === null || value === undefined) return true;
+  if (typeof value === "string") return value.trim() === "";
+  if (Array.isArray(value)) return value.length === 0;
+  if (typeof value === "object") return Object.keys(value).length === 0;
+  return false;
+}
+```
+
+```ts [ Composables 的特征]// composables/useCounter.ts
+import { ref, computed, watch, onUnmounted } from 'vue';
+
+// 特征1：封装响应式状态 + 逻辑
+export function useCounter(initialValue = 0) {
+  // ✅ 有响应式状态
+  const count = ref(initialValue);
+  const history = ref<string[]>([]);
+  
+  // ✅ 计算属性（派生状态）
+  const doubled = computed(() => count.value * 2);
+  const isEven = computed(() => count.value % 2 === 0);
+
+  const increment = () => {
+    count.value++;
+    history.value.push('increment');
+  };
+
+  const decrement = () => {
+    count.value--;
+    history.value.push('decrement');
+  };
+
+  const reset = () => {
+    count.value = initialValue;
+    history.value = [];
+  };
+
+  // ✅ 有副作用（watch 监听变化）
+  const stopWatch = watch(count, (newVal, oldVal) => {
+    console.log(`count changed: ${oldVal} -> ${newVal}`);
+  });
+
+  // ✅ 生命周期清理
+  onUnmounted(() => {
+    stopWatch();
+    console.log('counter composable unmounted');
+  });
+
+  return {
+    count,      // ref
+    doubled,    // computed
+    isEven,     // computed
+    history,    // ref
+    increment,
+    decrement,
+    reset,
+  };
+}
+
+// 特征2：每次调用独立
+// 在组件中使用
+// <script setup>
+// const counterA = useCounter(0);  // 独立的 count
+// const counterB = useCounter(100); // 独立的 count，不同的初始值
+// </script>
+
+// 特征3：可以组合其他 Composables
+// composables/useUserWithOrders.ts
+import { computed, ref, watch } from 'vue';
+import { useUser } from './useUser';
+import { useOrders } from './useOrders';
+
+export function useUserWithOrders(userId: string) {
+  // ✅ 组合其他 composables
+  const { user, loading: userLoading, error: userError } = useUser(userId);
+  const { orders, loading: ordersLoading, error: ordersError } = useOrders(userId);
+  
+  // 组合派生状态
+  const isLoading = computed(() => userLoading.value || ordersLoading.value);
+  const hasError = computed(() => userError.value || ordersError.value);
+  
+  // 副作用：当用户变化时重新加载订单
+  watch(() => user.value?.id, (newUserId) => {
+    if (newUserId) {
+      console.log(`User changed to ${newUserId}, refetch orders`);
+    }
+  });
+  
+  return {
+    user,
+    orders,
+    isLoading,
+    hasError,
+  };
+}
+
+// 特征4：封装异步操作
+// composables/useFetch.ts
+import { ref, readonly } from 'vue';
+
+export function useFetch<T>(url: string) {
+  const data = ref<T | null>(null);
+  const loading = ref(false);
+  const error = ref<Error | null>(null);
+
+  const execute = async () => {
+    loading.value = true;
+    error.value = null;
+    
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('Network error');
+      data.value = await response.json();
+    } catch (e) {
+      error.value = e as Error;
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  // 自动执行
+  execute();
+
+  return {
+    data: readonly(data),  // 只读暴露
+    loading: readonly(loading),
+    error: readonly(error),
+    refetch: execute,
+  };
+}
+```
+
+```ts [Store 的特征]
+// stores/user.ts
+import { defineStore } from 'pinia';
+import { ref, computed } from 'vue';
+import { useAppStore } from './app';
+import { api } from '@/utils/api';
+import { validators } from '@/utils/format';
+
+// 特征1：全局单例状态（使用组合式 store 语法）
+export const useUserStore = defineStore('user', () => {
+  // ✅ 全局共享状态（ref）
+  const userInfo = ref<UserInfo | null>(null);
+  const token = ref<string | null>(null);
+  const permissions = ref<string[]>([]);
+  
+  // 特征2：计算属性（派生状态）
+  const isLoggedIn = computed(() => !!token.value);
+  const userName = computed(() => userInfo.value?.name || 'Guest');
+  const userAvatar = computed(() => userInfo.value?.avatar || '/default.png');
+  
+  // 特征3：修改状态的方法（可包含副作用）
+  async function login(credentials: Credentials) {
+    // ✅ 可以有副作用（API 调用）
+    const response = await api.login(credentials);
+    
+    userInfo.value = response.user;
+    token.value = response.token;
+    
+    // 持久化
+    localStorage.setItem('token', response.token);
+    
+    // 自动获取权限
+    await fetchUserPermissions();
+  }
+  
+  function logout() {
+    userInfo.value = null;
+    token.value = null;
+    permissions.value = [];
+    localStorage.removeItem('token');
+  }
+  
+  // ✅ 可以调用其他 store
+  async function fetchUserPermissions() {
+    if (!userInfo.value) return;
+    
+    const appStore = useAppStore();
+    const perms = await api.getPermissions(userInfo.value.id);
+    
+    permissions.value = perms;
+    appStore.setPermissions(perms); // 更新其他 store
+  }
+  
+  // ✅ 数据验证
+  function updateUserInfo(data: Partial<UserInfo>) {
+    if (data.email && !validators.isEmail(data.email)) {
+      throw new Error('Invalid email format');
+    }
+    
+    if (data.phone && !validators.isPhone(data.phone)) {
+      throw new Error('Invalid phone number');
+    }
+    
+    userInfo.value = { ...userInfo.value, ...data };
+  }
+  
+  return {
+    // 状态
+    userInfo,
+    token,
+    permissions,
+    // 计算属性
+    isLoggedIn,
+    userName,
+    userAvatar,
+    // 方法
+    login,
+    logout,
+    fetchUserPermissions,
+    updateUserInfo,
+  };
+});
+
+// 特征4：跨组件共享
+// 在任意组件中使用
+// <script setup>
+// const userStore = useUserStore();  // 获取同一个实例
+// 
+// // ComponentA
+// userStore.login({ name: 'John' });
+// 
+// // ComponentB（同一应用）
+// console.log(userStore.userInfo); // ✅ 能立即访问到 ComponentA 修改后的状态
+// </script>
+```
+:::
+### Composables vs Store
+
+1️⃣ 核心概念
+
+| 维度       | Composables                              | Store                        |
+| ---------- | ---------------------------------- | ---------------------------- |
+| 定义       | 可复用的逻辑函数，封装状态和副作用 | 全局/模块化的状态管理容器    |
+| 定位       | 逻辑复用                           | 状态共享                     |
+| 作用域     | 组件级（每次调用独立）             | 应用级（全局共享）           |
+| 数据持久性 | 组件卸载后状态消失                 | 状态持久存在（除非手动清除） |
+
+2️⃣ 对比
+
+| 对比维度 | Composables               | Store                    |
+| -------- | ------------------- | ------------------------ |
+| 主要目的 | 逻辑复用            | 状态共享                 |
+| 状态范围 | 组件级              | 应用级                   |
+| 生命周期 | 跟随组件            | 应用全程                 |
+| 通信方式 | props/context       | 直接访问                 |
+| 适用场景 | UI 逻辑、副作用封装 | 全局数据、跨组件通信     |
+| 性能     | 轻量，按需创建      | 全局单例，需考虑性能优化 |
+| 复杂度   | 低到中              | 中到高                   |
+### Composables vs utils
+
+`Composables`目录下的文件是 `Composables`，`utils` 目录下的文件是 `utils` 。
+
+- `Composables` 内部使用了 `vue` 相关 `API`
 - `utils` 内部没有使用 `vue`相关 `API` 。
 
 ## 执行类型检查
