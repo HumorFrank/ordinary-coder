@@ -52,7 +52,7 @@ git config --global init.defaultbranch 'BranchName'
 ```
 
 ## gitignore 文件
-```gitignore [.gitignore]
+```txt [.gitignore]
 # 依赖
 node_modules/
 
