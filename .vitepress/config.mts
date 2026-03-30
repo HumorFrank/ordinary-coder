@@ -47,6 +47,7 @@ export default defineConfig({
           { text: "Emmet 指南", link: "/docs/emmet/emmet" },
           { text: "版本控制", link: "/docs/version-control/index" },
           { text: "TypeScript", link: "/docs/typescript/typescript" },
+          { text: "小程序系列", link: "/docs/miniprogram/miniprogram" },
           { text: "高级指南", link: "/docs/advanced/advanced" },
           { text: "VSCode常用插件", link: "/docs/vscode-plugins/index" },
         ],
