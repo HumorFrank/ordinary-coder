@@ -4,15 +4,37 @@
 
 ### 登录流程
 
-- 1️⃣ 获取当前登录微信用户的临时登录凭证（`code`）。
+1️⃣ 微信小程序的登录流程图如下图所示
+```mermaid
+sequenceDiagram
+  participant Mini as 小程序<br/>MiniProgram
+  participant Dev as 开发者服务器<br/>Developer Service
+  participant Wechat as 微信接口服务<br/>Wechat Http Api
+
+  Mini->>Mini: wx.login() 获取 code
+  Mini->>Dev: wx.request() 发送code
+  Dev->>Wechat: 登录凭证校验接口<br/>appid + appsecret + code
+  Wechat-->>Dev: session_key + openid 等
+  Dev->>Dev: 自定义登录态<br/>与openid ,session_key 关联
+  Dev-->>Mini: 返回自定义登录态
+  Mini->>Mini: 自定义登录态<br/>存入storage
+  Mini->>Dev: wx.request() 发起业务请求<br/>携带 自定义登录态
+  Dev->>Dev: 通过自定义登录态<br/>查询openid 和 session_key
+  Dev-->>Mini: 返回业务数据
+
+```
+
+2️⃣微信小程序的登录步骤
+
+- ① 获取当前登录微信用户的临时登录凭证（`code`）。
   - 调用 `wx.login()` 获取 `code` 。
   - 调用 `wx.getUserInfo()` 获取用户数据（`encryptedData`与 `iv`）。
-- 2️⃣ 通过 `appid` + `appsecret`+ `code`，换取 `openid` 和 `session_key`
+- ② 通过 `appid` + `appsecret`+ `code`，换取 `openid` 和 `session_key`
   - 请求我们自己的后台服务器，将临时登录凭证（`code`）传给后端。
   - 后端把 `appid`、`appsecret`、 `code` 一起发送到微信服务器。
   - 微信服务器返回用户的唯一标识 `openid` 和会话密钥 `session_key`给自己的业务后端。
-- 3️⃣ 拿到 `openid` 后将其存到数据库中，后端根据`openid`生成一个自定义登录态（如JWT token），返回给小程序端。
-- 4️⃣ 小程序端保存登录态并后续携带
+- ③ 拿到 `openid` 后将其存到数据库中，后端根据`openid`生成一个自定义登录态（如JWT token），返回给小程序端。
+- ④ 小程序端保存登录态并后续携带
 
 ### 流程说明
 
@@ -115,6 +137,32 @@
 
 ### 支付流程
 
+1️⃣ 微信小程序支付流程图如下图示
+```mermaid
+sequenceDiagram
+  participant User as 微信支付用户
+  participant Mini as 微信小程序
+  participant Merchant as 商户系统
+  participant Wechat as 微信后台
+
+  User->>Mini: 进入小程序，下单
+  Mini->>Merchant: 请求下单支付()
+  Merchant->>Wechat: 调用小程序登录API
+  Wechat-->>Merchant: 返回Openid
+  Merchant->>Merchant: 生成商户订单
+  Merchant->>Wechat: 调用支付统一下单API
+  Wechat-->>Merchant: 返回预付单信息(prepay_id)
+  Merchant->>Merchant: 将组合数据再次签名
+  Merchant-->>Mini: 返回支付参数(含参数和sign)
+  User->>Mini: 用户确认支付
+  Mini->>Wechat: 鉴权唤起支付
+  Wechat-->>Mini: 返回支付结果
+  Mini->>Mini: 展示支付结果
+  Wechat->>Merchant: 推送支付结果
+  Merchant->>Merchant: 更新订单状态
+
+```
+2️⃣ 微信小程序支付步骤
 - 打开某小程序，点击直接下单
 - `wx.login()`获取用户临时登录凭证`code`，发送到后端服务器换取`openId`
 - 在下单时，小程序需要将购买的`商品Id`、`商品数量`，以及用户的 `openId` 传送到服务器
@@ -147,7 +195,7 @@ wx.requestPayment({
 
 微信支付接口具有幂等性设计，只要请求参数与原订单完全一致，接口会返回相同的支付参数（如 `prepay_id`），商户即可用这些参数再次拉起微信支付收银台，无需创建新订单
 
-2️⃣ 微信小程序`重新支付`流程步骤如下
+2️⃣ 微信小程序`重新支付`流程图如下图示
 
 ```mermaid
 sequenceDiagram
@@ -165,6 +213,8 @@ sequenceDiagram
     Wechat-->>User: 7. 用户完成支付
 ```
 
+3️⃣ 微信小程序`重新支付`流程步骤如下
+
 - 用户在小程序/APP 前端页面点击`重新支付`按钮。
 - 前端向商户后端发起`重新支付`请求（携带原订单号）。
 - 商户后端收到请求后，调用微信支付的统一下单 API（参数中使用原商户订单号）。
@@ -174,7 +224,7 @@ sequenceDiagram
 - 用户完成支付。
 
 
-3️⃣ 支付结果确认与查单机制
+4️⃣ 支付结果确认与查单机制
 - `前端轮询`
 > 在调起支付后，前端应`立即启动轮询`，定期调用后端的“查单接口”，根据订单的最终状态更新页面（通常建议间隔2-5秒，持续60秒左右）。
 
