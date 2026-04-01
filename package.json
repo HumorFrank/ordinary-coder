@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "@vue-flow/core": "^1.48.2",
-    "vitepress-plugin-group-icons": "^1.7.1"
+    "vitepress-plugin-group-icons": "^1.7.1",
+    "vitepress-plugin-mermaid": "^2.0.17"
   },
   "devDependencies": {
     "@types/node": "^25.1.0",

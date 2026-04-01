@@ -148,6 +148,23 @@ wx.requestPayment({
 微信支付接口具有幂等性设计，只要请求参数与原订单完全一致，接口会返回相同的支付参数（如 `prepay_id`），商户即可用这些参数再次拉起微信支付收银台，无需创建新订单
 
 2️⃣ 微信小程序`重新支付`流程步骤如下
+
+```mermaid
+sequenceDiagram
+    participant User as 用户
+    participant Frontend as 前端(小程序/App)
+    participant Backend as 商户后端
+    participant Wechat as 微信支付
+
+    User->>Frontend: 1. 点击"重新支付"
+    Frontend->>Backend: 2. 请求重新支付 (携带原订单号)
+    Backend->>Wechat: 3. 调用统一下单API (使用原商户订单号)
+    Wechat-->>Backend: 4. 返回 prepay_id 等支付参数
+    Backend-->>Frontend: 5. 返回支付参数
+    Frontend->>Wechat: 6. 调用 wx.requestPayment 拉起支付
+    Wechat-->>User: 7. 用户完成支付
+```
+
 - 用户在小程序/APP 前端页面点击`重新支付`按钮。
 - 前端向商户后端发起`重新支付`请求（携带原订单号）。
 - 商户后端收到请求后，调用微信支付的统一下单 API（参数中使用原商户订单号）。
@@ -155,6 +172,7 @@ wx.requestPayment({
 - 商户后端将这些支付参数返回给前端。
 - 前端调用 `wx.requestPayment()` 方法，拉起微信支付。
 - 用户完成支付。
+
 
 3️⃣ 支付结果确认与查单机制
 - `前端轮询`

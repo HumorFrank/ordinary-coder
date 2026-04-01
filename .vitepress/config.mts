@@ -1,11 +1,10 @@
 import { defineConfig } from "vitepress";
-import {
-  groupIconMdPlugin,
-  groupIconVitePlugin,
-} from "vitepress-plugin-group-icons";
+import {  groupIconMdPlugin,  groupIconVitePlugin} from "vitepress-plugin-group-icons";
+import {withMermaid} from 'vitepress-plugin-mermaid'
 
 // https://vitepress.dev/reference/site-config
-export default defineConfig({
+export default withMermaid(
+  defineConfig({
   // 你的 GitHub Pages 部署在 /ordinary-coder/ 子路径下
   // 智能配置 base 路径：若在 CI 环境下（如 GitHub Actions）则使用子路径，否则使用根路径
   base: process.env.CI ? "/ordinary-coder/" : "/",
@@ -15,6 +14,9 @@ export default defineConfig({
     config(md) {
       md.use(groupIconMdPlugin)
     },
+  },
+  mermaid: {
+    theme: 'default', // 可选：设置 Mermaid 图表的主题
   },
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
@@ -83,6 +85,10 @@ export default defineConfig({
   vite:{
     plugins: [
         groupIconVitePlugin()
-      ]
+      ],
+    optimizeDeps: {
+      include: ['mermaid']
+    },
   }
-});
+})
+)
