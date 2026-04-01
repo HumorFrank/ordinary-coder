@@ -82,9 +82,9 @@ sequenceDiagram
 
 ### 参考文献
 
-- https://segmentfault.com/a/1190000016750340
-- https://juejin.cn/post/6955754095860776973
-- https://www.cnblogs.com/zwh0910/p/13977278.html
+- [小程序开发-梳理登录流程-v1.0](https://segmentfault.com/a/1190000016750340)
+- [微信小程序登录流程](https://juejin.cn/post/6955754095860776973)
+- [微信小程序登录流程解析](https://www.cnblogs.com/zwh0910/p/13977278.html)
 
 ## 微信小程序的发布流程
 
