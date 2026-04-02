@@ -22,6 +22,54 @@
 > - `体积限制`：微信小程序只有2M的大小，这样导致无法开发大型一些的小程序
 > - `受控微信`：小程序要面对很多来自微信的限制，从功能接口，甚至到类别内容，都要接受微信的管控
 
+## 微信小程序架构图
+
+> 微信小程序采用`双线程架构`，渲染层与逻辑层分离，通过微信客户端（`Native`）进行中转通信
+
+```mermaid
+graph TB
+  subgraph Top[ ]
+    direction LR
+    subgraph AppService[App Service（逻辑层）]
+      direction TB
+      Manager[Manager]
+      API[API]
+    end
+    subgraph View[View（视图层）]
+      direction TB
+      VP1[Page]
+      VP2[Page]
+    end
+  end
+
+  subgraph Native[Native（系统层）]
+    direction TB
+    JSB[JSBridge]
+    subgraph Bottom[ ]
+      C1[微信能力]
+      C2[离线存储]
+      C3[网络请求]
+      C4[...]
+    end
+  end
+
+  AppService -- Data --> JSB
+  JSB -- Event --> AppService
+
+  View -- Event --> JSB
+  JSB -- Data --> View
+
+  JSB --> C1
+  JSB --> C2
+  JSB --> C3
+  JSB --> C4
+```
+
+> - `逻辑层（App Service）`：包含 `manager` 和 `API`，负责业务逻辑处理，通过 `JSBridge` 向渲染层发送 `Data`、接收 `Event`
+> - `视图层（View）`：每个页面由 `WXML` 模板与 `WXSS` 样式构成，多页面可同时存在，通过 `JSBridge` 接收 `Data`、上报 `Event`
+> - `JSBridge`：逻辑层与视图层之间的通信桥梁，同时连接底层 Native 能力
+> - `Native 能力`：包括微信能力、离线存储、网络请求等，由微信客户端提供
+
 ## 微信小程序的登录流程
 
 ### 登录流程
