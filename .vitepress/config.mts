@@ -52,6 +52,15 @@ export default withMermaid(
           { text: "小程序系列", link: "/docs/miniprogram/miniprogram" },
           { text: "高级指南", link: "/docs/advanced/advanced" },
           { text: "VSCode常用插件", link: "/docs/vscode-plugins/index" },
+          { 
+            text: "面试", 
+            link: "/docs/interview/html-css-js",
+            items: [
+              { text: "ES6", link: "/docs/interview/ecmascript" },
+              { text: "other", link: "/docs/interview/other" },
+              { text: "Vue", link: "/docs/interview/vue" },
+              { text: "TypeScript", link: "/docs/interview/typescript" },
+            ] },
         ],
       },
     ],
