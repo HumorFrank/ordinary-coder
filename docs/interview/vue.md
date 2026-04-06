@@ -214,13 +214,13 @@ app.use(anotherPlugin); // 警告：插件不会生效，已创建的组件无�
 
 - 核心要点总结
 
-| 特性     | Vue 2                               | Vue 3                          |
-| -------- | ----------------------------------- | ------------------------------ |
-| 注册时机 | `new Vue()` 之前                      | `app.mount()` 之前               |
-| 重复注册 | 自动阻止（基于 `_installedPlugins`） | 自动阻止（基于 `Set`）           |
-| 不同实例 | 同一 Vue 构造函数只注册一次         | 不同 `app` 实例可分别注册        |
-| 注册记录 |` Vue._installedPlugins`              | `app._installedPlugins`（内部） |
-| 重复警告 | 静默忽略                            | 控制台警告                     |
+| 特性     | Vue 2                                | Vue 3                           |
+| -------- | ------------------------------------ | ------------------------------- |
+| 注册时机 | `new Vue()` 之前                     | `app.mount()` 之前              |
+| 重复注册 | 自动阻止（基于 `_installedPlugins`） | 自动阻止（基于 `Set`）          |
+| 不同实例 | 同一 Vue 构造函数只注册一次          | 不同 `app` 实例可分别注册       |
+| 注册记录 | ` Vue._installedPlugins`             | `app._installedPlugins`（内部） |
+| 重复警告 | 静默忽略                             | 控制台警告                      |
 
 :::
 
@@ -239,4 +239,47 @@ app.use(anotherPlugin); // 警告：插件不会生效，已创建的组件无�
 
 ## Vue2.x
 
+### 生命周期
+
+| 生命周期      | 可访问 data | 可访问 $el | 可操作 DOM | 适合做什么                                                                 |
+| ------------- | ----------- | ---------- | ---------- | -------------------------------------------------------------------------- |
+| beforeCreate  | ❌          | ❌         | ❌         | 插件初始化/非响应式配置                                                    |
+| created       | ✅          | ❌         | ❌         | 数据请求/初始化                                                            |
+| beforeMount   | ✅          | ❌         | ❌         | 最后的数据修改                                                             |
+| mounted       | ✅          | ✅         | ✅         | DOM 操作/第三方库初始化/启动定时器/获取数据/ref操作                        |
+| beforeUpdate  | ✅          | ✅(旧)     | ✅(旧)     | 获取旧 DOM 状态                                                            |
+| updated       | ✅          | ✅(新)     | ✅(新)     | 操作更新后的 DOM                                                           |
+| activated     | ✅          | ✅         | ✅         | ⚠️keep-alive 缓存组件激活时：刷新数据/开始轮询/恢复状态/重新获取焦点       |
+| deactivated   | ✅          | ✅         | ✅         | ⚠️keep-alive 缓存组件失活时：停止轮询/保存滚动位置/清理临时资源/暂停音视频 |
+| beforeDestroy | ✅          | ✅         | ✅         | 清理定时器/取消请求/移除事件监听/销毁第三方实例/解绑事件总线（最重要）     |
+| destroyed     | ❌          | ❌         | ❌         | 清理完成的通知/日志记录/全局状态清理（实例已不可用）                       |
+
+### 生命周期钩子对比总结
+
+| 特点                         | 说明                                                 |
+| ---------------------------- | ---------------------------------------------------- |
+| 首次进入 keep-alive 缓存组件 | `created → beforeMount → mounted → activated`        |
+| 缓存后再次进入               | `activated`（不经过 created/mounted）                |
+| 组件失活                     | `deactivated`（不经过 beforeDestroy）                |
+| 组件被销毁（v-if=false）     | `deactivated`（如有）→ `beforeDestroy → destroyed`   |
+| 子组件先于父组件挂载         | 子组件 `mounted` 先执行，父组件 `mounted` 后执行     |
+| 子组件先于父组件销毁         | 子组件 `destroyed` 先执行，父组件 `destroyed` 后执行 |
+
 ## Vue3.x
+
+### 生命周期
+
+| Options API     | Composition API   | 可访问 data | 可访问 DOM | 主要用途                                                   |
+| --------------- | ----------------- | ----------- | ---------- | ---------------------------------------------------------- |
+| -               | setup() 本身      | ✅          | ❌         | 数据初始化、异步请求                                       |
+| beforeMount     | onBeforeMount     | ✅          | ❌         | 最后的数据修改，DOM未生成                                  |
+| mounted         | onMounted         | ✅          | ✅         | DOM操作、第三方库初始化                                    |
+| beforeUpdate    | onBeforeUpdate    | ✅          | ✅(旧)     | 获取旧DOM状态，避免无限循环                                |
+| updated         | onUpdated         | ✅          | ✅(新)     | 操作更新后的DOM                                            |
+| activated       | onActivated       | ✅          | ✅         | keep-alive缓存组件激活时：刷新数据/开始轮询/恢复状态         |
+| deactivated     | onDeactivated     | ✅          | ✅         | keep-alive缓存组件失活时：停止轮询/保存滚动位置/清理临时资源 |
+| beforeUnmount   | onBeforeUnmount   | ✅          | ✅         | 清理资源（最重要）                                         |
+| unmounted       | onUnmounted       | ❌          | ❌         | 清理完成的通知                                             |
+| renderTracked   | onRenderTracked   | ✅          | ❌         | 开发调试：依赖被收集时                                     |
+| renderTriggered | onRenderTriggered | ✅          | ❌         | 开发调试：依赖触发重渲染时                                 |
+| errorCaptured   | onErrorCaptured   | ✅          | ✅         | 捕获子组件错误                                             |
