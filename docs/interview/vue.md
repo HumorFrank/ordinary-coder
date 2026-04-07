@@ -237,6 +237,42 @@ app.use(anotherPlugin); // 警告：插件不会生效，已创建的组件无�
 - `组件`：需要封`可复用`的`UI片段`（表单、卡片、弹窗）。
 - `插件`：需要提供跨多个组件的`全局功能`（路由、状态管理、国际化、自定义指令库）。
 
+## data是函数而非对象
+1️⃣ Vue实例定义的时候，data属性既可以是一个`对象`，也可以是一个`函数`。
+
+```js [Vue实例]
+const app = new Vue({
+    el:"#app",
+    // 对象格式
+    data:{
+        foo:"foo"
+    },
+    // 函数格式
+    data(){
+        return {
+             foo:"foo"
+        }
+    }
+})
+```
+
+::: info Tip
+- 实例的 `data` 可以是对象，因为`实例唯一`，不会复用。
+- 组件的 `data` 必须是函数，返回独立对象，防止多次复用共享同一引用（组件复用可能导致数据共享，所以必须使用函数返回新对象）。
+
+> Vue组件的复用可能会有很多个实例，采用函数返回一个全新`data`形式，使每个实例对象的数据不会受到其他实例对象数据的污染
+
+:::
+
+2️⃣ 组件 data
+> 组件中定义 `data` 属性，只能是一个函数
+
+3️⃣ 结论
+- 根实例
+> 根实例对象`data`可以是`对象`也可以是`函数`（根实例是单例），不会产生数据污染情况
+- 组件实例
+> 组件实例对象`data`必须为函数，目的是为了防止多个组件实例对象之间共用一个`data`，产生数据污染。采用函数的形式，`init Data`时会将其作为工厂函数都会返回全新`data`对象
+
 ## Vue2.x
 
 ### 生命周期
@@ -265,21 +301,91 @@ app.use(anotherPlugin); // 警告：插件不会生效，已创建的组件无�
 | 子组件先于父组件挂载         | 子组件 `mounted` 先执行，父组件 `mounted` 后执行     |
 | 子组件先于父组件销毁         | 子组件 `destroyed` 先执行，父组件 `destroyed` 后执行 |
 
+### 对象新增属性界面不刷新
+
+1️⃣ 直接添加属性的问题
+
+> Vue中给对象添加新属性界面不刷新，数据虽然更新了（console打印出了新属性），但页面并没有更新
+
+2️⃣ 原因分析
+
+> `Object.defineProperty` 只能为对象`已存在的属性`添加 `getter/setter`。
+> 初始化时 `Vue` 会遍历对象已存在的属性进行`getter/setter`劫持，后期新增的属性`Object.defineProperty`不会被 `getter/setter`劫持，因此没有响应式能力。
+
+```js
+const obj = {};
+Object.defineProperty(obj, "foo", {
+  get() {
+    console.log(`get foo:${val}`);
+    return val;
+  },
+  set(newVal) {
+    if (newVal !== val) {
+      console.log(`set foo:${newVal}`);
+      val = newVal;
+    }
+  },
+});
+
+// 当我们访问foo属性或者设置foo值的时候都能够触发setter与getter
+obj.foo;
+obj.foo = "new";
+// 但是我们为obj添加新属性的时候，却无法触发事件属性的拦截
+obj.bar = "新属性";
+```
+
+3️⃣ 解决方案
+
+> Vue 不允许在已经创建的实例上动态添加新的响应式属性，若想实现数据与视图同步更新，可采取下面三种解决方案
+>
+> - `Vue.set() / this.$set() / vm.$set() / $set()`
+> - `Object.assign()`
+> - `$forcecUpdated()`
+
+4️⃣ 小结
+
+- 若为对象`添加少量`的新属性，可以直接采用`Vue.set()`
+- 若需要为新对象`添加大量`的新属性，则通过`Object.assign()`创建新对象
+- 若你实在不知道怎么操作时，可采取`$forceUpdate()`进行强制刷新 (不建议)
+
+5️⃣
+::: code-group
+
+```js [Object.assign()]
+// 直接使用 Object.assign() 添加到对象的新属性不会触发更新
+// 应创建一个新的对象，合并原对象和混入对象的属性
+this.someObject = Object.assign({},this.someObject,{ 
+  newProperty1:1,
+  newProperty2:2,
+  //  ...
+})
+```
+```js [$forceUpdate]
+- 若你发现你自己需要在 Vue 中做一次强制更新，99.9% 的情况，是你在某个地方做错了事
+- $forceUpdate迫使 Vue 实例重新渲染
+- PS：仅仅影响实例本身和插入插槽内容的子组件，而不是所有子组件。
+```
+:::
+
+::: warning PS
+`vue3`是用过`proxy`实现数据响应式的，直接动态添加新属性仍可以实现数据响应式
+:::
+
 ## Vue3.x
 
 ### 生命周期
 
-| Options API     | Composition API   | 可访问 data | 可访问 DOM | 主要用途                                                   |
-| --------------- | ----------------- | ----------- | ---------- | ---------------------------------------------------------- |
-| -               | setup() 本身      | ✅          | ❌         | 数据初始化、异步请求                                       |
-| beforeMount     | onBeforeMount     | ✅          | ❌         | 最后的数据修改，DOM未生成                                  |
-| mounted         | onMounted         | ✅          | ✅         | DOM操作、第三方库初始化                                    |
-| beforeUpdate    | onBeforeUpdate    | ✅          | ✅(旧)     | 获取旧DOM状态，避免无限循环                                |
-| updated         | onUpdated         | ✅          | ✅(新)     | 操作更新后的DOM                                            |
+| Options API     | Composition API   | 可访问 data | 可访问 DOM | 主要用途                                                     |
+| --------------- | ----------------- | ----------- | ---------- | ------------------------------------------------------------ |
+| -               | setup() 本身      | ✅          | ❌         | 数据初始化、异步请求                                         |
+| beforeMount     | onBeforeMount     | ✅          | ❌         | 最后的数据修改，DOM未生成                                    |
+| mounted         | onMounted         | ✅          | ✅         | DOM操作、第三方库初始化                                      |
+| beforeUpdate    | onBeforeUpdate    | ✅          | ✅(旧)     | 获取旧DOM状态，避免无限循环                                  |
+| updated         | onUpdated         | ✅          | ✅(新)     | 操作更新后的DOM                                              |
 | activated       | onActivated       | ✅          | ✅         | keep-alive缓存组件激活时：刷新数据/开始轮询/恢复状态         |
 | deactivated     | onDeactivated     | ✅          | ✅         | keep-alive缓存组件失活时：停止轮询/保存滚动位置/清理临时资源 |
-| beforeUnmount   | onBeforeUnmount   | ✅          | ✅         | 清理资源（最重要）                                         |
-| unmounted       | onUnmounted       | ❌          | ❌         | 清理完成的通知                                             |
-| renderTracked   | onRenderTracked   | ✅          | ❌         | 开发调试：依赖被收集时                                     |
-| renderTriggered | onRenderTriggered | ✅          | ❌         | 开发调试：依赖触发重渲染时                                 |
-| errorCaptured   | onErrorCaptured   | ✅          | ✅         | 捕获子组件错误                                             |
+| beforeUnmount   | onBeforeUnmount   | ✅          | ✅         | 清理资源（最重要）                                           |
+| unmounted       | onUnmounted       | ❌          | ❌         | 清理完成的通知                                               |
+| renderTracked   | onRenderTracked   | ✅          | ❌         | 开发调试：依赖被收集时                                       |
+| renderTriggered | onRenderTriggered | ✅          | ❌         | 开发调试：依赖触发重渲染时                                   |
+| errorCaptured   | onErrorCaptured   | ✅          | ✅         | 捕获子组件错误                                               |
