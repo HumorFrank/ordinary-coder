@@ -238,25 +238,27 @@ app.use(anotherPlugin); // 警告：插件不会生效，已创建的组件无�
 - `插件`：需要提供跨多个组件的`全局功能`（路由、状态管理、国际化、自定义指令库）。
 
 ## data是函数而非对象
+
 1️⃣ Vue实例定义的时候，data属性既可以是一个`对象`，也可以是一个`函数`。
 
 ```js [Vue实例]
 const app = new Vue({
-    el:"#app",
-    // 对象格式
-    data:{
-        foo:"foo"
-    },
-    // 函数格式
-    data(){
-        return {
-             foo:"foo"
-        }
-    }
-})
+  el: "#app",
+  // 对象格式
+  data: {
+    foo: "foo",
+  },
+  // 函数格式
+  data() {
+    return {
+      foo: "foo",
+    };
+  },
+});
 ```
 
 ::: info Tip
+
 - 实例的 `data` 可以是对象，因为`实例唯一`，不会复用。
 - 组件的 `data` 必须是函数，返回独立对象，防止多次复用共享同一引用（组件复用可能导致数据共享，所以必须使用函数返回新对象）。
 
@@ -265,13 +267,258 @@ const app = new Vue({
 :::
 
 2️⃣ 组件 data
+
 > 组件中定义 `data` 属性，只能是一个函数
 
 3️⃣ 结论
+
 - 根实例
-> 根实例对象`data`可以是`对象`也可以是`函数`（根实例是单例），不会产生数据污染情况
+  > 根实例对象`data`可以是`对象`也可以是`函数`（根实例是单例），不会产生数据污染情况
 - 组件实例
-> 组件实例对象`data`必须为函数，目的是为了防止多个组件实例对象之间共用一个`data`，产生数据污染。采用函数的形式，`init Data`时会将其作为工厂函数都会返回全新`data`对象
+  > 组件实例对象`data`必须为函数，目的是为了防止多个组件实例对象之间共用一个`data`，产生数据污染。采用函数的形式，`init Data`时会将其作为工厂函数都会返回全新`data`对象
+
+## $nextTick详解
+
+1️⃣ 定义
+
+> 等待下一次 DOM 更新结束之后执行延迟回调; 在修改数据之后立即使用这个方法，获取更新后的 DOM。
+
+::: warning Tip
+`$nextTick`：等 Vue 把该更新的更新完了，再执行传入的这个函数。
+
+:::
+
+```vue [index.vue]
+<script setup>
+import { ref, nextTick, onMounted } from "vue";
+const msg = ref("Hello");
+const box = ref(null);
+function updateText() {
+  msg.value = "Vue3 NextTick!";
+  // 立即读 DOM 可能还是旧值或 null，不要在这里直接读 box.value
+  console.log("立即获取：", box.value && box.value.textContent);
+  // 使用 nextTick 确保 DOM 更新完成后再读取
+  nextTick(() => {
+    console.log("nextTick 后获取：", box.value && box.value.textContent);
+  });
+}
+onMounted(() => {
+  updateText();
+});
+</script>
+```
+
+2️⃣ Vue 的异步更新队列机制
+
+> Vue 的响应式系统在数据变化时，并`不会立即同步更新` DOM。因为若每次数据变化都触发一次 DOM 渲染，性能会极差，因此，Vue 采用的是`异步更新队列`的策略
+
+3️⃣ 关键点
+
+> DOM 的更新是`批量`、`异步`进行的，因此数据变化后无法立即获得最新的 DOM 结构。
+
+4️⃣ $nextTick 的实现原理
+
+> 将用户传入的回调函数，推迟到 DOM 更新队列执行完毕之后再执行。
+
+5️⃣ 使用方式
+::: code-group
+
+```js [回调方式.js]
+nextTick(() => {
+  console.log("DOM 更新完毕！");
+});
+```
+
+```js [await方式.js]
+await nextTick();
+console.log("DOM 更新完毕！");
+```
+
+:::
+6️⃣ 常见用例总结
+
+- `访问更新后的 DOM`：在修改数据后，获取元素的尺寸、内容或位置。
+- `集成第三方库`：当一个 DOM 元素通过 `v-if` 创建后，需要在这个元素上初始化一个第三方库（如图表、编辑器等）。
+- `管理焦点`：在一个输入框通过 `v-if` 显示后，立即让它获得焦点。
+
+## 解决 SPA 首屏加载速度慢
+
+1️⃣ 加载慢的原因
+
+- 网络延时问题
+- 资源文件体积是否过大
+- 资源是否重复发送请求去加载了
+- 加载脚本的时候，渲染内容堵塞了
+
+2️⃣ 常见的几种 SPA 首屏优化方式
+
+- 减小入口文件体积
+  > 路由懒加载，把不同路由对应的组件分割成不同的代码块，待路由被请求的时候会单独打包路由，使得入口文件变小，加载速度大大增加
+- 静态资源本地缓存
+  > 后端返回资源问题
+  >
+  > - 采用HTTP缓存，设置`Cache-Control`，`Last-Modified`，`Etag`等响应头
+  > - 采用`Service Worker`离线缓存
+
+> 前端合理利用`localStorage`
+
+- UI 框架按需加载
+- 对图片资源压缩
+- 避免组件重复打包
+- 开启 GZip 压缩
+- 使用 SSR（服务端渲染）
+
+## SPA 和 MPA
+
+1️⃣ SPA 和 MPA 对比
+
+|                  | 单页面应用（SPA）              | 多页面应用（MPA）                     |
+| ---------------- | ------------------------------ | ------------------------------------- |
+| 组成             | 一个主页面和多个组件(页面片段) | 多个主页面                            |
+| 刷新方式         | 局部刷新                       | 整页刷新                              |
+| url 模式         | 哈希模式                       | 历史模式                              |
+| SEO 搜索引擎优化 | 难实现，可使用 SSR 方式改善    | 容易实现                              |
+| 数据传递         | 容易                           | 通过 url、cookie、localStorage 等传递 |
+| 页面切换         | 速度快，用户体验良好           | 切换加载资源，速度慢，用户体验差      |
+| 维护成本         | 相对容易                       | 相对复杂                              |
+
+2️⃣ 单页应用优缺点
+
+> ✅ 优点
+>
+> - 具有桌面应用的即时性、网站的可移植性和可访问性
+> - 用户体验好、快，内容的改变不需要重新加载整个页面
+> - 良好的前后端分离，分工更明确
+
+> ❌ 缺点
+>
+> - 不利于搜索引擎的抓取
+> - 首次渲染速度相对较慢
+
+3️⃣ SPA 做 SEO优化
+
+- SSR 服务端渲染
+- 静态化
+- 使用`Phantomjs`针对爬虫处理
+
+## 实现一个 SPA
+
+### 原理
+
+- 监听地址栏中 `hash` 变化驱动界面变化
+- 用 `pushsate` 记录浏览器的历史，驱动界面发送变化
+
+### 实现
+
+#### hash 模式
+
+> 核心通过监听`url`中的`hash`来进行路由跳转
+
+```js [Router.js]
+// 定义 Router
+class Router {
+  constructor() {
+    this.routes = {}; // 存放路由path及callback
+    this.currentUrl = ""; // 监听路由change调用相对应的路由回调
+    window.addEventListener("load", this.refresh, false);
+    window.addEventListener("hashchange", this.refresh, false);
+  }
+  route(path, callback) {
+    this.routes[path] = callback;
+  }
+  push(path) {
+    this.routes[path] && this.routes[path]();
+  }
+}
+
+// 使用 router
+window.miniRouter = new Router();
+miniRouter.route("/", () => console.log("page1"));
+miniRouter.route("/page2", () => console.log("page2"));
+
+miniRouter.push("/"); // page1
+miniRouter.push("/page2"); // page2
+```
+
+#### history 模式
+
+> `history` 模式核心借用 `HTML5 history api`
+>
+> - `history.pushState` 浏览器历史纪录添加记录
+> - `history.replaceState` 修改浏览器历史纪录中当前纪录
+> - `history.popState` 当 `history` 发生变化时触发
+
+```js [Router.js]
+// 定义 Router
+class Router {
+  constructor() {
+    this.routes = {};
+    this.listerPopState();
+  }
+  init(path) {
+    history.replaceState({ path: path }, null, path);
+    this.routes[path] && this.routes[path]();
+  }
+  route(path, callback) {
+    this.routes[path] = callback;
+  }
+  push(path) {
+    history.pushState({ path: path }, null, path);
+    this.routes[path] && this.routes[path]();
+  }
+  listerPopState() {
+    window.addEventListener("popstate", (e) => {
+      const path = e.state && e.state.path;
+      this.routers[path] && this.routers[path]();
+    });
+  }
+}
+
+// 使用 Router
+window.miniRouter = new Router();
+miniRouter.route("/", () => console.log("page1"));
+miniRouter.route("/page2", () => console.log("page2"));
+
+// 跳转
+miniRouter.push("/page2"); // page2
+```
+
+## v-show 与 v-if
+
+> `v-if` 与 `v-show` 都能控制`DOM`元素在页面的显示与隐藏。
+
+- 性能消耗
+  - `v-if`有更高的切换消耗（直接操作`DOM`节点增加与删除）
+  - `v-show`有更高的初始渲染消耗（不管初始条件是什么，元素总是会被渲染）
+- 控制手段
+  - `v-show` 隐藏则是为该元素添加 `display:none/block`，DOM元素依旧还在。
+  - `v-if` 显示隐藏是将`DOM`元素整个添加或删除
+- 组件生命周期
+  - `v-show` 由`false -> true 或 true->false`的时候，`不会触发`组件的`生命周期`
+  - `v-if`由`false-> true 或 true -> false`的时候，`会触发`组件的`生命周期`
+- 应用场景
+  - 需要非常频繁地切换，则使用 `v-show` 较好
+  - 在运行时条件很少改变，则使用 `v-if` 较好
+
+## v-if 与 v-for
+
+| 版本  | 优先级       | 官方说明                         |
+| ----- | ------------ | -------------------------------- |
+| Vue 2 | `v-for > v-if` | `v-for` 的优先级高于 `v-if`。        |
+| Vue 3 | `v-if > v-for` | `v-if `会拥有比 `v-for` 更高的优先级 |
+
+> Vue2.x
+> - 在Vue 2中，当`v-for`和`v-if`作用于同一元素时，无论`v-if`的条件是否依赖`v-for`的变量，`v-for`都会先执行。
+
+> Vue3.x
+> - Vue会先执行 `v-if` 的条件判断，若条件为真，才会继续执行`v-for`指令来渲染列表。若条件为假，则直接跳过`v-for`的渲染
+
+::: info 注意事项
+- 不要将 `v-for` 和 `v-if` 用在同一个元素上
+- ✅ 官方最佳实践：如何正确地过滤列表
+  - 使用 `computed` 计算属性（推荐）
+  - 将 `v-if` 移动到外层包裹元素
+:::
 
 ## Vue2.x
 
@@ -354,17 +601,19 @@ obj.bar = "新属性";
 ```js [Object.assign()]
 // 直接使用 Object.assign() 添加到对象的新属性不会触发更新
 // 应创建一个新的对象，合并原对象和混入对象的属性
-this.someObject = Object.assign({},this.someObject,{ 
-  newProperty1:1,
-  newProperty2:2,
+this.someObject = Object.assign({}, this.someObject, {
+  newProperty1: 1,
+  newProperty2: 2,
   //  ...
-})
+});
 ```
+
 ```js [$forceUpdate]
 - 若你发现你自己需要在 Vue 中做一次强制更新，99.9% 的情况，是你在某个地方做错了事
 - $forceUpdate迫使 Vue 实例重新渲染
 - PS：仅仅影响实例本身和插入插槽内容的子组件，而不是所有子组件。
 ```
+
 :::
 
 ::: warning PS
