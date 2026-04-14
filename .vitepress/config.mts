@@ -38,6 +38,7 @@ export default withMermaid(
               { text: "Vue", link: "/docs/memory/vue" },
               { text: "Vue Router", link: "/docs/memory/vue-router" },
               { text: "Pinia", link: "/docs/memory/pinia" },
+              { text: "Vite", link: "/docs/memory/vite" },
               { text: "高级", link: "/docs/memory/advanced" },
             ]
            },
