@@ -138,6 +138,9 @@ try {
 - `/path/xxx/sss`: 是 `params` 传参
 - `/path/xxx?key=value`: 是 `query` 传参
 
+### URL 路径 ↔ 组件
+- `<router-link>`：`负责跳转`，相当于 `<a>` 标签。
+- `<router-view>`：`负责显示`当前路由对应的组件，占位符。
 
 ## 基于文件的路由
 > [基于文件的路由](https://router.vuejs.org/zh/file-based-routing/): Vue Router 内置了基于文件的路由插件。它会自动从你的页面组件生成路由和类型，因此你不再需要手动维护 `routes` 数组。
