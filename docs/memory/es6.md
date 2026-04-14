@@ -6,6 +6,32 @@
 - [ES6](https://262.ecma-international.org/6.0/)
 - [ECMAScript 6入门](https://es6.ruanyifeng.com/)
 
+## var 🤞 let 🤞 const 
+- `var`
+> 声明具有`函数/全局作用域`的变量，并允许在`同一作用域`内`重复声明`和`更新`。
+- `let`
+> 声明具有`块级作用域`的变量，允许更新值，但在`同一代码块`内`不能重复声明`。
+- `const`
+> 声明在`初始赋值` 后 `不能重新赋值`的`块作用域`变量。
+
+```js [example.js]
+// var: 函数或全局作用域，可以重新声明和更新。
+var x = 10;
+var x = 20; // re-declaration allowed
+console.log("var:", x); // 20
+
+// let: 块级作用域，可以更新，但不能在同一代码块内重新声明。
+let y = 30;
+// let y = 40; Error (can't re-declare in same block)
+y = 40; // update allowed
+console.log("let:", y); // 40
+
+// const: 块级作用域，初始赋值后，不能重新赋值。
+const z = 50;
+// z = 60; Error (can't reassign)
+console.log("const:", z); // 50
+```
+
 ## 运算符的扩展
 
 - `**`：指数运算符，ES2016 新增的一个运算符。
@@ -15,7 +41,7 @@
   - `obj?.prop`：对象属性是否存在
   - `obj?.[expr]`：同上
   - `func?.(...args)`：函数或对象方法是否存在
-- `??`：Null 判断运算符，ES2020 新增的一个运算符，只有运算符左侧的值为`null/undefined`时，才会返回右侧的值。
+- `??`：null/undefined 判断运算符，ES2020 新增的一个运算符，只有运算符左侧的值为`null/undefined`时，才会返回右侧的值。
   - `const name = res.nickName ?? 'frank';` 默认值只有在左侧属性值为`null/undefined`时，才会生效
 
 ## Set & Map 数据结构

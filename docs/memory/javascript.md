@@ -909,10 +909,15 @@ sum.apply(null, arr); // 6
 
 ## 防抖与节流
 
-- 防抖（Debounce）：延迟执行，`仅最后一次操作停止后生效`（频繁操作，会重新计时，仅最后一次点击后，达到间隔时间才生效）
-- 节流（Throttle）：`降低频率`（频繁操作，节流时间不变，满足设定的节流时间就执行）
-
-> [【Debounce vs Throttle】](https://kettanaito.com/blog/debounce-vs-throttle): 防抖与节流两者混淆终极图解指南。
+- 防抖（Debounce）
+> 延迟执行，`仅最后一次操作停止后生效`（频繁操作，会重新计时，仅最后一次点击后，达到间隔时间才生效）
+- 节流（Throttle）
+> `降低频率`（频繁操作，节流时间不变，满足设定的节流时间就执行）
+- 权威视觉指南（Debounce vs Throttle）
+> [Debounce vs Throttle](https://kettanaito.com/blog/debounce-vs-throttle): 防抖与节流两者混淆终极图解指南。
+- 应用场景
+> - 1️⃣ 窗口`调整大小`后界面更新是否一致; 2️⃣ 服务器或客户端的高性能操作
+> - 1️⃣ 异步搜索建议 ; 2️⃣ 服务器上的更新批处理
 
 ## 延时函数
 
@@ -995,3 +1000,71 @@ sum.apply(null, arr); // 6
     - 都是 `-0`
     - 都是 `NaN`
     - 都有相同的值，非零且都不是 `NaN`
+
+## 多重继承
+> JS 不支持传统意义上的多重继承，但它提供了`重用`和`组合`功能的方法。
+
+- `类（Classes）`
+> JS 类只允许单一继承，意味着一个类只能扩展一个父类。
+- `原型（Prototypes）`
+> 对象可以一次继承一个原型，不能继承多个。
+- `混合（Mixins）`
+> 为了实现类似多重继承的行为，JS 使用`混合`— 将属性和方法复制到类或对象中的函数或对象。
+
+## 变量作用域
+
+- `全局作用域（Global Scope）`
+> 最外层级别（在任何地方都可访问）。
+- `局部作用域（Local Scope）`
+> 由于词法作用域，内部函数可以访问其父函数中的变量。
+- `函数作用域（Function Scope）`
+> 变量被限制在声明它们的函数内部。
+- `块级作用域（Block Scope）`
+> 使用 let 或 const 声明的变量被限制在最近的代码块（循环、条件语句等）内部。
+
+## isNaN 和 Number.isNaN
+- `Number.isNaN(x)` 
+> `Number.isNaN(x)` →  仅当 `x` 为 `NaN` 值时返回 `true`，不进行类型转换。
+- `isNaN(x)` 
+> `isNaN(x)` → 将 `x` 转换为`数值`，然后`检查该结果`是否为 `NaN`。
+- `Example`
+```js [example.js]
+// 在 JavaScript 中，值 NaN 被视为一种数字。
+Number.isNaN(NaN)             // true
+isNaN(NaN)                    // true
+
+Number.isNaN("foo")           // false  (string, not NaN)
+isNaN("foo")                 // true   (coerces "foo" → NaN)
+
+Number.isNaN(undefined)     // false
+isNaN(undefined)             // true   (undefined → NaN)
+
+Number.isNaN("")             // false
+isNaN("")                    // false  ("" → 0)
+
+Number.isNaN(0/0)            // true   (is NaN)
+isNaN(0/0)                   // true
+```
+
+## x++ 和 ++x
+> 两者`都会递增`，但返回的值不同。
+
+- `x++`
+> `后增` → `返回旧值`，然后`递增`。
+- `++x`
+> `预增` → `先递增`，然后`返回新值`。
+- `Example`
+```js [example.js]
+let x = 0;
+console.log(x++); // 先返回当前值，后递增。
+console.log(++x); // 先递增，后返回新值。
+
+// 0
+// 2
+```
+
+## null 和 undefined
+- `null` 
+> `空值`表示没有值或没有对象，这被称为`空值/对象`。
+- `undefined`
+> 当变量声明但`未赋值`时发生，未定义不是关键词。
