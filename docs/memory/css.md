@@ -455,6 +455,200 @@ li:not(:last-child) {
 > - `100%`，则完全是深褐色的。
 > - `0%`，图像无变化。
 
+## background
+
+### background-clip
+
+1️⃣ 定义
+> `background-clip` 设置元素的背景（背景图片或颜色）是否延伸到边框、内边距盒子、内容盒子下面。
+
+2️⃣ 属性值
+- `border-box`
+> 背景延伸至边框外沿（但是在边框下层）。
+
+- `padding-box`
+> 背景延伸至内边距（padding）外沿。不会绘制到边框处。
+
+- `content-box`
+> 背景被裁剪至内容区（content box）外沿。
+
+- `text`（实验性）
+> 背景被裁剪成文字的前景色。
+
+### background-color
+
+1️⃣ 定义
+
+> `background-color` 设置元素的背景色。
+
+2️⃣ 属性值
+
+- 【颜色关键字值】：`red`、`green`、...
+- 【十六进制值】：`#bf0`、`#bbff00`、...
+- 【RGB 值】：`rgb(255 255 128)`、`rgb(117 190 218 / 50%)`、...
+- 【HSL 值】：`hsl(50 33% 25%)`、`hsl(50 33% 25% / 75%)`、...
+- 【特殊关键字值】: `transparent（透明）`、`currentcolor（背景颜色的统一颜色）`、...
+
+### background-image
+
+1️⃣ 定义
+
+> `background-image` 用于为一个元素设置一个或者多个背景图像。
+
+2️⃣ 属性值
+
+- `none`
+  > 是一个表示无背景图的关键字。
+- `<image>`
+  > 用来标记将要显示的图片。支持多背景设置，背景之间以逗号隔开。
+
+::: warning 注意
+
+- 若没有被背景图片覆盖的背景区域仍然会显示用`background-color`属性设置的背景颜色。
+- 若背景图片设置了透明或者半透明属性，衬在背景图片后面的背景色也会显示出来。
+
+:::
+
+### background-origin
+
+1️⃣ 定义
+> `background-origin` 规定了指定背景图片属性的原点位置的背景相对区域。
+
+2️⃣ 属性值
+- `border-box`
+> 背景图片的摆放以 border 区域为参考
+- `padding-box`
+> 背景图片的摆放以 padding 区域为参考
+- `content-box`
+> 背景图片的摆放以 content 区域为参考
+
+### background-position
+
+1️⃣ 定义
+> `background-position` 属性为每一个背景图片设置初始位置。这个位置是相对于由 `background-origin` 定义的位置图层的。
+
+2️⃣ 属性值
+
+```css
+/* Keyword values */
+background-position: top;
+background-position: bottom;
+background-position: left;
+background-position: right;
+background-position: center;
+
+/* <percentage> values */
+background-position: 25% 75%;
+
+/* <length> values */
+background-position: 0 0;
+background-position: 1cm 2cm;
+background-position: 10ch 8em;
+
+/* Multiple images */
+background-position:
+  0 0,
+  center;
+
+/* Edge offsets values */
+background-position: bottom 10px right 20px;
+background-position: right 3em bottom 10px;
+background-position: bottom 10px right;
+background-position: top right 10px;
+
+/* Global values */
+background-position: inherit;
+background-position: initial;
+background-position: revert;
+background-position: unset;
+```
+
+### background-repeat
+
+1️⃣ 定义
+
+> `background-repeat` 属性定义背景图像的重复方式。
+
+2️⃣ 属性值
+
+> 在双值语法中，第一个值表示水平重复行为，第二个值表示垂直重复行为。
+
+| 单值        | 等价于双值              |
+| ----------- | ----------------------- |
+| `repeat-x`  | `repeat` `no-repeat`    |
+| `repeat-y`  | `no-repeat` `repeat`    |
+| `repeat`    | `repeat` `repeat`       |
+| `space`     | `space` `space`         |
+| `round`     | `round` `round`         |
+| `no-repeat` | `no-repeat` `no-repeat` |
+
+### background-size
+
+1️⃣ 定义
+
+> `background-size` 设置背景图片大小。
+
+2️⃣ 背景图片
+
+> - 可以保持其原有的尺寸
+> - 可以拉伸到新的尺寸
+> - 可以在保持其原有比例的同时缩放到元素的可用空间的尺寸。
+
+3️⃣ 属性值
+
+```css
+/* 关键字 */
+background-size: cover
+background-size: contain
+
+/* 一个值 */
+/* 这个值指定图片的宽度，图片的高度隐式的为 auto */
+background-size: 50%
+background-size: 3em
+background-size: 12px
+background-size: auto
+
+/* 两个值 */
+/* 第一个值指定图片的宽度，第二个值指定图片的高度 */
+background-size: 50% auto
+background-size: 3em 25%
+background-size: auto 6px
+background-size: auto auto
+
+/* 逗号分隔的多个值：设置多重背景 */
+background-size: auto, auto     /* 不同于 background-size: auto auto */
+background-size: 50%, 25%, 25%
+background-size: 6px, auto, contain
+
+/* 全局属性 */
+background-size: inherit;
+background-size: initial;
+background-size: unset;
+```
+
+### background-attachment
+
+1️⃣ 定义
+
+> `background-attachment` 决定背景图像的位置是相对`视口`（固定/滚动）
+
+2️⃣ 属性值
+
+- `fixed`
+  > 表示背景相对于视口固定。即使一个元素拥有滚动机制，背景也不会随着元素的内容滚动。
+- `scroll`
+  > 表示背景相对于元素本身固定，而不是随着它的内容滚动（对元素边框是有效的）。
+- `local`
+  > 表示背景相对于元素的内容固定。若一个元素拥有滚动机制，背景将会随着元素的内容滚动，
+  > 并且背景的绘制区域和定位区域是相对于可滚动的区域而不是包含他们的边框。
+
+::: info 决定背景图像的位置
+
+- 1️⃣ 在视口内固定。
+- 2️⃣ 随着包含它的区块滚动。
+
+:::
+
 ## 组合函数
 
 > 你可以`组合任意`数量的`函数`来控制渲染。滤镜将按`声明顺序依次`应用。
@@ -462,6 +656,7 @@ li:not(:last-child) {
 ## 图形/图像入门到放弃
 
 ### 网页上的图形
+
 - `<img>` — 元素显示`静态图像`。
 - `background-image` — 属性来设置 HTML 元素的`背景`。
 - `更高级图像`
@@ -541,10 +736,12 @@ li:not(:last-child) {
 - `提供回退图像`: 虽然标准 HTML `<img>` 元素不支持图片的兼容性回退，但 `<picture>` 元素支持。
 
 #### 相关的 CSS 属性
+
 - `object-fit` — 指定`内容`应该`如何适应`宽和高固定的`容器`。
+
 ```css
-/* 图片将被缩放，保持图片的宽高比，宽高比与容器的宽高比不匹配，该图片将被添加“黑边” */ 
-object-fit: contain; 
+/* 图片将被缩放，保持图片的宽高比，宽高比与容器的宽高比不匹配，该图片将被添加“黑边” */
+object-fit: contain;
 /* 图片保持其宽高比并填充整个容器，图片的宽高比与容器不匹配，该图片将被剪裁以适应容器 */
 object-fit: cover;
 /* 图片正好填充整个容器，图片的宽高比与容器不匹配，该图片将被拉伸以适应整个容器 */
@@ -554,6 +751,7 @@ object-fit: none;
 /* 图片的尺寸与 none/contain 中的一个相同，取决于两个之间谁得到的图像尺寸会更小一些 */
 object-fit: scale-down;
 ```
+
 - `object-position` — 规定了图片在其容器中的位置。
 
 ```css
@@ -586,6 +784,7 @@ object-position: unset;
 ```
 
 - `image-orientation` — 用来修正某些图片的预设方向。
+
 ```css
 /* 根据图片的 EXIF 数据来旋转图片，EXIF 中有一个控制图片旋转度的属性。 */
 image-orientation: from-image;
