@@ -1,10 +1,12 @@
 # CSS（页面样式）
+
 > 网页的“化妆师/邪术”，专治“丑”，一行代码就能让页面从素颜秒变女神，时尚潮流全靠它。
 
 ## 指南
+
 - [Ctrip webkit CSS library](http://ic4.github.io/webkitcss/)
 - [CSS Reference](https://tympanus.net/codrops/css_reference/)
-> 这是一个详尽的 CSS 参考书，包含所有重要的属性和信息，帮助你从基础学习 CSS
+  > 这是一个详尽的 CSS 参考书，包含所有重要的属性和信息，帮助你从基础学习 CSS
 
 ## 外边距折叠
 
@@ -93,9 +95,9 @@
 > - 给父元素设置溢出隐藏（overflow: hidden/auto）
 > - 使用浮动或绝对定位
 
-## 实现元素隐藏的方式
+## 实现元素隐藏
 
-## display: non
+### display: none
 
 > 最彻底的隐藏，元素仿佛不存在。
 
@@ -108,7 +110,7 @@
   - `无障碍性`：屏幕阅读器会忽略该内容。
 - `适用场景`：彻底不需要显示、不需要交互的元素（如移动端侧边栏未打开时的状态）。
 
-## visibility: hidden
+### visibility: hidden
 
 > 看不见，但还在那里。
 
@@ -121,7 +123,7 @@
   - `无障碍性`：屏幕阅读器通常会忽略该内容。
 - `适用场景`：需要保持布局占位，避免页面抖动的情况。
 
-## opacity: 0
+### opacity: 0
 
 > 透明度为 0，完全透明。
 
@@ -133,7 +135,7 @@
   - `无障碍性`：屏幕阅读器可以读取该内容。
 - `适用场景`：需要淡入淡出动画效果时（如 `transition: opacity 0.3s`）。
 
-## 移出可视区域
+### 移出可视区域
 
 > `position: absolute/fixed` 并移出可视区域,如 `left: -9999px` 或 `top: -9999px`。
 
@@ -144,7 +146,7 @@
   - `无障碍性`：屏幕阅读器可以读取该内容（这对 SEO 和无障碍访问非常重要）。
 - `适用场景`：SEO 优化文本、屏幕阅读器专用文本（SR-only）。
 
-## 高度为 0 并裁剪溢出
+### 高度为 0 并裁剪溢出
 
 > `height: 0; overflow: hidden`,高度为 0 并裁剪溢出。
 
@@ -155,7 +157,7 @@
   - `可做动画`：极其适合做手风琴（Accordion）折叠效果。
 - `适用场景`：折叠面板、下拉菜单的展开收起。
 
-## 缩放为 0
+### 缩放为 0
 
 > `transform: scale(0)` 缩放为 0。
 
@@ -456,3 +458,160 @@ li:not(:last-child) {
 ## 组合函数
 
 > 你可以`组合任意`数量的`函数`来控制渲染。滤镜将按`声明顺序依次`应用。
+
+## 图形/图像入门到放弃
+
+### 网页上的图形
+- `<img>` — 元素显示`静态图像`。
+- `background-image` — 属性来设置 HTML 元素的`背景`。
+- `更高级图像`
+  - `Canvas` — 元素提供了使用 Js 绘制 `2D` 图形的 API。
+  - `SVG` — 借助SVG来使用线条、曲线和其他几何形状来渲染 `2D` 图形。
+  - `WebGL` — 用于 Web 的 `3D` 图形 API，可让你在 Web 内容中使用标准的 OpenGL ES。
+
+### `img`图像嵌入元素
+
+> `<img>` HTML 元素将一张图像嵌入文档。
+
+#### img标签相关属性
+
+::: info 属性
+
+- `src` — 资源地址
+- `width` — 图像宽度
+- `height` — 图像高度
+- `alt` — 在没有图片时使用的替换文本
+- `srcset` — 用于不同场景的图像，例如高分辨率显示器、小型显示器等。
+- `sizes` — 不同页面布局的图像尺寸
+- `crossorigin` — 元素如何处理交叉起源请求
+- `usemap` — 用于图像映射的名称
+- `ismap` — 图像是否为服务器端图像映射
+- `loading` — 用于确定加载延迟
+- `draggable`:
+  > 全局属性，用于标识元素是否允许使用浏览器原生行为或 HTML `拖放`操作 API 拖动。
+  >
+  > - 若该属性没有设值，则默认值 为 `auto`，表示使用浏览器定义的默认行为。
+  > - `true`：表示元素可以被拖动
+  > - `false`：表示元素不可以被拖动
+
+:::
+
+#### 图像类型与格式
+
+> [图像文件类型与格式指南](https://developer.mozilla.org/zh-CN/docs/Web/Media/Guides/Formats/Image_types)
+
+1️⃣ 常见图像文件类型
+
+| 缩写   | 文件格式             | MIME 类型       | 文件扩展名                             |
+| ------ | -------------------- | --------------- | -------------------------------------- |
+| `WebP` | Web 图像格式         | `image/webp`    | `.webp`                                |
+| `SVG`  | 可缩放矢量图形       | `image/svg+xml` | `.svg`                                 |
+| `PNG`  | 便携式网络图形       | `image/png`     | `.png`                                 |
+| `JPEG` | 联合图像专家小组图像 | `image/jpeg`    | `.jpg`/`.jpeg`/`.jfif`/`.pjpeg`/`.pjp` |
+| `APNG` | 动态可移植网络图形   | `image/apng`    | `.apng `                               |
+| `AVIF` | AV1 图像档案格式     | `image/avif`    | `.avif`                                |
+| `GIF`  | 图像互换格式         | `image/gif`     | `.gif`                                 |
+
+2️⃣ 选择合适的图像格式
+
+- `照片`: WebP 是首选，JPEG 是次选（JPEG 的`兼容性`更好，但 WebP 的`压缩效果`可能更好）
+
+| 最佳选择        | 回退方案 |
+| --------------- | -------- |
+| `WebP` / `JPEG` | `JPEG`   |
+
+- `图标`: 对于图标等较小的图像，应使用`无损格式`，以避免在大小受限的图像中丢失细节。
+
+| 最佳选择                  | 回退方案 |
+| ------------------------- | -------- |
+| `SVG`/ `无损 WebP`/ `PNG` | `PNG`    |
+
+- `截图`: PNG 可能是最好的选择，但无损 WebP 的压缩效果可能更好。
+
+| 最佳选择                                                  | 回退方案                                      |
+| --------------------------------------------------------- | --------------------------------------------- |
+| 无损 WebP 或 PNG；<br/>若不担心压缩伪影，则使用 JPEG 文件 | PNG 或 JPEG；<br>GIF 用于颜色数较少的屏幕截图 |
+
+- `示意图、绘图和图表`: 对于任何可以使用矢量图形表示的图像，SVG 都是最佳选择。否则，应使用 PNG 等无损格式。
+
+| 最佳选择 | 回退方案 |
+| -------- | -------- |
+| `SVG`    | `PNG`    |
+
+- `提供回退图像`: 虽然标准 HTML `<img>` 元素不支持图片的兼容性回退，但 `<picture>` 元素支持。
+
+#### 相关的 CSS 属性
+- `object-fit` — 指定`内容`应该`如何适应`宽和高固定的`容器`。
+```css
+/* 图片将被缩放，保持图片的宽高比，宽高比与容器的宽高比不匹配，该图片将被添加“黑边” */ 
+object-fit: contain; 
+/* 图片保持其宽高比并填充整个容器，图片的宽高比与容器不匹配，该图片将被剪裁以适应容器 */
+object-fit: cover;
+/* 图片正好填充整个容器，图片的宽高比与容器不匹配，该图片将被拉伸以适应整个容器 */
+object-fit: fill;
+/* 图片将保持其原有的尺寸 */
+object-fit: none;
+/* 图片的尺寸与 none/contain 中的一个相同，取决于两个之间谁得到的图像尺寸会更小一些 */
+object-fit: scale-down;
+```
+- `object-position` — 规定了图片在其容器中的位置。
+
+```css
+/* <position> 关键字值 */
+object-position: top;
+object-position: bottom;
+object-position: left;
+object-position: right;
+object-position: center;
+
+/* <percentage> 值 */
+object-position: 25% 75%;
+
+/* <length> 值 */
+object-position: 0 0;
+object-position: 1cm 2cm;
+object-position: 10ch 8em;
+
+/* 边缘偏移值 */
+object-position: bottom 10px right 20px;
+object-position: right 3em bottom 10px;
+object-position: top 0 right 10px;
+
+/* 全局关键字 */
+object-position: inherit;
+object-position: initial;
+object-position: revert;
+object-position: revert-layer;
+object-position: unset;
+```
+
+- `image-orientation` — 用来修正某些图片的预设方向。
+```css
+/* 根据图片的 EXIF 数据来旋转图片，EXIF 中有一个控制图片旋转度的属性。 */
+image-orientation: from-image;
+/* 图片旋转值 <angle> , 会被自动四舍五入到 90deg (0.25turn) 的整数倍。 */
+image-orientation: <angle>;
+/* 对图片进行水平翻转，先进行第二个参数执行的旋转，再进行此次翻转。 */
+image-orientation: flip;
+```
+
+- `image-rendering` — 用于设置图像缩放算法。此属性对于未缩放的图像没有影响。
+
+```css
+/* 当页面作者(程序员)指定的尺寸不是图像的原始尺寸（UI 设计尺寸）时，用户代理将缩放图像 */
+/* 专有属性值 */
+image-rendering: auto;
+image-rendering: crisp-edges;
+image-rendering: pixelated;
+
+/* 全局属性值 */
+image-rendering: inherit;
+image-rendering: initial;
+image-rendering: unset;
+```
+
+- `image-resolution` — 图像分辨率（实验性技术），指定了容器内的图像的内在分辨率。
+
+### background-image
+
+> CSS [background-image](https://developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Properties/background) 属性用于为一个元素设置一个或者多个背景图像。
