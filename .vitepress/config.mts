@@ -8,7 +8,7 @@ export default withMermaid(
   // 你的 GitHub Pages 部署在 /ordinary-coder/ 子路径下
   // 智能配置 base 路径：若在 CI 环境下（如 GitHub Actions）则使用子路径，否则使用根路径
   base: process.env.CI ? "/ordinary-coder/" : "/",
-  title: "前端防脱发指南",
+  title: "前端留存指南",
   description: "试图记录今天学废、明天就会忘掉的前端知识，给未来的自己留条活路。",
   markdown: {
     config(md) {

@@ -3,7 +3,7 @@
 layout: home
 
 hero:
-  name: "前端防脱发指南"
+  name: "前端留存指南"
   text: "试图记录今天学废、明天就会忘掉的前端知识"
   tagline: 为了防止秃头而学的那些事儿
   actions:
