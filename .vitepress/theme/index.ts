@@ -2,6 +2,8 @@ import Theme from 'vitepress/theme'
 import 'virtual:group-icons.css'
 import '@vue-flow/core/dist/style.css'
 import './custom-outline.css'
+import './mermaid-clarity.css'
+import { setupMermaidWheelZoom } from './mermaid-wheel-zoom'
 import AtomicCssFlow from './components/AtomicCssFlow.vue'
 import UnoCssFlow from './components/UnoCssFlow.vue'
 import TailwindFlow from './components/TailwindFlow.vue'
@@ -12,6 +14,7 @@ export default {
 	...Theme,
 	enhanceApp(ctx: EnhanceAppContext) {
 		Theme.enhanceApp?.(ctx)
+		setupMermaidWheelZoom()
 		ctx.app.component('AtomicCssFlow', AtomicCssFlow)
 		ctx.app.component('UnoCssFlow', UnoCssFlow)
 		ctx.app.component('TailwindFlow', TailwindFlow)

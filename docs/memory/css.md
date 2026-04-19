@@ -7,6 +7,258 @@
 - [Ctrip webkit CSS library](http://ic4.github.io/webkitcss/)
 - [CSS Reference](https://tympanus.net/codrops/css_reference/)
   > 这是一个详尽的 CSS 参考书，包含所有重要的属性和信息，帮助你从基础学习 CSS
+## 水平垂直居中
+
+> 按元素类型 + 已知/未知尺寸来选方案，避免“能居中但不好维护”。
+
+### 方案脑图
+
+```mermaid
+%%{init: {"flowchart": {"htmlLabels": false, "useMaxWidth": false}, "themeVariables": {"fontSize": "16px"}} }%%
+flowchart LR
+  root["水平垂直居中(终结版)"]
+
+  root --> h["水平居中"]
+  root --> v["垂直居中"]
+
+  h --> h1["行内元素"]
+  h1 --> h1a["text-align: center"]
+
+  h --> h2["块级元素"]
+  h2 --> h21["宽度确定"]
+  h21 --> h21a["margin: 0 auto"]
+  h21 --> h21b["absolute和margin-left: -width/2"]
+  h21b --> h21b1["前提：父元素relative"]
+
+  h2 --> h22["宽度未知"]
+  h22 --> h22a["display: table; margin: 0 auto;"]
+  h22 --> h22b["display: inline-block和text-align:center"]
+  h22 --> h22c["display: flex; justify-content:center;"]
+  h22 --> h22d["absolute+transform，translateX可以移动本身元素的50%"]
+
+  v --> v1["line-height"]
+  v1 --> v1a["适合纯文字类"]
+
+  v --> v2["子元素margin为auto"]
+  v2 --> v2a["前提:父容器相对定位，子级设置absolute"]
+
+  v --> v3["子元素margin为auto"]
+  v3 --> v3a["前提:父级设置display: flex"]
+
+  v --> v4["absolute+transform，translateY可以移动本身元素的50%。"]
+  v4 --> v4a["前提：父元素 relative"]
+
+  v --> v5["设置 vertical-align: middle"]
+  v5 --> v5a["前提: 内联元素以及display值为table-cell"]
+
+  classDef rootStyle fill:#0f6b66,stroke:#0f6b66,color:#ffffff,stroke-width:2px,font-size:18px,font-weight:700;
+  classDef nodeStyle fill:#eef5f4,stroke:#2d6f6a,color:#0f6b66,stroke-width:1px,font-size:16px,font-weight:600;
+  class root rootStyle;
+  class h,v,h1,h1a,h2,h21,h21a,h21b,h21b1,h22,h22a,h22b,h22c,h22d,v1,v1a,v2,v2a,v3,v3a,v4,v4a,v5,v5a nodeStyle;
+```
+
+### 快速选型
+
+| 场景 | 首选方案 | 备注 |
+| --- | --- | --- |
+| 现代布局，最通用 | `flex` | 语义清晰，响应式友好 |
+| 二维布局，最简写法 | `grid + place-items: center` | 一行解决水平+垂直 |
+| 绝对定位浮层/弹窗 | `left/top + transform` | 不依赖固定宽高 |
+| 老项目兼容表格布局 | `table-cell + vertical-align: middle` | 适合遗留结构 |
+| 只有单行文字要垂直居中 | `line-height = height` | 仅限单行文本 |
+
+### 水平居中
+
+#### 1) 行内元素（或 inline-block 文本）
+
+```css
+.parent {
+  text-align: center;
+}
+```
+
+#### 2) 块级元素（已知宽度）
+
+```css
+.child {
+  width: 240px;
+  margin: 0 auto;
+}
+```
+
+#### 3) 块级元素（未知宽度）
+
+::: code-group
+
+```css [table + margin]
+.child {
+  display: table;
+  margin: 0 auto;
+}
+```
+
+```css [inline-block + text-align]
+.parent {
+  text-align: center;
+}
+
+.child {
+  display: inline-block;
+}
+```
+
+```css [flex]
+.parent {
+  display: flex;
+  justify-content: center;
+}
+```
+
+```css [grid]
+.parent {
+  display: grid;
+  justify-content: center;
+}
+```
+
+```css [绝对定位 + transform]
+.parent {
+  position: relative;
+}
+
+.child {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+```
+
+:::
+
+### 垂直居中
+
+#### 1) 单行文本
+
+```css
+.single-line {
+  height: 48px;
+  line-height: 48px;
+}
+```
+
+#### 2) 通用容器
+
+::: code-group
+
+```css [flex]
+.parent {
+  display: flex;
+  align-items: center;
+}
+```
+
+```css [grid]
+.parent {
+  display: grid;
+  align-items: center;
+}
+```
+
+```css [table-cell]
+.parent {
+  display: table-cell;
+  vertical-align: middle;
+}
+```
+
+:::
+
+#### 3) 绝对定位方案
+
+::: code-group
+
+```css [已知高度]
+.parent {
+  position: relative;
+}
+
+.child {
+  position: absolute;
+  top: 50%;
+  height: 120px;
+  margin-top: -60px;
+}
+```
+
+```css [未知高度]
+.parent {
+  position: relative;
+}
+
+.child {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+```
+
+```css [已知宽高 + margin auto]
+.parent {
+  position: relative;
+}
+
+.child {
+  position: absolute;
+  inset: 0;
+  width: 200px;
+  height: 120px;
+  margin: auto;
+}
+```
+
+:::
+
+### 水平 + 垂直同时居中
+
+::: code-group
+
+```css [flex 方案]
+.parent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+```
+
+```css [grid 方案]
+.parent {
+  display: grid;
+  place-items: center;
+}
+```
+
+```css [绝对定位 + transform]
+.parent {
+  position: relative;
+}
+
+.child {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+```
+
+:::
+
+### 常见坑位
+
+- `margin: 0 auto` 只对块级元素有效，且元素需要有宽度。
+- `line-height = height` 只适合单行文本，多行会错位。
+- 绝对定位方案要给父元素加 `position: relative`。
+- `transform` 会创建新的层叠上下文，必要时注意 `z-index`。
+- 不要为了居中滥用 `table-cell`，新项目优先 `flex/grid`。
 
 ## 外边距折叠
 

@@ -1,0 +1,51 @@
+/* Mermaid clarity tuning: keep vector size and avoid auto shrink blur */
+.vp-doc .mermaid {
+  overflow: hidden;
+}
+
+.vp-doc .mermaid.mermaid-wheel-zoom-host {
+  position: relative;
+}
+
+.vp-doc .mermaid-zoom-viewport {
+  width: 100%;
+  overflow: auto;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 10px;
+  background: var(--vp-c-bg-soft);
+  cursor: zoom-in;
+}
+
+.vp-doc .mermaid-zoom-viewport[data-can-drag='1'] {
+  cursor: grab;
+}
+
+.vp-doc .mermaid-zoom-viewport.is-dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.vp-doc .mermaid-zoom-stage {
+  width: max-content;
+  transform-origin: top left;
+}
+
+.vp-doc .mermaid svg {
+  display: block;
+  max-width: none !important;
+  height: auto;
+  text-rendering: geometricPrecision;
+  shape-rendering: geometricPrecision;
+}
+
+.vp-doc .mermaid text {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.vp-doc .mermaid-zoom-hint {
+  display: block;
+  font-size: 12px;
+  color: var(--vp-c-text-3);
+  margin-top: 6px;
+}
