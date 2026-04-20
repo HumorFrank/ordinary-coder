@@ -2,6 +2,250 @@
 
 > 前端界的“拼装大师”，数据和界面说合就合，开发效率像开挂一样，适合“懒人”与“强迫症”共同拥有。
 
+## 响应式 API 指南
+
+### 响应式变量定义
+
+#### 核心 API
+
+| API               | 使用方式                            | 访问方式  | 适用场景           |
+| ----------------- | ----------------------------------- | --------- | ------------------ |
+| `ref`             | `const count = ref(0)`              | `.value`  | 基础类型           |
+| `reactive`        | `const state = reactive({})`        | 直接访问  | 复杂对象/表单数据  |
+| `computed`        | `const double = computed(() => {})` | `.value`  | 依赖其他响应式数据 |
+| `shallowRef`      | `const data = shallowRef({})`       | `.value ` | 大型数据全量替换   |
+| `shallowReactive` | `const state = shallowReactive({})` | 直接访问  | 只关心顶层属性变化 |
+
+#### 组合式 API 辅助函数
+
+| API               | 使用方式                           | 作用                                       |
+| ----------------- | ---------------------------------- | ------------------------------------------ |
+| `toRef`           | `const name=toRef(props,'name')`   | 从响应式对象中提取单个属性，保持响应式连接 |
+| `toRefs`          | `const {name,age}=toRefs(state)`   | 解构响应式对象时保持每个属性的响应式       |
+| `customRef`       | `customRef((track,trigger) => {})` | 自定义响应式行为（如防抖、节流）           |
+| `readonly`        | `const a=readonly(state)`          | 创建只读版本，防止意外修改                 |
+| `shallowReadonly` | `const b=shallowReadonly(state)`   | 只读但仅限制顶层属性                       |
+
+### API 对比表
+
+| API               | 响应式深度                   | 触发更新条件                   | 适用场景                             | 性能开销 |
+| ----------------- | ---------------------------- | ------------------------------ | ------------------------------------ | -------- |
+| `ref`             | 深度（`.value`内对象全递归） | `.value`整体替换或内部属性变化 | 基础类型、需要重新赋值的对象         | 中~高    |
+| `reactive`        | 深度（全递归）               | 属性直接修改                   | 表单数据、复杂状态对象               | 中~高    |
+| `shallowRef`      | 浅层（仅`.value`本身）       | `.value`整体替换               | 大数据集、不需要修改内部属性的场景   | 低       |
+| `shallowReactive` | 浅层（仅第一层属性）         | 第一层属性修改                 | 配置对象、浅层状态                   | 低       |
+| `markRaw`         | 无（永久阻断）               | 不触发更新                     | 第三方库实例、静态常量、超大只读数据 | 零       |
+
+### Demo
+
+::: code-group
+
+```ts [核心选择原则.ts]
+// 1️⃣ ref - 基础类型首选，对象也可用
+const count = ref(0)           // ✅ 基础类型
+const user = ref({ name: 'John' })  // ✅ 对象也可以
+
+// 2️⃣ reactive - 仅限对象，适合复杂状态
+const state = reactive({
+  user: { name: 'John', age: 18 },
+  posts: [],
+  loading: false
+})
+
+// 3️⃣ shallowRef - 大数据集，整体替换
+const items = shallowRef([...10000条数据])
+// 修改：整体替换才触发
+items.value = [...newItems]
+
+// 4️⃣ shallowReactive - 浅层配置
+const config = shallowReactive({
+  theme: 'dark',        // 修改 theme 触发更新
+  nested: {             // 修改 nested 内部不触发
+    api: 'xxx'
+  }
+})
+
+// 5️⃣ markRaw - 阻断响应式
+const threeScene = markRaw(new THREE.Scene())
+const state = reactive({
+  scene: threeScene,    // 保持原始对象，不会被代理
+  staticConfig: markRaw({ version: '1.0' })
+})
+```
+
+```ts [常见陷阱与最佳实践.ts]
+// ❌ 陷阱1：reactive 重新赋值会丢失响应式
+let state = reactive({ count: 0 });
+state = reactive({ count: 1 }); // 响应式丢失！
+
+// ✅ 解决：使用 ref 或 Object.assign
+const state = ref({ count: 0 });
+state.value = { count: 1 }; // ref 可以整体替换
+// 或
+Object.assign(state, { count: 1 });
+
+// ❌ 陷阱2：解构 reactive 丢失响应式
+const state = reactive({ count: 0 });
+let { count } = state; // count 是普通数字
+
+// ✅ 解决：使用 toRefs
+const { count } = toRefs(state); // count 是 ref
+
+// ❌ 陷阱3：shallowRef 内部属性变更不触发
+const data = shallowRef({ list: [] });
+data.value.list.push(1); // 不会触发更新！
+
+// ✅ 解决：整体替换
+data.value = { list: [...data.value.list, 1] };
+
+// ✅ 最佳实践：合理选择响应式深度
+// 80% 场景用 ref/reactive 就够了
+// 性能瓶颈时再考虑 shallow 系列
+```
+
+:::
+
+### 响应式 API Demo
+
+::: code-group
+
+```ts [ref.ts]
+const count = ref(0);
+const user = ref({ name: "John" });
+
+count.value++; // 触发更新
+user.value.name = "Jane"; // 深度响应式，触发更新
+user.value = { name: "Ann" }; // 整体替换，触发更新
+```
+
+```ts [reactive.ts]
+const state = reactive({
+  user: { name: "John", age: 18 },
+  posts: [],
+});
+
+state.user.name = "Jane"; // 触发更新
+state.posts.push("new"); // 触发更新
+
+// ✅ 正确：修改属性
+const state = reactive({ count: 0 });
+state.count = 1;
+
+// ❌ 错误：重新赋值
+let state = reactive({ count: 0 });
+state = reactive({ count: 1 }); // 新对象不再响应式！
+
+// ✅ 正确解构
+const { count } = toRefs(state); // count 是 ref
+```
+
+```ts [shallowRef.ts]
+const data = shallowRef({ list: [] });
+
+// ✅ 触发更新
+data.value = { list: [1, 2, 3] };
+
+// ❌ 不会触发更新
+data.value.list.push(4);
+
+const state = shallowRef({ user: { name: "John" } });
+state.value = { user: { name: "Jane" } }; // 整体替换触发更新
+
+state.value.user.name = "Bob"; // 手动触发内部变更的更新
+triggerRef(state); // 强制更新
+
+// 配合 markRaw 保证内部完全非响应式
+const bigList = shallowRef(markRaw(veryLargeArray));
+```
+
+```ts [shallowReactive.ts]
+const state = shallowReactive({
+  visible: true, // 响应式
+  config: {
+    theme: "dark", // 非响应式
+  },
+});
+
+state.visible = false; // ✅ 触发更新
+state.config.theme = "light"; // ❌ 不会触发更新
+
+const settings = shallowReactive({
+  theme: "dark",
+  user: { name: "John" }, // 普通对象
+});
+
+// 顶层属性更新正常
+settings.theme = "light"; // 触发 UI 更新
+
+// 嵌套更新无效
+settings.user.name = "Jane"; // UI 不更新
+
+// 正确更新嵌套数据的方式
+settings.user = { name: "Jane" }; // 整体替换，触发更新
+```
+
+```ts [markRaw.ts]
+const staticData = markRaw({ version: '1.0', items: [...] })
+const threeObject = markRaw(new THREE.Scene())
+
+const state = reactive({
+  config: staticData,      // 保持原始对象
+  scene: threeObject       // 第三方实例不被代理
+})
+
+// ❌ 错误：只用在普通对象上，但从未放入响应式容器
+const obj = markRaw({ a: 1 })   // 多此一举，不如直接用 const
+
+// ✅ 正确：确保放入响应式容器时不会被转换
+const hugeList = markRaw(Array.from({ length: 100000 }))
+const state = reactive({ data: hugeList })  // 无响应式开销
+
+// ❌ 错误：先放入再标记无效
+const state = reactive({ data: {} })
+markRaw(state.data)   // 无效，已经是响应式对象了
+
+// ✅ 正确：标记后再放入
+const raw = markRaw({})
+const state = reactive({ data: raw })
+```
+
+:::
+
+## defineAsyncComponent
+
+1️⃣ 动态(按需)加载组件
+
+> - 一个用于显式`声明异步组件`的`辅助函数`，它主要用于`性能优化和按需加载`。
+> - 它通过结合 ES 模块的动态导入 (`import()`)，实现组件只有在被渲染时才从服务器下载和加载。
+
+```ts
+import { defineAsyncComponent } from "vue";
+
+// 无配置项定义方式
+const asyncPage = defineAsyncComponent(() => import("./HeavyComponent.vue"));
+
+// 配置项定义方式
+const AsyncHeavyComponent = defineAsyncComponent({
+  // 异步加载组件的函数，通常使用 import()
+  loader: () => import("./HeavyComponent.vue"),
+  // 加载时显示的组件（例:如加载动画）
+  loadingComponent: LoadingComponent,
+  // 加载失败/发生错误显示的组件
+  errorComponent: ErrorComponent,
+  // 显示加载组件前延迟，默认值是 200 毫秒。
+  // 若组件加载的时间小于这个延迟，loadingComponent 不会显示。
+  delay: 200,
+  // 超时时间（超时限制），若加载时间超过此时间，将显示 errorComponent。
+  timeout: 3000,
+});
+```
+
+2️⃣ defineAsyncComponent 的核心价值
+
+- `提升性能`：优化初始加载时间。
+- `按需加载`：延迟加载，减小内存占用。
+- `状态管理`：内置支持加载失败、超时和 loading 状态的处理。
+
 ## 生命周期
 
 1️⃣ 生命周期对比表
@@ -1282,6 +1526,7 @@ count.value++;
 - `Store`：全局共享/需要共享状态、跨组件、响应式
 
 ### 核心应用原则
+
 - 能用 `Composables` 解决的，不用 `Store`（保持简单）
 - 需要在多个不相关的组件间共享的状态，用 `Store`
 - 可以组合使用：`Store` 管理全局数据，`Composables` 封装业务逻辑
@@ -1352,8 +1597,8 @@ count.value++;
 
 🎯 核心原则
 
-| 层级        | 核心原则                                                        |
-| ----------- | --------------------------------------------------------------- |
+| 层级        | 核心原则                                                          |
+| ----------- | ----------------------------------------------------------------- |
 | Composables | `"封装有状态的逻辑复用"` — 将响应式状态、方法、生命周期组合在一起 |
 | Store       | `"管理全局共享状态"` — 确保应用单一数据源，跨组件通信             |
 | Utils       | `"提供无副作用的工具"` — 保持纯函数特性，可随处调用               |
@@ -1394,6 +1639,7 @@ Utils 不能调用 Composables 或 Store（会引入副作用和依赖）
 6️⃣ Example
 
 ::: code-group
+
 ```ts [Utils 的特征]
 // utils/format.ts
 // 特征1：纯函数（无副作用）
@@ -1472,26 +1718,26 @@ export function isEmpty(value: any): boolean {
 ```
 
 ```ts [ Composables 的特征]// composables/useCounter.ts
-import { ref, computed, watch, onUnmounted } from 'vue';
+import { ref, computed, watch, onUnmounted } from "vue";
 
 // 特征1：封装响应式状态 + 逻辑
 export function useCounter(initialValue = 0) {
   // ✅ 有响应式状态
   const count = ref(initialValue);
   const history = ref<string[]>([]);
-  
+
   // ✅ 计算属性（派生状态）
   const doubled = computed(() => count.value * 2);
   const isEven = computed(() => count.value % 2 === 0);
 
   const increment = () => {
     count.value++;
-    history.value.push('increment');
+    history.value.push("increment");
   };
 
   const decrement = () => {
     count.value--;
-    history.value.push('decrement');
+    history.value.push("decrement");
   };
 
   const reset = () => {
@@ -1507,14 +1753,14 @@ export function useCounter(initialValue = 0) {
   // ✅ 生命周期清理
   onUnmounted(() => {
     stopWatch();
-    console.log('counter composable unmounted');
+    console.log("counter composable unmounted");
   });
 
   return {
-    count,      // ref
-    doubled,    // computed
-    isEven,     // computed
-    history,    // ref
+    count, // ref
+    doubled, // computed
+    isEven, // computed
+    history, // ref
     increment,
     decrement,
     reset,
@@ -1530,26 +1776,33 @@ export function useCounter(initialValue = 0) {
 
 // 特征3：可以组合其他 Composables
 // composables/useUserWithOrders.ts
-import { computed, ref, watch } from 'vue';
-import { useUser } from './useUser';
-import { useOrders } from './useOrders';
+import { computed, ref, watch } from "vue";
+import { useUser } from "./useUser";
+import { useOrders } from "./useOrders";
 
 export function useUserWithOrders(userId: string) {
   // ✅ 组合其他 composables
   const { user, loading: userLoading, error: userError } = useUser(userId);
-  const { orders, loading: ordersLoading, error: ordersError } = useOrders(userId);
-  
+  const {
+    orders,
+    loading: ordersLoading,
+    error: ordersError,
+  } = useOrders(userId);
+
   // 组合派生状态
   const isLoading = computed(() => userLoading.value || ordersLoading.value);
   const hasError = computed(() => userError.value || ordersError.value);
-  
+
   // 副作用：当用户变化时重新加载订单
-  watch(() => user.value?.id, (newUserId) => {
-    if (newUserId) {
-      console.log(`User changed to ${newUserId}, refetch orders`);
-    }
-  });
-  
+  watch(
+    () => user.value?.id,
+    (newUserId) => {
+      if (newUserId) {
+        console.log(`User changed to ${newUserId}, refetch orders`);
+      }
+    },
+  );
+
   return {
     user,
     orders,
@@ -1560,7 +1813,7 @@ export function useUserWithOrders(userId: string) {
 
 // 特征4：封装异步操作
 // composables/useFetch.ts
-import { ref, readonly } from 'vue';
+import { ref, readonly } from "vue";
 
 export function useFetch<T>(url: string) {
   const data = ref<T | null>(null);
@@ -1570,10 +1823,10 @@ export function useFetch<T>(url: string) {
   const execute = async () => {
     loading.value = true;
     error.value = null;
-    
+
     try {
       const response = await fetch(url);
-      if (!response.ok) throw new Error('Network error');
+      if (!response.ok) throw new Error("Network error");
       data.value = await response.json();
     } catch (e) {
       error.value = e as Error;
@@ -1586,7 +1839,7 @@ export function useFetch<T>(url: string) {
   execute();
 
   return {
-    data: readonly(data),  // 只读暴露
+    data: readonly(data), // 只读暴露
     loading: readonly(loading),
     error: readonly(error),
     refetch: execute,
@@ -1596,70 +1849,70 @@ export function useFetch<T>(url: string) {
 
 ```ts [Store 的特征]
 // stores/user.ts
-import { defineStore } from 'pinia';
-import { ref, computed } from 'vue';
-import { useAppStore } from './app';
-import { api } from '@/utils/api';
-import { validators } from '@/utils/format';
+import { defineStore } from "pinia";
+import { ref, computed } from "vue";
+import { useAppStore } from "./app";
+import { api } from "@/utils/api";
+import { validators } from "@/utils/format";
 
 // 特征1：全局单例状态（使用组合式 store 语法）
-export const useUserStore = defineStore('user', () => {
+export const useUserStore = defineStore("user", () => {
   // ✅ 全局共享状态（ref）
   const userInfo = ref<UserInfo | null>(null);
   const token = ref<string | null>(null);
   const permissions = ref<string[]>([]);
-  
+
   // 特征2：计算属性（派生状态）
   const isLoggedIn = computed(() => !!token.value);
-  const userName = computed(() => userInfo.value?.name || 'Guest');
-  const userAvatar = computed(() => userInfo.value?.avatar || '/default.png');
-  
+  const userName = computed(() => userInfo.value?.name || "Guest");
+  const userAvatar = computed(() => userInfo.value?.avatar || "/default.png");
+
   // 特征3：修改状态的方法（可包含副作用）
   async function login(credentials: Credentials) {
     // ✅ 可以有副作用（API 调用）
     const response = await api.login(credentials);
-    
+
     userInfo.value = response.user;
     token.value = response.token;
-    
+
     // 持久化
-    localStorage.setItem('token', response.token);
-    
+    localStorage.setItem("token", response.token);
+
     // 自动获取权限
     await fetchUserPermissions();
   }
-  
+
   function logout() {
     userInfo.value = null;
     token.value = null;
     permissions.value = [];
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
   }
-  
+
   // ✅ 可以调用其他 store
   async function fetchUserPermissions() {
     if (!userInfo.value) return;
-    
+
     const appStore = useAppStore();
     const perms = await api.getPermissions(userInfo.value.id);
-    
+
     permissions.value = perms;
     appStore.setPermissions(perms); // 更新其他 store
   }
-  
+
   // ✅ 数据验证
   function updateUserInfo(data: Partial<UserInfo>) {
     if (data.email && !validators.isEmail(data.email)) {
-      throw new Error('Invalid email format');
+      throw new Error("Invalid email format");
     }
-    
+
     if (data.phone && !validators.isPhone(data.phone)) {
-      throw new Error('Invalid phone number');
+      throw new Error("Invalid phone number");
     }
-    
+
     userInfo.value = { ...userInfo.value, ...data };
   }
-  
+
   return {
     // 状态
     userInfo,
@@ -1681,20 +1934,22 @@ export const useUserStore = defineStore('user', () => {
 // 在任意组件中使用
 // <script setup>
 // const userStore = useUserStore();  // 获取同一个实例
-// 
+//
 // // ComponentA
 // userStore.login({ name: 'John' });
-// 
+//
 // // ComponentB（同一应用）
 // console.log(userStore.userInfo); // ✅ 能立即访问到 ComponentA 修改后的状态
 // </script>
 ```
+
 :::
+
 ### Composables vs Store
 
 1️⃣ 核心概念
 
-| 维度       | Composables                              | Store                        |
+| 维度       | Composables                        | Store                        |
 | ---------- | ---------------------------------- | ---------------------------- |
 | 定义       | 可复用的逻辑函数，封装状态和副作用 | 全局/模块化的状态管理容器    |
 | 定位       | 逻辑复用                           | 状态共享                     |
@@ -1703,7 +1958,7 @@ export const useUserStore = defineStore('user', () => {
 
 2️⃣ 对比
 
-| 对比维度 | Composables               | Store                    |
+| 对比维度 | Composables         | Store                    |
 | -------- | ------------------- | ------------------------ |
 | 主要目的 | 逻辑复用            | 状态共享                 |
 | 状态范围 | 组件级              | 应用级                   |
@@ -1712,6 +1967,7 @@ export const useUserStore = defineStore('user', () => {
 | 适用场景 | UI 逻辑、副作用封装 | 全局数据、跨组件通信     |
 | 性能     | 轻量，按需创建      | 全局单例，需考虑性能优化 |
 | 复杂度   | 低到中              | 中到高                   |
+
 ### Composables vs utils
 
 `Composables`目录下的文件是 `Composables`，`utils` 目录下的文件是 `utils` 。
