@@ -15,6 +15,8 @@
 > Web 的原创（创建于 1995 年！）和最受尊敬的 Web 开发资源之一
 - [htmlreference](https://htmlreference.io/)
 > 一个免费的 HTML 指南。它包含所有元素和属性 。
+- [thevalleyofcode](https://thevalleyofcode.com/#more-html)
+> 你的软件开发之路从这里开始
 - [Html特殊字符编码对照表](https://www.jb51.net/onlineread/htmlchar.htm)
 
 ## 元数据（meta）
@@ -87,3 +89,16 @@ VITE_APP_WEB_IMAGE='你的网站或者APP logo地址（如：https://example.com
 :::
 
 > ⚠️ 注意: `VITE_APP_WEB_IMAGE` 使用的是网络地址（你可以将图片资源放到你的public目录下，网络地址就是你的域名/xxx.png）
+
+## src与href
+1️⃣ 作用结果
+- `href` 用于在当前文档和引用资源之间确立联系
+- `src` 用于替换当前内容
+
+2️⃣ 浏览器解析方式
+- 当浏览器遇到`href`，会并行下载资源并且不会停止对当前文档的处理。
+- 当浏览器遇到`src`，会暂停其他资源的下载和处理，直到将该资源加载或执行完毕。
+
+## defer与async
+- [async vs defer attributes](https://www.growingwiththeweb.com/2014/02/async-vs-defer-attributes.html)
+- [attr-script-defer](https://html.spec.whatwg.org/multipage/scripting.html#attr-script-defer)
