@@ -2,6 +2,35 @@
 
 > 网页的“化妆师/邪术”，专治“丑”，一行代码就能让页面从素颜秒变女神，时尚潮流全靠它。
 
+## BFC
+### 什么是BFC?
+
+> `浮动/绝对定位`元素，`非块级盒子的块级容器`（如`inline-block`/`table-cell`/`table-caption`），
+> 以及`overflow ≠ visible`的块级盒子，都会为他们的内容创建新的BFC（块级格式上下文）
+
+### 触发条件
+一个HTML元素要创建BFC，则满足下列的任意一个或多个条件即可
+> - 根元素
+> - 浮动元素（元素的 float 不是 none）
+> - 绝对定位元素（元素的 position 为 absolute 或 fixed）
+> - 行内块元素（元素的 display 为 inline-block）
+> - 表格单元格（元素的 display为 table-cell，HTML表格单元格默认为该值）
+> - 表格标题（元素的 display 为 table-caption，HTML表格标题默认为该值）
+> - 匿名表格单元格的 display为 table、row、tbody、thead、tfoot的默认属性或 inline-table
+> - `overflow ≠ visible` 的块元素
+> - 弹性布局元素（display为 flex 或 inline-flex元素的直接子元素）
+> - 网格布局元素（display为 grid 或 inline-grid 元素的直接子元素） 等等。
+
+### 渲染规则
+- BFC 垂直方向边距重叠
+- BFC 的区域不会与浮动元素的box重叠
+- BFC 是一个独立的容器，外面的元素不会影响里面的元素
+- 计算BFC高度的时候浮动元素也会参与计算
+
+### 应用场景
+- 防止浮动导致父元素高度塌陷
+- 避免外边距重叠
+
 ## 指南
 
 - [Ctrip webkit CSS library](http://ic4.github.io/webkitcss/)
