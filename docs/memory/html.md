@@ -101,8 +101,17 @@ VITE_APP_WEB_IMAGE='你的网站或者APP logo地址（如：https://example.com
 - 当浏览器遇到`src`，会暂停其他资源的下载和处理，直到将该资源加载或执行完毕。
 
 ## defer与async
+### defer&async
+1️⃣ `<script>`
+> HTML 文件会被解析直到触发脚本文件，之后解析会停止，并请求获取该文件（如果是外部文件）。脚本随后会被执行，然后继续解析。
 
-### 介绍
+2️⃣ `<script async>` 异步脚本
+> 该文件(脚本文件)会在解析 HTML 时异步下载，并在下载完成后暂停 HTML 解析器以执行该文件(脚本文件)。
+
+3️⃣ `<script defer>` 延迟脚本
+> `defer` 会在解析 HTML 时下载文件，并仅在解析器完成后执行该文件。此外，`defer` 脚本保证按其在文档中出现的顺序执行。
+
+### defer/async/module
 
 <script setup>
 import { withBase } from 'vitepress'
