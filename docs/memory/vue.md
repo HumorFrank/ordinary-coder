@@ -225,6 +225,281 @@ const state = reactive({ data: raw })
 ```
 
 :::
+## 全局属性挂载
+### Vue3
+####  定义
+> 在 Vue3 中，通过 `app.config.globalProperties` 挂载的全局属性，在 `<script setup>` 中需要通过 `getCurrentInstance()` 来获取。
+
+#### 全局挂载
+```ts [main.ts]
+import { createApp } from 'vue'
+import App from './App.vue'
+
+const app = createApp(App)
+
+// 挂载全局属性
+app.config.globalProperties.$api = {
+  getUsers: () => console.log('获取用户列表'),
+  getUser: (id) => console.log(`获取用户 ${id}`)
+}
+
+app.config.globalProperties.$utils = {
+  formatDate: (date) => new Date(date).toLocaleDateString()
+}
+
+app.mount('#app')
+```
+#### 在 setup 中使用
+1️⃣ 方法一：使用 `getCurrentInstance` (推荐)
+
+```vue [vue]
+<script setup>
+import { getCurrentInstance } from 'vue'
+
+// 获取当前组件实例
+const { proxy } = getCurrentInstance()
+
+// 使用全局属性
+const handleClick = () => {
+  proxy.$api.getUsers()
+  console.log(proxy.$utils.formatDate('2024-01-01'))
+}
+</script>
+```
+
+2️⃣ 方法二：封装成 `Composable` (更优雅)
+
+::: code-group
+
+```ts [composables/useGlobal.ts]
+import { getCurrentInstance } from 'vue'
+
+export function useGlobal() {
+  const { proxy } = getCurrentInstance()
+  return proxy
+}
+```
+```vue [index.vue]
+<script setup>
+import { useGlobal } from '@/composables/useGlobal'
+
+const global = useGlobal()
+
+const handleClick = () => {
+  global.$api.getUsers()
+  console.log(global.$utils.formatDate('2024-01-01'))
+}
+</script>
+```
+
+:::
+
+3️⃣ 方法三：使用 `provide/inject` (更推荐的替代方案)
+::: code-group
+```ts [main.ts]
+import { createApp } from 'vue'
+import App from './App.vue'
+
+const app = createApp(App)
+
+// 全局提供
+const globalApi = {
+  getUsers: () => console.log('获取用户列表')
+}
+
+app.provide('$api', globalApi)
+app.provide('$utils', {
+  formatDate: (date) => new Date(date).toLocaleDateString()
+})
+
+app.mount('#app')
+```
+```vue [index.vue]
+<script setup>
+import { inject } from 'vue'
+
+// 直接注入使用
+const $api = inject('$api')
+const $utils = inject('$utils')
+
+const handleClick = () => {
+  $api.getUsers()
+  console.log($utils.formatDate('2024-01-01'))
+}
+</script>
+```
+
+:::
+
+#### TypeScript 支持
+
+```ts
+// 若使用 TypeScript，需要声明类型 shims-vue.d.ts 或 global.d.ts
+import { ComponentCustomProperties } from 'vue'
+
+declare module '@vue/runtime-core' {
+  interface ComponentCustomProperties {
+    $api: {
+      getUsers: () => void
+      getUser: (id: number) => void
+    }
+    $utils: {
+      formatDate: (date: string | Date) => string
+    }
+  }
+}
+```
+#### 注意事项
+- `getCurrentInstance()` 仅在 `setup` 或生命周期钩子中可用
+- 生产环境中谨慎使用`getCurrentInstance()`，它主要用于高级特性或库开发
+- 推荐用`provide/inject`替代`globalProperties`，这样更有 TypeScript 友好且作用域更清晰
+- 模板中可以直接使用（不需要通过 `proxy`）
+
+```vue
+<template>
+  <div>{{ $utils.formatDate('2024-01-01') }}</div>
+</template>
+```
+
+### Vue2
+#### 全局挂载方法
+
+1️⃣ 方法一：挂载到 `Vue.prototype` (最常用)
+
+```ts [main.js]
+import Vue from 'vue'
+import App from './App.vue'
+
+// 挂载全局属性或方法
+Vue.prototype.$api = {
+  getUsers() {
+    console.log('获取用户列表')
+  },
+  getUser(id) {
+    console.log(`获取用户 ${id}`)
+  }
+}
+
+Vue.prototype.$utils = {
+  formatDate(date) {
+    return new Date(date).toLocaleDateString()
+  }
+}
+
+Vue.prototype.$globalData = '全局数据'
+
+new Vue({
+  render: h => h(App)
+}).$mount('#app')
+```
+
+2️⃣ 方法二：使用全局混入 (不推荐)
+
+```ts [main.js]
+Vue.mixin({
+  data() {
+    return {
+      $globalData: '全局数据'
+    }
+  },
+  methods: {
+    $globalMethod() {
+      console.log('全局方法')
+    }
+  }
+})
+```
+#### 使用
+
+1️⃣ 在模板中使用 (无需任何额外操作)
+```vue [index.vue]
+<template>
+  <div>
+    <p>全局数据：{{ $globalData }}</p>
+    <button @click="$api.getUsers()">获取用户</button>
+    <p>格式化日期：{{ $utils.formatDate('2024-01-01') }}</p>
+  </div>
+</template>
+```
+2️⃣ 在选项式 API 中使用
+```vue [index.vue]
+<script>
+export default {
+  name: 'MyComponent',
+  // 1. 在 data 中使用
+  data() {
+    return {
+      localData: this.$globalData,
+      currentDate: this.$utils.formatDate(new Date())
+    }
+  },
+  // 2. 在 computed 中使用
+  computed: {
+    formattedDate() {
+      return this.$utils.formatDate(this.someDate)
+    }
+  },
+  // 3. 在 methods 中使用
+  methods: {
+    handleGetUsers() {
+      this.$api.getUsers()
+    },
+    handleFormatDate(date) {
+      return this.$utils.formatDate(date)
+    }
+  },
+  // 4. 在生命周期钩子中使用
+  created() {
+    console.log(this.$globalData)
+    this.$api.getUsers()
+  },
+  mounted() {
+    const today = this.$utils.formatDate(new Date())
+    console.log(today)
+  },
+  // 5. 在 watch 中使用
+  watch: {
+    someValue(newVal) {
+      this.$api.getUser(newVal)
+    }
+  }
+}
+</script>
+```
+3️⃣ 在组合式 `API (Vue 2.7+)` 中使用
+
+```vue [index.vue]
+<script>
+import { getCurrentInstance } from 'vue'
+
+export default {
+  setup() {
+    // 获取当前实例
+    const { proxy } = getCurrentInstance()
+    
+    // 使用全局属性
+    const getUsers = () => {
+      proxy.$api.getUsers()
+    }
+    
+    const formatDate = (date) => {
+      return proxy.$utils.formatDate(date)
+    }
+    
+    return {
+      getUsers,
+      formatDate
+    }
+  }
+}
+</script>
+```
+#### 注意事项
+- `命名规范`：通常使用 `$` 前缀避免与组件内部属性冲突
+- `响应式问题`：全局挂载的属性不是响应式的，修改不会触发视图更新
+- `组件隔离`：每个组件实例都可以访问，但修改会影响所有组件
+- `生命周期`：在 `created` 之后才能访问（`beforeCreate` 中无法访问）
+- `替代方案`：对于共享状态，建议使用 `Vuex`；对于工具函数，建议单独导入
 
 ## defineAsyncComponent
 
