@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="280" viewBox="0 0 960 280" role="img" aria-labelledby="title desc">
+  <title id="title">Local Markdown Asset Demo</title>
+  <desc id="desc">Example SVG stored next to a markdown document and imported with a relative path.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#f4fbff" />
+      <stop offset="100%" stop-color="#d9eef9" />
+    </linearGradient>
+  </defs>
+  <rect width="960" height="280" rx="28" fill="url(#bg)" />
+  <rect x="36" y="36" width="888" height="208" rx="22" fill="#ffffff" stroke="#9ecae1" stroke-width="4" />
+  <text x="64" y="98" fill="#0f4c5c" font-size="34" font-family="Segoe UI, Arial, sans-serif" font-weight="700">docs/memory/images/html-local-asset.svg</text>
+  <text x="64" y="148" fill="#205c68" font-size="24" font-family="Segoe UI, Arial, sans-serif">推荐给当前文档专用插图，Markdown 里直接使用相对路径。</text>
+  <text x="64" y="192" fill="#205c68" font-size="24" font-family="Segoe UI, Arial, sans-serif">示例：![图片说明](./images/html-local-asset.svg)</text>
+  <text x="64" y="226" fill="#49707a" font-size="20" font-family="Segoe UI, Arial, sans-serif">Vite 会处理资源并在构建后自动生成可访问的产物路径。</text>
+</svg>

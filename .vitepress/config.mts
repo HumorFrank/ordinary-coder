@@ -20,7 +20,10 @@ export default withMermaid(
   },
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
-    nav: [{ text: "首页", link: "/" }],
+    nav: [
+      { text: "首页", link: "/" },
+      { text: "示例", link: "/docs/example/example" },
+    ],
     // 配置侧边栏，按照目录结构组织文档
     sidebar: [
       {

@@ -88,7 +88,7 @@ VITE_APP_WEB_IMAGE='你的网站或者APP logo地址（如：https://example.com
 ```
 :::
 
-> ⚠️ 注意: `VITE_APP_WEB_IMAGE` 使用的是网络地址（你可以将图片资源放到你的public目录下，网络地址就是你的域名/xxx.png）
+> ⚠️ 注意: `VITE_APP_WEB_IMAGE` 需要填写最终可访问的完整网络地址。如果站点部署到子路径，地址也要带上子路径，例如 `https://example.com/ordinary-coder/images/html-public-asset.svg`。
 
 ## src与href
 1️⃣ 作用结果
@@ -100,5 +100,15 @@ VITE_APP_WEB_IMAGE='你的网站或者APP logo地址（如：https://example.com
 - 当浏览器遇到`src`，会暂停其他资源的下载和处理，直到将该资源加载或执行完毕。
 
 ## defer与async
+
+### 介绍
+
+- `<script>`
+- `<script defer>`
+- `<script async>`
+- `<script type="module">`
+- `<script type="module" async>`
+
+### 参考资料
 - [async vs defer attributes](https://www.growingwiththeweb.com/2014/02/async-vs-defer-attributes.html)
 - [attr-script-defer](https://html.spec.whatwg.org/multipage/scripting.html#attr-script-defer)

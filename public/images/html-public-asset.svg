@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="280" viewBox="0 0 960 280" role="img" aria-labelledby="title desc">
+  <title id="title">Public Asset Demo</title>
+  <desc id="desc">Example SVG stored in the public directory for stable URLs after build.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#fff7ed" />
+      <stop offset="100%" stop-color="#fde7cf" />
+    </linearGradient>
+  </defs>
+  <rect width="960" height="280" rx="28" fill="url(#bg)" />
+  <rect x="36" y="36" width="888" height="208" rx="22" fill="#ffffff" stroke="#f0b27a" stroke-width="4" />
+  <text x="64" y="98" fill="#8a4b08" font-size="34" font-family="Segoe UI, Arial, sans-serif" font-weight="700">public/images/html-public-asset.svg</text>
+  <text x="64" y="148" fill="#9a5a1e" font-size="24" font-family="Segoe UI, Arial, sans-serif">适合需要固定公开 URL 的资源，例如 og:image、封面图、分享图。</text>
+  <text x="64" y="192" fill="#9a5a1e" font-size="24" font-family="Segoe UI, Arial, sans-serif">页面中如需引用，优先通过 withBase('/images/html-public-asset.svg') 生成路径。</text>
+  <text x="64" y="226" fill="#ab6d35" font-size="20" font-family="Segoe UI, Arial, sans-serif">构建时文件会原样拷贝到 dist/images 目录。</text>
+</svg>
