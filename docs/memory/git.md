@@ -26,7 +26,7 @@ git switch -c <branch_name>
 :::
 
 
-### 删除远程仓库分支
+### 删除分支
 
 ::: code-group
 ```bash [删除本地分支]
