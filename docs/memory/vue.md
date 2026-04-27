@@ -5,6 +5,7 @@
 ## 响应式 API 指南
 
 ### 快速决策流程图
+
 ```txt
 1️⃣ 数据需要响应式更新吗？
 ├─ 否 → 普通变量 / const / markRaw
@@ -17,8 +18,9 @@
     └─ 第三方实例/超大静态数据 → markRaw
 2️⃣ 数据是否用于模板（template）中渲染？
 ├─ 否 → 仅在 setup 逻辑中使用，不需要显示在页面上，普通 JS 变量/对象（不可用于渲染动态数据，普通对象模板无法感知变化）
-└─ 是 → 必须是响应式数据，否则后续即使数据变了视图也不更新 
+└─ 是 → 必须是响应式数据，否则后续即使数据变了视图也不更新
 ```
+
 ### 响应式变量定义
 
 #### 核心 API
@@ -225,45 +227,175 @@ const state = reactive({ data: raw })
 ```
 
 :::
+
+## 理解副作用
+
+### 理解
+
+> 理解 `computed`、`watch`、`watchEffect`提到的副作用
+>
+> - `副作用 = 影响函数/作用域之外的东西`
+> - 白话 `我做的事情，影响到了我之外的东西`
+
+### 理解上补充
+
+> 对它之外（且“非直接返回结果”的内容）的其他内容产生了影响
+
+### 简单判断
+
+> 判断：这个操作若不是为了得到返回值，那它是为了什么？
+>
+> - 若是`改变外部世界` → 副作用
+> - 若只是为了`计算返回值` → 无副作用
+
+### 常见副作用清单
+
+- 控制台输出（console）
+- DOM操作
+- 存在操作（localStorage/sessionStorage）
+- 网络请求（fetch/axios）
+- 定时器（setTimeout/setInterval）
+- 修改非响应式变量/对象、响应式变量/对象（ref/reactive）
+- 路由跳转
+- 事件触发
+- ...
+
+### 副作用对比
+
+| API           | 允许副作用                   | 主要用途           | 执行时机            |
+| ------------- | ---------------------------- | ------------------ | ------------------- |
+| `computed`    | ❌ 严禁副作用， 必须是纯函数 | 派生数据           | 依赖变化时同步计算  |
+| `watch`       | ✅ 允许，但要控制            | 响应数据变化做某事 | 依赖变化后执行      |
+| `watchEffect` | ✅ 允许，自动追踪            | 收集副作用依赖     | 立即执行 + 依赖变化 |
+
+### 实践总结
+
+```ts [demo.ts]
+// 📌 黄金法则
+// 1. computed：纯函数，只读，无副作用
+const fullName = computed(() => `${firstName.value} ${lastName.value}`);
+
+// 2. watch：明确的副作用，知道自己在改变什么
+watch(selectedId, async (id) => {
+  const data = await fetchDetail(id);
+  detailData.value = data;
+});
+
+// 3. watchEffect：副作用依赖自动收集
+watchEffect(() => {
+  // 自动追踪 id.value, filters.value
+  loadData(id.value, filters.value);
+});
+
+// 4. 清理副作用：总是记得清理定时器、事件监听、请求中止
+watchEffect((onCleanup) => {
+  const timer = setInterval(() => {}, 1000);
+  onCleanup(() => clearInterval(timer));
+});
+```
+
+### Example
+
+::: code-group
+
+```js [类比.ts]
+// 我是一个函数，活在自己的小世界里
+function me() {
+  // 我内部的事情（不是副作用）
+  let internal = 10; // 我自己的变量，随便改
+  internal++; // 改自己的东西，没问题
+
+  // 我外部的事情（这才是副作用！）
+  window.count = 5; // ❌ 改全局变量 → 影响外部
+  console.log("hi"); // ❌ 控制台输出 → 影响外部
+  localStorage.set(); // ❌ 写存储 → 影响外部
+  fetch("/api"); // ❌ 发请求 → 影响外部（服务器）
+  modifyProps.value = 1; // ❌ 改传入的参数 → 影响外部
+
+  return internal; // 返回值：不是副作用
+}
+```
+
+```ts [补充.ts]
+function example(a) {
+  // ❌ 副作用：影响外部
+  externalVariable = a;
+  console.log(a);
+  localStorage.setItem("key", a);
+
+  // ✅ 不是副作用：只是返回结果
+  return a * 2;
+
+  // ⚠️ 边界情况：修改传入的对象参数（也是副作用）
+  a.value = 10; // 如果 a 是外部传入的对象/ref
+}
+```
+
+```ts [computed 不允许副作用.ts]
+// ❌ computed 不允许副作用 = 不允许影响“之外”的内容
+const bad = computed(() => {
+  externalCount.value++; // 影响外部的 ref（之外）
+  console.log("计算"); // 控制台输出（之外）
+  return count.value * 2;
+});
+
+// ✅ watchEffect 专门做副作用 = 专门用来影响“之外”
+watchEffect(() => {
+  // 所有这些都是在“影响之外”
+  document.title = `${count.value}`; // 影响 DOM
+  localStorage.setItem("count", count.value); // 影响存储
+  externalState.value = count.value; // 影响外部状态
+  console.log("变化了"); // 控制台输出
+});
+```
+
+:::
+
 ## 全局属性挂载
+
 ### Vue3
-####  定义
+
+#### 定义
+
 > 在 Vue3 中，通过 `app.config.globalProperties` 挂载的全局属性，在 `<script setup>` 中需要通过 `getCurrentInstance()` 来获取。
 
 #### 全局挂载
-```ts [main.ts]
-import { createApp } from 'vue'
-import App from './App.vue'
 
-const app = createApp(App)
+```ts [main.ts]
+import { createApp } from "vue";
+import App from "./App.vue";
+
+const app = createApp(App);
 
 // 挂载全局属性
 app.config.globalProperties.$api = {
-  getUsers: () => console.log('获取用户列表'),
-  getUser: (id) => console.log(`获取用户 ${id}`)
-}
+  getUsers: () => console.log("获取用户列表"),
+  getUser: (id) => console.log(`获取用户 ${id}`),
+};
 
 app.config.globalProperties.$utils = {
-  formatDate: (date) => new Date(date).toLocaleDateString()
-}
+  formatDate: (date) => new Date(date).toLocaleDateString(),
+};
 
-app.mount('#app')
+app.mount("#app");
 ```
+
 #### 在 setup 中使用
+
 1️⃣ 方法一：使用 `getCurrentInstance` (推荐)
 
 ```vue [vue]
 <script setup>
-import { getCurrentInstance } from 'vue'
+import { getCurrentInstance } from "vue";
 
 // 获取当前组件实例
-const { proxy } = getCurrentInstance()
+const { proxy } = getCurrentInstance();
 
 // 使用全局属性
 const handleClick = () => {
-  proxy.$api.getUsers()
-  console.log(proxy.$utils.formatDate('2024-01-01'))
-}
+  proxy.$api.getUsers();
+  console.log(proxy.$utils.formatDate("2024-01-01"));
+};
 </script>
 ```
 
@@ -272,23 +404,24 @@ const handleClick = () => {
 ::: code-group
 
 ```ts [composables/useGlobal.ts]
-import { getCurrentInstance } from 'vue'
+import { getCurrentInstance } from "vue";
 
 export function useGlobal() {
-  const { proxy } = getCurrentInstance()
-  return proxy
+  const { proxy } = getCurrentInstance();
+  return proxy;
 }
 ```
+
 ```vue [index.vue]
 <script setup>
-import { useGlobal } from '@/composables/useGlobal'
+import { useGlobal } from "@/composables/useGlobal";
 
-const global = useGlobal()
+const global = useGlobal();
 
 const handleClick = () => {
-  global.$api.getUsers()
-  console.log(global.$utils.formatDate('2024-01-01'))
-}
+  global.$api.getUsers();
+  console.log(global.$utils.formatDate("2024-01-01"));
+};
 </script>
 ```
 
@@ -296,36 +429,38 @@ const handleClick = () => {
 
 3️⃣ 方法三：使用 `provide/inject` (更推荐的替代方案)
 ::: code-group
-```ts [main.ts]
-import { createApp } from 'vue'
-import App from './App.vue'
 
-const app = createApp(App)
+```ts [main.ts]
+import { createApp } from "vue";
+import App from "./App.vue";
+
+const app = createApp(App);
 
 // 全局提供
 const globalApi = {
-  getUsers: () => console.log('获取用户列表')
-}
+  getUsers: () => console.log("获取用户列表"),
+};
 
-app.provide('$api', globalApi)
-app.provide('$utils', {
-  formatDate: (date) => new Date(date).toLocaleDateString()
-})
+app.provide("$api", globalApi);
+app.provide("$utils", {
+  formatDate: (date) => new Date(date).toLocaleDateString(),
+});
 
-app.mount('#app')
+app.mount("#app");
 ```
+
 ```vue [index.vue]
 <script setup>
-import { inject } from 'vue'
+import { inject } from "vue";
 
 // 直接注入使用
-const $api = inject('$api')
-const $utils = inject('$utils')
+const $api = inject("$api");
+const $utils = inject("$utils");
 
 const handleClick = () => {
-  $api.getUsers()
-  console.log($utils.formatDate('2024-01-01'))
-}
+  $api.getUsers();
+  console.log($utils.formatDate("2024-01-01"));
+};
 </script>
 ```
 
@@ -335,21 +470,23 @@ const handleClick = () => {
 
 ```ts
 // 若使用 TypeScript，需要声明类型 shims-vue.d.ts 或 global.d.ts
-import { ComponentCustomProperties } from 'vue'
+import { ComponentCustomProperties } from "vue";
 
-declare module '@vue/runtime-core' {
+declare module "@vue/runtime-core" {
   interface ComponentCustomProperties {
     $api: {
-      getUsers: () => void
-      getUser: (id: number) => void
-    }
+      getUsers: () => void;
+      getUser: (id: number) => void;
+    };
     $utils: {
-      formatDate: (date: string | Date) => string
-    }
+      formatDate: (date: string | Date) => string;
+    };
   }
 }
 ```
+
 #### 注意事项
+
 - `getCurrentInstance()` 仅在 `setup` 或生命周期钩子中可用
 - 生产环境中谨慎使用`getCurrentInstance()`，它主要用于高级特性或库开发
 - 推荐用`provide/inject`替代`globalProperties`，这样更有 TypeScript 友好且作用域更清晰
@@ -357,40 +494,41 @@ declare module '@vue/runtime-core' {
 
 ```vue
 <template>
-  <div>{{ $utils.formatDate('2024-01-01') }}</div>
+  <div>{{ $utils.formatDate("2024-01-01") }}</div>
 </template>
 ```
 
 ### Vue2
+
 #### 全局挂载方法
 
 1️⃣ 方法一：挂载到 `Vue.prototype` (最常用)
 
 ```ts [main.js]
-import Vue from 'vue'
-import App from './App.vue'
+import Vue from "vue";
+import App from "./App.vue";
 
 // 挂载全局属性或方法
 Vue.prototype.$api = {
   getUsers() {
-    console.log('获取用户列表')
+    console.log("获取用户列表");
   },
   getUser(id) {
-    console.log(`获取用户 ${id}`)
-  }
-}
+    console.log(`获取用户 ${id}`);
+  },
+};
 
 Vue.prototype.$utils = {
   formatDate(date) {
-    return new Date(date).toLocaleDateString()
-  }
-}
+    return new Date(date).toLocaleDateString();
+  },
+};
 
-Vue.prototype.$globalData = '全局数据'
+Vue.prototype.$globalData = "全局数据";
 
 new Vue({
-  render: h => h(App)
-}).$mount('#app')
+  render: (h) => h(App),
+}).$mount("#app");
 ```
 
 2️⃣ 方法二：使用全局混入 (不推荐)
@@ -399,102 +537,109 @@ new Vue({
 Vue.mixin({
   data() {
     return {
-      $globalData: '全局数据'
-    }
+      $globalData: "全局数据",
+    };
   },
   methods: {
     $globalMethod() {
-      console.log('全局方法')
-    }
-  }
-})
+      console.log("全局方法");
+    },
+  },
+});
 ```
+
 #### 使用
 
 1️⃣ 在模板中使用 (无需任何额外操作)
+
 ```vue [index.vue]
 <template>
   <div>
     <p>全局数据：{{ $globalData }}</p>
     <button @click="$api.getUsers()">获取用户</button>
-    <p>格式化日期：{{ $utils.formatDate('2024-01-01') }}</p>
+    <p>格式化日期：{{ $utils.formatDate("2024-01-01") }}</p>
   </div>
 </template>
 ```
+
 2️⃣ 在选项式 API 中使用
+
 ```vue [index.vue]
 <script>
 export default {
-  name: 'MyComponent',
+  name: "MyComponent",
   // 1. 在 data 中使用
   data() {
     return {
       localData: this.$globalData,
-      currentDate: this.$utils.formatDate(new Date())
-    }
+      currentDate: this.$utils.formatDate(new Date()),
+    };
   },
   // 2. 在 computed 中使用
   computed: {
     formattedDate() {
-      return this.$utils.formatDate(this.someDate)
-    }
+      return this.$utils.formatDate(this.someDate);
+    },
   },
   // 3. 在 methods 中使用
   methods: {
     handleGetUsers() {
-      this.$api.getUsers()
+      this.$api.getUsers();
     },
     handleFormatDate(date) {
-      return this.$utils.formatDate(date)
-    }
+      return this.$utils.formatDate(date);
+    },
   },
   // 4. 在生命周期钩子中使用
   created() {
-    console.log(this.$globalData)
-    this.$api.getUsers()
+    console.log(this.$globalData);
+    this.$api.getUsers();
   },
   mounted() {
-    const today = this.$utils.formatDate(new Date())
-    console.log(today)
+    const today = this.$utils.formatDate(new Date());
+    console.log(today);
   },
   // 5. 在 watch 中使用
   watch: {
     someValue(newVal) {
-      this.$api.getUser(newVal)
-    }
-  }
-}
+      this.$api.getUser(newVal);
+    },
+  },
+};
 </script>
 ```
+
 3️⃣ 在组合式 `API (Vue 2.7+)` 中使用
 
 ```vue [index.vue]
 <script>
-import { getCurrentInstance } from 'vue'
+import { getCurrentInstance } from "vue";
 
 export default {
   setup() {
     // 获取当前实例
-    const { proxy } = getCurrentInstance()
-    
+    const { proxy } = getCurrentInstance();
+
     // 使用全局属性
     const getUsers = () => {
-      proxy.$api.getUsers()
-    }
-    
+      proxy.$api.getUsers();
+    };
+
     const formatDate = (date) => {
-      return proxy.$utils.formatDate(date)
-    }
-    
+      return proxy.$utils.formatDate(date);
+    };
+
     return {
       getUsers,
-      formatDate
-    }
-  }
-}
+      formatDate,
+    };
+  },
+};
 </script>
 ```
+
 #### 注意事项
+
 - `命名规范`：通常使用 `$` 前缀避免与组件内部属性冲突
 - `响应式问题`：全局挂载的属性不是响应式的，修改不会触发视图更新
 - `组件隔离`：每个组件实例都可以访问，但修改会影响所有组件
