@@ -59,6 +59,7 @@ export default withMermaid(
           { text: "高级指南", link: "/docs/advanced/advanced" },
           { text: "工程化", link: "/docs/engineering/engineering" },
           { text: "VSCode常用插件", link: "/docs/vscode-plugins/index" },
+          { text: "Tools", link: "/docs/tools/tools" },
         ],
       },
     ],
