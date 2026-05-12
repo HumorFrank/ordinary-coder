@@ -60,6 +60,7 @@ export default withMermaid(
           { text: "工程化", link: "/docs/engineering/engineering" },
           { text: "VSCode常用插件", link: "/docs/vscode-plugins/index" },
           { text: "Tools", link: "/docs/tools/tools" },
+          { text: "编程技能", link: "/docs/programe-skills/programe-skills" },
         ],
       },
     ],
