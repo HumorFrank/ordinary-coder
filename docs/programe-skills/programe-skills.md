@@ -99,6 +99,110 @@
 > PM2 是一个高性能的 Node.js 进程管理工具，提供自动重启、负载均衡、日志管理等功能。
 
 ## 数据库与缓存
+- `MySQL`
+> MySQL 是最流行的关系型数据库管理系统，在 WEB 应用方面 MySQL 是最好的 RDBMS(Relational Database Management System：关系数据库管理系统)应用软件之一。
+
+- `Oracle`
+> Oracle数据库是由甲骨文公司（Oracle Corporation）开发的一款关系型数据库管理系统（RDBMS）
+
+- `PostgreSQL`
+> PostgreSQL 是一个开源、功能强大且高度扩展的关系型数据库系统，支持 SQL 标准并提供丰富的高级特性
+
+- `Elasticsearch`
+> 分布式搜索与分析引擎，能够实时存储、搜索和分析海量结构化与非结构化数据
+
+- `LowDB`
+> 一款小巧的本地 JSON 数据库，支持 Node.js、Electron 和浏览器，API 简洁，适合小型项目
+
+- `MariaDB`
+> MariaDB 是 MySQL 的一个分支，由 MySQL 的原始开发者开发，旨在保持 MySQL 的兼容性，同时提供更好的性能和可扩展性
+
+- `MongoDB`
+> 面向文档的 NoSQL 数据库，以 JSON 风格的 BSON 存储数据，支持高可扩展性和灵活的数据模型
+
+- `SQlite`
+> 一个轻量级、功能强大的嵌入式关系型数据库，适用于嵌入式系统、移动设备、桌面应用程序等
+
+- `Memcached`
+> 高性能的分布式内存对象缓存系统，常用于缓存数据库查询结果、API 响应和会话数据等
+
+- `Redis`
+> 高性能的键值对存储系统，常用于缓存、消息队列、排行榜等场景
+
 ## 编程语言基础
+- `C`
+> C 语言是一种通用的、面向过程式的计算机程序设计语言。
+
+- `C++`
+> C++ 具有广泛影响力的通用编程语言，源于 C 语言，并在其基础上引入了面向对象编程的概念
+
+- `C#`
+> C# 是一种现代化、通用、面向对象的编程语言，由微软开发。它在 .NET 平台上运行，支持跨平台开发，包括 Windows、Linux 和 macOS。C# 语言设计简洁，易于学习，适合初学者和有经验的开发者。
+
+- `Go`
+> Go（Golang）是一种由 Google 开发的开源编程语言，特点是简洁、高效、并发友好，适合构建高性能服务器和分布式系统
+
+- `Java`
+> Java 是由 Sun Microsystems 公司于 1995 年 5 月推出的 Java 面向对象程序设计语言和 Java 平台的总称
+
+- `Python`
+> Python 是一种高级、通用、开源的编程语言，具有简单、易学、易读、易维护、可扩展、可嵌入等特性
+
+- `Lua`
+> Lua 是一种强大、高效、轻量级、可嵌入的脚本语言。它支持多种编程风格：过程式、面向对象、函数式、数据驱动和数据描述。
+
+- `Rust`
+> 一个系统编程语言，旨在提高速度、安全性、并发性和可移植性，同时保持简单性
+
+- `Swift`
+> 一个安全、快速、灵活的编程语言，用于开发 iOS、macOS、watchOS 和 tvOS 应用程序
+
+- `JavaScript`
+> JavaScript 是 Web 的编程语言。所有现代的 HTML 页面都可以使用 JavaScript。
+
+- `TypeScript`
+> TypeScript 是由 Microsoft 开发的开源编程语言，它是 JavaScript 的超集，意味着任何有效的 JavaScript 代码也是有效的 TypeScript 代码。
 ## 版本控制
+
+- `Corepack`
+> Node.js 官方提供的包管理代理工具，支持 npm、pnpm、yarn 的统一调用，帮助开发者简化版本管理和工具切换
+
+- `Git`
+> 一个分布式版本控制系统，用于跟踪代码和文件的历史变化，支持多人协作开发
+
+- `TortoiseSVN`
+> TortoiseSVN 是一个 Apache™ Subversion (SVN)® 客户端，以 Windows shell 扩展的形式实现。它直观且易于使用，因为它不需要 Subversion 命令行客户端运行。而且它是免费使用的，即使在商业环境中也是如此。简直是最酷的 (Sub)版本控制界面！
+
+- `nvm`
+> Node 版本管理器，符合 POSIX 标准的 bash 脚本，用于管理多个活动的 node.js 版本
+
+- `Volta`
+> Volta 是一个快速、跨平台的 JavaScript 工具链管理器，用来无缝管理和切换 Node.js、npm、pnpm、yarn 等工具版本
+
 ## 系统与运维
+- `Docker`
+> 一个开源的容器引擎，用于构建、分发和运行分布式应用程序
+
+- `Kubernetes (K8s)`
+> Kubernetes（简称K8s）是一个开源的容器编排平台，旨在自动化容器化应用的部署、扩展和管理。它源于Google的Borg系统，并于2014年开源，现已成为云原生计算的核心技术。
+
+- `Linux`
+> 全面的 Linux 系统知识，从基础概念到高级应用，帮助您系统掌握 Linux 系统的各个方面
+
+- `Nginx`
+> 高性能 Web 服务器与反向代理，用于网站部署、负载均衡和 HTTPS 配置
+
+- `Apache Tomcat`
+> Apache Tomcat 是一个用于部署和提供Java Web应用的Web服务器和Servlet容器。
+
+- `Rocky Linux`
+> 全面了解和掌握 Rocky Linux 操作系统的各项功能和管理技巧
+
+- `Gentoo`
+> 从零构建高性能可定制的 Gentoo Linux 系统指南
+
+- `Kubernetes Dashboard`
+> Kubernetes Dashboard 是 Kubernetes 官方提供的 Web 用户界面，用于管理和监控 Kubernetes 集群。
+
+- `Rancher`
+> Rancher 是一个开源的 Kubernetes 多集群管理平台，提供了强大的集群管理和应用部署功能。
