@@ -81,3 +81,7 @@
 ## Markdown 工具
 - [Obsidian](https://obsidian.md/)
 - [Typora](https://typoraio.cn/releases/stable.html)
+
+## 加速服务
+- [GitHub 文件加速](https://hub.m5.work/)
+> 快速下载GitHub上的文件和仓库，解决国内访问GitHub速度慢的问题，支持Docker镜像加速和Hugging Face仓库。
