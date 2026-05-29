@@ -1,23 +1,29 @@
-import Theme from 'vitepress/theme'
-import 'virtual:group-icons.css'
-import '@vue-flow/core/dist/style.css'
-import './custom-outline.css'
-import './mermaid-clarity.css'
-import { setupMermaidWheelZoom } from './mermaid-wheel-zoom'
-import AtomicCssFlow from './components/AtomicCssFlow.vue'
-import UnoCssFlow from './components/UnoCssFlow.vue'
-import TailwindFlow from './components/TailwindFlow.vue'
-import PostCssFlow from './components/PostCssFlow.vue'
-import { EnhanceAppContext } from 'vitepress'
+import Theme from "vitepress/theme";
+import "virtual:group-icons.css";
+import "@vue-flow/core/dist/style.css";
+import "./custom-outline.css";
+import "./mermaid-clarity.css";
+import { setupMermaidWheelZoom } from "./mermaid-wheel-zoom";
+import AtomicCssFlow from "./components/AtomicCssFlow.vue";
+import UnoCssFlow from "./components/UnoCssFlow.vue";
+import TailwindFlow from "./components/TailwindFlow.vue";
+import PostCssFlow from "./components/PostCssFlow.vue";
+import FrameEvo from "./components/FrameEvo.vue";
+import TriSet from "./components/TriSet.vue";
+import FullStack from "./components/FullStack.vue";
+import { EnhanceAppContext } from "vitepress";
 
 export default {
-	...Theme,
-	enhanceApp(ctx: EnhanceAppContext) {
-		Theme.enhanceApp?.(ctx)
-		setupMermaidWheelZoom()
-		ctx.app.component('AtomicCssFlow', AtomicCssFlow)
-		ctx.app.component('UnoCssFlow', UnoCssFlow)
-		ctx.app.component('TailwindFlow', TailwindFlow)
-		ctx.app.component('PostCssFlow', PostCssFlow)
-	}
-}
+  ...Theme,
+  enhanceApp(ctx: EnhanceAppContext) {
+    Theme.enhanceApp?.(ctx);
+    setupMermaidWheelZoom();
+    ctx.app.component("AtomicCssFlow", AtomicCssFlow);
+    ctx.app.component("UnoCssFlow", UnoCssFlow);
+    ctx.app.component("TailwindFlow", TailwindFlow);
+    ctx.app.component("PostCssFlow", PostCssFlow);
+    ctx.app.component("FrameEvo", FrameEvo);
+    ctx.app.component("TriSet", TriSet);
+    ctx.app.component("FullStack", FullStack);
+  },
+};

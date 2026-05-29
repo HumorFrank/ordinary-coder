@@ -73,6 +73,18 @@ export default withMermaid(
               ],
             },
             {
+              text: "前端生态系统",
+              link: "/docs/fe-eco/index",
+              items: [
+                { text: "Vue 生态", link: "/docs/fe-eco/vue-eco" },
+                { text: "React 生态", link: "/docs/fe-eco/react-eco" },
+              ],
+            },
+            {
+              text: "全栈开发",
+              link: "/docs/full-stack/index",
+            },
+            {
               text: "编程语言与开源项目热度榜单",
               link: "/docs/programe-skills/programe-skills",
             },
