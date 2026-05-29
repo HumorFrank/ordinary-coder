@@ -26,7 +26,7 @@ const fields = [
   {
     name: '前端基础',
     desc: '用户界面、交互体验、浏览器端的一切',
-    techs: ['HTML5', 'CSS3', 'JavaScript', 'TypeScript', 'ES6', 'Sass/Less', 'PostCSS', 'Tailwind CSS', 'UnocSS']
+    techs: ['HTML5', 'CSS3', 'JavaScript', 'TypeScript', 'ES6', 'Sass/Less', 'PostCSS', 'Tailwind CSS', 'Unocss', 'CSS-in-JS']
   },
   {
     name: '前端框架',
@@ -61,14 +61,13 @@ const fields = [
   {
     name: '全栈框架',
     desc: '前后端一体，SSR/SSG/API 一把梭',
-    techs: ['Next.js/React ', 'Nuxt.js/Vue', 'Remix/React', 'SvelteKit/Svelte', 'Astro', 'Nest.js/Node.js']
+    techs: ['Next.js/React', 'Nuxt.js/Vue', 'Remix/React', 'SvelteKit/Svelte', 'Astro', 'Nest.js/Node.js']
   },
   {
     name: '部署与运维',
     desc: '让应用稳定、安全、高性能地跑在线上',
     techs: ['Docker', 'Nginx', 'Shell', 'Linux', 'Kubernetes', '云服务器', 'Sentry/监控']
   },
-
   {
     name: '服务器',
     desc: '国内主流云服务器提供商',
@@ -78,6 +77,11 @@ const fields = [
     name: 'AI 编程助手',
     desc: 'AI 编程助手与大模型应用开发',
     techs: ['Cursor', 'Claude Code', 'GitHub Copilot', 'QWen', 'DeepSeek', 'OpenAI', 'Prompt Engineering']
+  },
+  {
+    name: '算法',
+    desc: '数据结构与算法——程序员的底层内功',
+    techs: ['数组/链表', '栈/队列/堆', '哈希表', '树/图', '排序/二分查找', '贪心', '递归/回溯', '动态规划', 'BFS/DFS', '双指针/滑动窗口']
   }
 ]
 </script>
