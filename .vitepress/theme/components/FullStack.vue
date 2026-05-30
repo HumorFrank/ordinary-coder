@@ -36,7 +36,7 @@ const fields = [
   {
     name: '前端工程化',
     desc: '构建、测试、规范、自动化——让代码从源码到上线',
-    techs: ['npm/pnpm', 'Vite/Webpack', 'ESM/CommonJS', 'AMD/CMD/UMD', 'Vitest', 'CI/CD', 'ESLint/Prettier', 'Monorepo']
+    techs: ['npm/pnpm', 'Vite/Webpack', 'ESM/CommonJS', 'AMD/CMD/UMD', 'Vitest', 'CI/CD', 'ESLint/Prettier', 'Monorepo/Polyrepo']
   },
   {
     name: '后端开发',

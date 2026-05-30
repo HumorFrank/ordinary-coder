@@ -25,20 +25,20 @@
 const triad = [
   {
     name: 'HTML',
-    role: '结构层',
+    role: '内容与结构',
     analogy: '骨架',
     examples: ['div', 'span', 'form', 'input']
   },
   {
     name: 'CSS',
-    role: '表现层',
-    analogy: '装修',
+    role: '呈现与样式',
+    analogy: '外观',
     examples: ['color', 'flex', 'grid', 'animation']
   },
   {
     name: 'JavaScript',
-    role: '行为层',
-    analogy: '智能',
+    role: '行为与交互',
+    analogy: '灵魂',
     examples: ['事件', 'DOM操作', '网络请求']
   }
 ]

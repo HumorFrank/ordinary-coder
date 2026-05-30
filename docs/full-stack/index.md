@@ -123,7 +123,7 @@ AI 辅助开发对 AI 工程师的影响
 
 ## 从入门到精通
 
-### 年成长路线图
+### 成长路线图
 
 <EngB2M />
 
@@ -152,7 +152,7 @@ AI 辅助开发对 AI 工程师的影响
 
 1️⃣ 全局认知
 
-- 1. **领域划分**：前端、后端、移动端、AI、运维、数据——各有侧重
+- 1. **领域划分**：前端、后端、移动端、AI、运维、数据 —— 各有侧重
 - 2. **技术选型**：没有最好的技术，只有最适合场景的技术
 - 3. **成长路径**：先深后广，建立根据地再横向扩展
 - 4. **AI 时代**：AI 能帮你写代码，但不能替你思考
@@ -178,6 +178,12 @@ AI 辅助开发对 AI 工程师的影响
 └─────────────────────────────────────────┘
 ```
 
+## Monorepo vs Polyrepo
+
 ## 参考资料
 
-- [easy-vibe](https://datawhalechina.github.io/easy-vibe/zh-cn/)
+- [JavaScript 明星项目](https://risingstars.js.org/2025/zh)
+- [Vibe Coding 时代下的全栈开发](https://datawhalechina.github.io/easy-vibe/zh-cn/)
+- [Best of JS](https://bestofjs.org/): ⭐ 这里汇集了构建出色 Web 应用程序所需的最佳组件。JavaScript 的精华！
+- [JavaScript 名人堂](https://bestofjs.org/hall-of-fame): 一些 JavaScript 社区中最杰出的开发者、作家和演讲者。
+- [Site Generators](https://jamstack.org/generators/): Jamstack 网站的静态站点生成器列表

@@ -21,8 +21,8 @@
 import { ref } from 'vue'
 
 const selections = ref([
-  { goal: 'Web 前端', desc: '网页、小程序、H5', langs: ['JavaScript', 'TypeScript'] },
-  { goal: 'Web 后端', desc: 'API 服务、业务系统', langs: ['Node.js', 'Go', 'Java', 'Python'] },
+  { goal: '前端', desc: '网页、小程序、H5', langs: ['JavaScript', 'TypeScript'] },
+  { goal: '后端', desc: 'API 服务、业务系统', langs: ['Node.js', 'Go', 'Java', 'Python'] },
   { goal: '移动端', desc: 'iOS / Android 应用', langs: ['Swift', 'Kotlin', 'Flutter'] },
   { goal: 'AI / 数据科学', desc: '机器学习、数据分析', langs: ['Python'] },
   { goal: '系统编程', desc: '操作系统、嵌入式', langs: ['C', 'C++', 'Rust'] },
