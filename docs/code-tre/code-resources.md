@@ -1,4 +1,4 @@
-# Tools
+# 程序员资源
 
 ## 静态站点生成器
 - [Jamstack 站点生成器](https://jamstack.org/generators/)
@@ -77,10 +77,6 @@
 
 - [ICONFINDER | 四百多万个免费图标素材](https://www.iconfinder.com/)
 > ICONFINDER 一个提供超过四百多万个免费 icon 图标下载使用，注意的是`部分`是`收费`的哦。
-
-## Markdown 工具
-- [Obsidian](https://obsidian.md/)
-- [Typora](https://typoraio.cn/releases/stable.html)
 
 ## 加速服务
 - [GitHub 文件加速](https://hub.m5.work/)

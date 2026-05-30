@@ -84,11 +84,18 @@ export default withMermaid(
               text: "全栈开发",
               link: "/docs/full-stack/index",
             },
+            { 
+              text: "程序员宝藏", 
+              link: "/docs/code-tre/index",
+              items: [
+                { text: "程序员工具", link: "/docs/code-tre/code-tools" },
+                { text: "程序员资源", link: "/docs/code-tre/code-resources" },
+              ],
+             },
             {
               text: "编程语言与开源项目热度榜单",
               link: "/docs/programe-skills/programe-skills",
             },
-            { text: "Tools", link: "/docs/tools/tools" },
             { text: "VSCode常用插件", link: "/docs/vscode-plugins/index" },
           ],
         },
