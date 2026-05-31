@@ -18,6 +18,8 @@ import FStEng from "./components/FStEng.vue";
 import AIEng from "./components/AIEng.vue";
 import EngB2M from "./components/EngB2M.vue";
 import LStrat from "./components/LStrat.vue";
+// Vue 生态
+import VueEco from "./components/VueEco.vue";
 
 export default {
   ...Theme,
@@ -36,5 +38,6 @@ export default {
     ctx.app.component("AIEng", AIEng);
     ctx.app.component("EngB2M", EngB2M);
     ctx.app.component("LStrat", LStrat);
+    ctx.app.component("VueEco", VueEco);
   },
 };
