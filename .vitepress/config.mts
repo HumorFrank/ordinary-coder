@@ -61,7 +61,8 @@ export default withMermaid(
             { text: "TypeScript", link: "/docs/typescript/typescript" },
             { text: "小程序系列", link: "/docs/miniprogram/miniprogram" },
             { text: "高级指南", link: "/docs/advanced/advanced" },
-            { text: "工程化", link: "/docs/engineering/engineering" },
+            { text: "前端工程化", link: "/docs/engineering/engineering" },
+            { text: "前端项目架构设计", link: "/docs/fe-arch/index" },
             {
               text: "技术栈&灵魂伴侣",
               link: "/docs/techstack/index",
