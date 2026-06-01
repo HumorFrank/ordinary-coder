@@ -85,6 +85,18 @@ export default withMermaid(
               text: "全栈开发",
               link: "/docs/full-stack/index",
             },
+            {
+              text: "基础设施与运维",
+              link: "/docs/infra-ops/linux",
+              items: [
+                {text: "Linux 基础", link: '/docs/infra-ops/linux'},
+                {text: "Nginx", link: '/docs/infra-ops/nginx'},
+                {text: "Docker 容器化", link: '/docs/infra-ops/docker'},
+                {text: "Kubernetes(k8s)", link: '/docs/infra-ops/Kubernetes'},
+                {text: "CI / CD 自动化", link: '/docs/infra-ops/ci-or-cd'},
+                {text: "域名/DNS 与 HTTPS", link: '/docs/infra-ops/domain-dns'},
+              ]
+            },
             { 
               text: "程序员宝藏", 
               link: "/docs/code-tre/index",
