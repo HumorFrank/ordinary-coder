@@ -54,7 +54,6 @@ simple-project/
 ```sh
 vue-project/
 ├── public/                     # 静态资源
-│   ├── index.html
 │   └── favicon.ico
 ├── src/
 │   ├── assets/                 # 样式、图片、字体
@@ -98,6 +97,7 @@ vue-project/
 │   └── main.js
 ├── tests/                      # 测试文件
 ├── .env                        # 环境变量
+├── index.html
 ├── vite.config.js
 ├── package.json
 └── README.md
