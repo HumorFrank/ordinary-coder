@@ -20,6 +20,10 @@ import EngB2M from "./components/EngB2M.vue";
 import LStrat from "./components/LStrat.vue";
 // Vue 生态
 import VueEco from "./components/VueEco.vue";
+// 虚拟机 vs 容器
+import DockerVsVM from"./components/DockerVsVM.vue"
+// Docker 生命周期
+import DockerLifecycle from "./components/DockerLifecycle.vue"
 
 export default {
   ...Theme,
@@ -39,5 +43,7 @@ export default {
     ctx.app.component("EngB2M", EngB2M);
     ctx.app.component("LStrat", LStrat);
     ctx.app.component("VueEco", VueEco);
+    ctx.app.component("DockerVsVM",  DockerVsVM);
+    ctx.app.component("DockerLifecycle", DockerLifecycle);
   },
 };
