@@ -24,7 +24,10 @@ import VueEco from "./components/VueEco.vue";
 import DockerVsVM from"./components/DockerVsVM.vue"
 // Docker 生命周期
 import DockerLifecycle from "./components/DockerLifecycle.vue"
-
+// Kubernetes 架构
+import K8sArchitecture from "./components/K8sArchitecture.vue";
+// K8s 核心资源
+import K8sWorkloads from "./components/K8sWorkloads.vue";
 export default {
   ...Theme,
   enhanceApp(ctx: EnhanceAppContext) {
@@ -45,5 +48,7 @@ export default {
     ctx.app.component("VueEco", VueEco);
     ctx.app.component("DockerVsVM",  DockerVsVM);
     ctx.app.component("DockerLifecycle", DockerLifecycle);
+    ctx.app.component("K8sArchitecture", K8sArchitecture);
+    ctx.app.component("K8sWorkloads", K8sWorkloads);
   },
 };
