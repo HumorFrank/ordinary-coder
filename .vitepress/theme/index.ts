@@ -28,6 +28,8 @@ import DockerLifecycle from "./components/DockerLifecycle.vue"
 import K8sArchitecture from "./components/K8sArchitecture.vue";
 // K8s 核心资源
 import K8sWorkloads from "./components/K8sWorkloads.vue";
+// HTTP vs HTTPS 数据传输对比
+import HTTPVSHTTPS from "./components/HTTPVSHTTPS.vue"
 export default {
   ...Theme,
   enhanceApp(ctx: EnhanceAppContext) {
@@ -50,5 +52,6 @@ export default {
     ctx.app.component("DockerLifecycle", DockerLifecycle);
     ctx.app.component("K8sArchitecture", K8sArchitecture);
     ctx.app.component("K8sWorkloads", K8sWorkloads);
+    ctx.app.component("HTTPVSHTTPS", HTTPVSHTTPS);
   },
 };
