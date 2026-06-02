@@ -30,6 +30,12 @@ import K8sArchitecture from "./components/K8sArchitecture.vue";
 import K8sWorkloads from "./components/K8sWorkloads.vue";
 // HTTP vs HTTPS 数据传输对比
 import HTTPVSHTTPS from "./components/HTTPVSHTTPS.vue"
+// Linux 文件系统层级演示
+import LinuxFileSystem from "./components/LinuxFileSystem.vue";
+//  Linux 常用命令分类演示
+import LinuxCommand from "./components/LinuxCommand.vue";
+// Linux 权限系统演示
+import LinuxPermissions from "./components/LinuxPermissions.vue";
 export default {
   ...Theme,
   enhanceApp(ctx: EnhanceAppContext) {
@@ -53,5 +59,8 @@ export default {
     ctx.app.component("K8sArchitecture", K8sArchitecture);
     ctx.app.component("K8sWorkloads", K8sWorkloads);
     ctx.app.component("HTTPVSHTTPS", HTTPVSHTTPS);
+    ctx.app.component("LinuxFileSystem", LinuxFileSystem);
+    ctx.app.component("LinuxCommand", LinuxCommand);
+    ctx.app.component("LinuxPermissions", LinuxPermissions);
   },
 };
