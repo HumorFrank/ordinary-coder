@@ -55,7 +55,11 @@ export default withMermaid(
             { text: "面向玄学部署", link: "/docs/deploy/deploy" },
             { text: "程序员单词发音", link: "/docs/words/words" },
             { text: "语义版本规范", link: "/docs/semver/semver" },
-            { text: "魔幻的包管理器", link: "/docs/pkg/pkg" },
+            {
+              text: "魔幻的包管理器",
+              link: "/docs/pkg/pkg",
+              items: [{ text: "npm publish", link: "/docs/pkg/npm-publish" }],
+            },
             { text: "Emmet 指南", link: "/docs/emmet/emmet" },
             { text: "版本控制", link: "/docs/version-control/index" },
             { text: "TypeScript", link: "/docs/typescript/typescript" },
@@ -89,22 +93,25 @@ export default withMermaid(
               text: "基础设施与运维",
               link: "/docs/infra-ops/linux",
               items: [
-                {text: "Linux 基础", link: '/docs/infra-ops/linux'},
-                {text: "Nginx", link: '/docs/infra-ops/nginx'},
-                {text: "Docker", link: '/docs/infra-ops/docker'},
-                {text: "Kubernetes(k8s)", link: '/docs/infra-ops/Kubernetes'},
-                {text: "CI / CD 自动化", link: '/docs/infra-ops/ci-or-cd'},
-                {text: "域名/DNS 与 HTTPS", link: '/docs/infra-ops/domain-dns'},
-              ]
+                { text: "Linux 基础", link: "/docs/infra-ops/linux" },
+                { text: "Nginx", link: "/docs/infra-ops/nginx" },
+                { text: "Docker", link: "/docs/infra-ops/docker" },
+                { text: "Kubernetes(k8s)", link: "/docs/infra-ops/Kubernetes" },
+                { text: "CI / CD 自动化", link: "/docs/infra-ops/ci-or-cd" },
+                {
+                  text: "域名/DNS 与 HTTPS",
+                  link: "/docs/infra-ops/domain-dns",
+                },
+              ],
             },
-            { 
-              text: "程序员宝藏", 
+            {
+              text: "程序员宝藏",
               link: "/docs/code-tre/index",
               items: [
                 { text: "程序员工具", link: "/docs/code-tre/code-tools" },
                 { text: "程序员资源", link: "/docs/code-tre/code-resources" },
               ],
-             },
+            },
             {
               text: "编程语言与开源项目热度榜单",
               link: "/docs/programe-skills/programe-skills",
