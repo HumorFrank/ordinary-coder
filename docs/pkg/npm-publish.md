@@ -1,6 +1,6 @@
 # npm 发包方式总结
 
-## A方式: Granular Token（免 2FA，推荐）
+## A方式: Granular Token（绕过2FA，推荐）
 
 ### 1. 创建令牌
 
@@ -14,6 +14,7 @@
 ### 3. 配置认证
 
 1️⃣ 全局设置：直接配置到 npm 全局设置（推荐，一劳永逸）
+
 ```bash
 npm config set //registry.npmjs.org/:_authToken YOUR_TOKEN_HERE
 ```
@@ -75,10 +76,11 @@ npm publish --otp=123456
 
 ## 对比总结
 
-| 方式 | 需 OTP | 支持自动化 | 适用场景 |
-|------|--------|-----------|----------|
-| Granular Token（免 2FA） | ❌ | ✅ | CI/CD、自动化脚本 |
-| Classic Token | ✅ | ❌ | 临时手动发布 |
-| npm login 交互式 | ✅ | ❌ | 本地手动发布 |
+| 方式                      | 需 OTP    | 支持自动化 | 适用场景          |
+| ------------------------- | --------- | ---------- | ----------------- |
+| Granular Token（绕过2FA） | ❌        | ✅         | CI/CD、自动化脚本 |
+| Classic Token             | ✅        | ❌         | 临时手动发布      |
+| npm login 交互式          | ✅        | ❌         | 本地手动发布      |
+| CI/CD 专用 Token          | ❌ 不需要 | ✅ 支持    | 生产环境 CI/CD    |
 
 > ⚠️ 免 2FA 的 Token 权限较高，请妥善保管，**切勿**提交到公开仓库。
