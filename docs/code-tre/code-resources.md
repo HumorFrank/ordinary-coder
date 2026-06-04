@@ -1,5 +1,10 @@
 # 程序员资源
 
+## Node.js中文网
+
+- [Node.js中文网](https://nodejs.cn/)
+> Node.js 是一个开源的、跨平台的 JavaScript 运行时环境。
+
 ## 静态站点生成器
 - [Jamstack 站点生成器](https://jamstack.org/generators/)
 > Jamstack 站点静态站点生成器列表
