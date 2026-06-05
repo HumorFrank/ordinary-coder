@@ -5,6 +5,14 @@
 - [Node.js中文网](https://nodejs.cn/)
 > Node.js 是一个开源的、跨平台的 JavaScript 运行时环境。
 
+
+## 优质资源
+
+- [GitHub](https://github.com/emmabostian/developer-portfolios)
+> [开发者作品集网站](https://6e87v.hatchboxapp.com/) 一份能给你带来灵感的开发者作品集清单
+- [GitCode](https://gitcode.com/)
+> 类似 Gitee 的国内代码托管平台，也可镜像 GitHub 仓库
+
 ## 静态站点生成器
 - [Jamstack 站点生成器](https://jamstack.org/generators/)
 > Jamstack 站点静态站点生成器列表
