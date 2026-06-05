@@ -113,6 +113,10 @@ export default withMermaid(
               ],
             },
             {
+              text: "CSS 原子化",
+              link: "/docs/atomic-css/index",
+            },
+            {
               text: "编程语言与开源项目热度榜单",
               link: "/docs/programe-skills/programe-skills",
             },
