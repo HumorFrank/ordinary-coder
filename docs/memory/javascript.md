@@ -725,6 +725,41 @@ chicken2.feed(10);
 
 :::
 
+## JS 闭包
+> 定义：当一个函数访问在其外部定义的变量时，就形成了闭包。
+
+::: code-group
+```js [简单案例]
+const items = [
+  { id: 1, title: 'First' },
+  { id: 2, title: 'Second' },
+  { id: 3, title: 'Final' }
+];
+const matcher = /^F/;
+const filteringFn = x => matcher.test(x.title);
+// 仔细观察 filteringFn，会发现它使用了一个在外部定义的变量 matcher，这是一个闭包。
+items.filter(filteringFn); 
+// [{ id: 1, title: 'First' }, { id: 3, title: 'Final' }]
+```
+```js [复杂案例]
+const initCounter = (start = 0) => {
+  let value = start;
+  return {
+    get: () => value,
+    increment: () => ++value,
+    decrement: () => --value,
+    reset: () => value = start
+  };
+}
+const counter = initCounter(5);
+counter.get(); // 5
+counter.increment(); // 6
+counter.increment(); // 7
+counter.decrement(); // 6
+counter.reset(); // 5
+```
+:::
+
 ## this指向
 > [理解 JavaScript 中的“this”关键字](https://www.30secondsofcode.org/js/s/this/)
 - 默认情况下，`this`指的是`全局对象`。
@@ -1158,6 +1193,24 @@ console.log(++x); // 先递增，后返回新值。
 - `undefined`
   > 当变量声明但`未赋值`时发生，未定义不是关键词。
 
+## NaN ≠ NaN
+
+> `NaN`（非数）是唯一一个与任何比较算符比较时`不等于自身`的 JS 值。 
+
+```js
+const x = Math.sqrt(-1); // NaN
+const y = 0 / 0;         // NaN
+
+x === y;                 // false
+x === NaN;               // false
+
+Number.isNaN(x);         // true
+Number.isNaN(y);         // true
+
+isNaN(x);                // true
+isNaN('hello');          // true
+```
+
 ## 清空数组的方法
 
 ### 直接赋值为空数组
@@ -1254,3 +1307,37 @@ while (arr4.length) {
 | `arr.length = 0` | 是           | 最快             | 最简洁推荐，直接截断，无返回值                     |
 | `arr.splice(0)`  | 是           | 较慢             | 返回被删除的元素数组，有额外遍历开销               |
 | `while`/`for`    | 是           | 最慢             | 无必要不推荐，仅在弹出项需特殊处理时用             |
+
+## 函数
+
+### 纯函数
+
+1️⃣ 纯函数是指满足以下两个条件的函数
+- 对于`相同的输入`，它总是返回`相同的输出`。
+- 在`函数作用范围之外`，不会产生`任何副作用`。
+
+2️⃣ Example
+
+```js
+// Pure 纯函数
+const add = (x, y) => x + y;
+const concat = (arr, value) => [...arr, value];
+const order = arr => [...arr].sort((a, b) => a - b);
+
+// Impure 非纯函数
+const addRandom = x => x + Math.random();
+const pushConcat = (arr, value) => { arr.push(value); return arr; }
+const reorder = arr => arr.sort((a, b) => a - b);
+```
+
+### 递归函数
+
+1️⃣ 递归
+> 递归是一种`编程技巧`，核心思想是`将大问题分解为规模更小、结构相同的子问题`。
+
+2️⃣ 递归函数
+> 递归函数是指在函数体内部调用自身的函数
+
+3️⃣ 一个正确的递归函数必须包含两个要素
+> - **基线条件**：终止递归的条件，直接返回结果，防止无限递归导致栈溢出。
+> - **递归条件**：将问题分解为更小的子问题并调用自身。
