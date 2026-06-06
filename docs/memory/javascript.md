@@ -186,9 +186,9 @@ class Multiton {
   }
 }
 // used
-const a = new Multiton('foo');
-const b = new Multiton('bar');
-const c = new Multiton('foo');
+const a = new Multiton("foo");
+const b = new Multiton("bar");
+const c = new Multiton("foo");
 console.log(a === c); // true
 console.log(a === b); // false
 ```
@@ -350,25 +350,26 @@ console.log(prodConfig.get("apiUrl")); // https://api.com
 #### 缓存系统案例
 
 ::: code-group
+
 ```js [单例缓存.js]
 class SingletonCache {
   constructor() {
     if (SingletonCache.instance) {
       return SingletonCache.instance;
     }
-    
+
     this.cache = new Map();
     SingletonCache.instance = this;
   }
-  
+
   set(key, value) {
     this.cache.set(key, value);
   }
-  
+
   get(key) {
     return this.cache.get(key);
   }
-  
+
   clear() {
     this.cache.clear();
   }
@@ -377,17 +378,18 @@ class SingletonCache {
 // 全局只有一个缓存池
 const cache = new SingletonCache();
 ```
+
 ```js [多例缓存（区分用户）.js]
 class UserCache {
   constructor(userId) {
     this.userId = userId;
     this.cache = new Map();
   }
-  
+
   set(key, value) {
     this.cache.set(key, value);
   }
-  
+
   get(key) {
     return this.cache.get(key);
   }
@@ -395,7 +397,7 @@ class UserCache {
 
 class CacheManager {
   static userCaches = new Map();
-  
+
   static getUserCache(userId) {
     if (!this.userCaches.has(userId)) {
       this.userCaches.set(userId, new UserCache(userId));
@@ -407,20 +409,23 @@ class CacheManager {
 // 每个用户独立的缓存空间
 const user1Cache = CacheManager.getUserCache(1);
 const user2Cache = CacheManager.getUserCache(2);
-user1Cache.set('theme', 'dark');
-user2Cache.set('theme', 'light');
-console.log(user1Cache.get('theme')); // dark
-console.log(user2Cache.get('theme')); // light
+user1Cache.set("theme", "dark");
+user2Cache.set("theme", "light");
+console.log(user1Cache.get("theme")); // dark
+console.log(user2Cache.get("theme")); // light
 ```
+
 :::
 
 #### 总结
+
 - `单例`适合`全局唯一`对象，`多例`适合`“每类唯一”`对象。
 - 单例更简单，易于实现；多例更灵活，适合分组管理。
 
 #### 注意事项
 
 ::: code-group
+
 ```js [单例的陷阱.js]
 // ❌ 不要过度使用单例
 class Utils {
@@ -436,6 +441,7 @@ class UserSession {
   }
 }
 ```
+
 ```js [多例的key设计.js]
 // ❌ 不好的key设计
 const key = `${type}${host}${port}`; // 容易冲突
@@ -443,19 +449,21 @@ const key = `${type}${host}${port}`; // 容易冲突
 // ✅ 好的key设计
 const key = `${type}:${host}:${port}`; // 明确分隔
 ```
+
 ```js [现代框架中的单例.js]
 // Vue 3 Composition API 中的单例
-import { reactive } from 'vue';
+import { reactive } from "vue";
 
 const store = reactive({
   count: 0,
   increment() {
     this.count++;
-  }
+  },
 });
 
 export default store; // 导入即单例
 ```
+
 ```js [ 测试时的注意事项.js]
 // 单例会导致测试间状态污染
 class Counter {
@@ -464,8 +472,10 @@ class Counter {
     this.count = 0;
     Counter.instance = this;
   }
-  
-  increment() { this.count++; }
+
+  increment() {
+    this.count++;
+  }
 }
 
 // 测试时需要重置
@@ -715,6 +725,79 @@ chicken2.feed(10);
 
 :::
 
+## this指向
+> [理解 JavaScript 中的“this”关键字](https://www.30secondsofcode.org/js/s/this/)
+- 默认情况下，`this`指的是`全局对象`。
+- 在函数中，当不在严格模式下时，`this`指的是`全局对象`。
+- 在函数中，当处于严格模式时，`this`是`undefined`。
+- 在箭头函数中，`this`保留封闭词法上下文的值`this`。
+- 在对象方法中，`this`指的是调用该方法的对象。
+- 在构造函数调用中，`this`它绑定到正在构造的新对象。
+- 在事件处理程序中，`this`它绑定到放置监听器的元素。
+
+```js
+// 1.全局执行上下文
+// 在全局执行上下文中，this 指的是全局对象。
+console.log(this === window); // true
+
+// 2.函数上下文
+// 不在严格模式下时，函数的 this 指向全局对象。
+function f() {
+  return this;
+}
+console.log(f() === window); // true
+
+// 在严格模式下，若函数在进入执行上下文时未设置，则其值this将为空。
+'use strict';
+function f() {
+  return this;
+}
+console.log(f()); // undefined
+
+// 3.对象上下文
+// 当一个函数作为对象的方法被调用时，this它指的是调用该方法的对象本身。
+const obj = {
+  f: function() {
+    return this;
+  }
+};
+const myObj = Object.create(obj);
+myObj.foo = 1;
+console.log(myObj.f()); // { foo: 1 }
+
+// 当在构造函数中使用时，this指的是正在构造的对象。
+class C {
+  constructor() {
+    this.x = 10;
+  }
+}
+const obj = new C();
+console.log(obj.x); // 10
+
+// 4.箭头函数上下文：在箭头函数中，this保留封闭词法上下文的值this。
+const f = () => this;
+console.log(f() === window); // true
+
+const obj = {
+  foo: function() {
+    const baz = () => this;
+    return baz();
+  },
+  bar: () => this
+};
+console.log(obj.foo()); // { foo, bar }
+console.log(obj.bar() === window); // true
+// 注意在第二个示例中，箭头函数的this指的是全局对象，
+// 除非它被包装在常规function调用中，而常规this调用的 `this` 指的是调用它的对象，
+// 并且它的词法上下文由箭头函数保留。
+
+// 5.事件处理程序上下文：在事件处理程序中使用时，this指的是放置监听器的元素。
+const el = document.getElementById('my-el');
+el.addEventListener('click', function() {
+  console.log(this === el); // true
+});
+```
+
 ## bind/call/apply
 
 > `bind/call/apply`都是 `Function.prototype` 的方法，都用于显式设置函数执行时 `this` 指向，同时可传入参数。
@@ -910,14 +993,14 @@ sum.apply(null, arr); // 6
 ## 防抖与节流
 
 - 防抖（Debounce）
-> 延迟执行，`仅最后一次操作停止后生效`（频繁操作，会重新计时，仅最后一次点击后，达到间隔时间才生效）
+  > 延迟执行，`仅最后一次操作停止后生效`（频繁操作，会重新计时，仅最后一次点击后，达到间隔时间才生效）
 - 节流（Throttle）
-> `降低频率`（频繁操作，节流时间不变，满足设定的节流时间就执行）
+  > `降低频率`（频繁操作，节流时间不变，满足设定的节流时间就执行）
 - 权威视觉指南（Debounce vs Throttle）
-> [Debounce vs Throttle](https://kettanaito.com/blog/debounce-vs-throttle): 防抖与节流两者混淆终极图解指南。
+  > [Debounce vs Throttle](https://kettanaito.com/blog/debounce-vs-throttle): 防抖与节流两者混淆终极图解指南。
 - 应用场景
-> - 1️⃣ 窗口`调整大小`后界面更新是否一致; 2️⃣ 服务器或客户端的高性能操作
-> - 1️⃣ 异步搜索建议 ; 2️⃣ 服务器上的更新批处理
+  > - 1️⃣ 窗口`调整大小`后界面更新是否一致; 2️⃣ 服务器或客户端的高性能操作
+  > - 1️⃣ 异步搜索建议 ; 2️⃣ 服务器上的更新批处理
 
 ## 延时函数
 
@@ -1002,58 +1085,63 @@ sum.apply(null, arr); // 6
     - 都有相同的值，非零且都不是 `NaN`
 
 ## 多重继承
+
 > JS 不支持传统意义上的多重继承，但它提供了`重用`和`组合`功能的方法。
 
 - `类（Classes）`
-> JS 类只允许单一继承，意味着一个类只能扩展一个父类。
+  > JS 类只允许单一继承，意味着一个类只能扩展一个父类。
 - `原型（Prototypes）`
-> 对象可以一次继承一个原型，不能继承多个。
+  > 对象可以一次继承一个原型，不能继承多个。
 - `混合（Mixins）`
-> 为了实现类似多重继承的行为，JS 使用`混合`— 将属性和方法复制到类或对象中的函数或对象。
+  > 为了实现类似多重继承的行为，JS 使用`混合`— 将属性和方法复制到类或对象中的函数或对象。
 
 ## 变量作用域
 
 - `全局作用域（Global Scope）`
-> 最外层级别（在任何地方都可访问）。
+  > 最外层级别（在任何地方都可访问）。
 - `局部作用域（Local Scope）`
-> 由于词法作用域，内部函数可以访问其父函数中的变量。
+  > 由于词法作用域，内部函数可以访问其父函数中的变量。
 - `函数作用域（Function Scope）`
-> 变量被限制在声明它们的函数内部。
+  > 变量被限制在声明它们的函数内部。
 - `块级作用域（Block Scope）`
-> 使用 let 或 const 声明的变量被限制在最近的代码块（循环、条件语句等）内部。
+  > 使用 let 或 const 声明的变量被限制在最近的代码块（循环、条件语句等）内部。
 
 ## isNaN 和 Number.isNaN
-- `Number.isNaN(x)` 
-> `Number.isNaN(x)` →  仅当 `x` 为 `NaN` 值时返回 `true`，不进行类型转换。
-- `isNaN(x)` 
-> `isNaN(x)` → 将 `x` 转换为`数值`，然后`检查该结果`是否为 `NaN`。
+
+- `Number.isNaN(x)`
+  > `Number.isNaN(x)` → 仅当 `x` 为 `NaN` 值时返回 `true`，不进行类型转换。
+- `isNaN(x)`
+  > `isNaN(x)` → 将 `x` 转换为`数值`，然后`检查该结果`是否为 `NaN`。
 - `Example`
+
 ```js [example.js]
 // 在 JavaScript 中，值 NaN 被视为一种数字。
-Number.isNaN(NaN)             // true
-isNaN(NaN)                    // true
+Number.isNaN(NaN); // true
+isNaN(NaN); // true
 
-Number.isNaN("foo")           // false  (string, not NaN)
-isNaN("foo")                 // true   (coerces "foo" → NaN)
+Number.isNaN("foo"); // false  (string, not NaN)
+isNaN("foo"); // true   (coerces "foo" → NaN)
 
-Number.isNaN(undefined)     // false
-isNaN(undefined)             // true   (undefined → NaN)
+Number.isNaN(undefined); // false
+isNaN(undefined); // true   (undefined → NaN)
 
-Number.isNaN("")             // false
-isNaN("")                    // false  ("" → 0)
+Number.isNaN(""); // false
+isNaN(""); // false  ("" → 0)
 
-Number.isNaN(0/0)            // true   (is NaN)
-isNaN(0/0)                   // true
+Number.isNaN(0 / 0); // true   (is NaN)
+isNaN(0 / 0); // true
 ```
 
 ## x++ 和 ++x
+
 > 两者`都会递增`，但返回的值不同。
 
 - `x++`
-> `后增` → `返回旧值`，然后`递增`。
+  > `后增` → `返回旧值`，然后`递增`。
 - `++x`
-> `预增` → `先递增`，然后`返回新值`。
+  > `预增` → `先递增`，然后`返回新值`。
 - `Example`
+
 ```js [example.js]
 let x = 0;
 console.log(x++); // 先返回当前值，后递增。
@@ -1064,7 +1152,105 @@ console.log(++x); // 先递增，后返回新值。
 ```
 
 ## null 和 undefined
-- `null` 
-> `空值`表示没有值或没有对象，这被称为`空值/对象`。
+
+- `null`
+  > `空值`表示没有值或没有对象，这被称为`空值/对象`。
 - `undefined`
-> 当变量声明但`未赋值`时发生，未定义不是关键词。
+  > 当变量声明但`未赋值`时发生，未定义不是关键词。
+
+## 清空数组的方法
+
+### 直接赋值为空数组
+
+> 它最直观的方法，但它并`没有真正清空原数组`，而是创建了一个新的空数组，并将新数组的`引用`赋值给变量。
+
+```js
+// 1.将新数组的 引用 赋值给变量
+let arr1 = [1, 2, 3];
+arr1 = []; // arr1 现在是 []
+
+// 2.若有其他变量引用了原数组，原数组不会被清空。
+let a = [1, 2, 3];
+let b = a;
+a = [];
+console.log(a); // []
+console.log(b); // [1, 2, 3]  // 仍然存在
+```
+
+::: danger ⚠️
+
+- **陷阱**：若有其他变量引用了原数组，原数组不会被清空。
+- **性能**：很快，旧数组会等待垃圾回收。
+- **适用**：当你确定没有其他引用，且不关心旧数据时。
+  :::
+
+### 设置 length 为 0
+
+> 最推荐的原生清空方式，简洁且高效。
+
+```js
+// 不产生新数组，引用地址未改变，直接修改原数组数据
+let arr2 = [1, 2, 3];
+arr2.length = 0; // arr2 现在是 []
+
+// ✅ 优点：会直接截断原数组，即使有其他变量引用也会被清空。
+let a = [1, 2, 3];
+let b = a;
+a.length = 0;
+console.log(a); // []
+console.log(b); // []  // 也变空了
+```
+
+::: tip ✅
+
+- **优点**：会直接截断原数组，即使有其他变量引用也会被清空。
+- **性能**：非常好，直接修改内部属性。
+- **适用**：大多数情况，尤其是需要清空共享引用的数组时。
+
+:::
+
+### 使用 splice 方法
+
+> 剪切全部元素来清空，返回值是被删除的元素数组。
+
+```js
+let arr3 = [1, 2, 3];
+arr3.splice(0, arr3.length); // 返回 [1, 2, 3]
+// arr3 现在是 []
+```
+
+::: tip 优缺点
+
+- ✅ 优点：同样会清空所有引用，并返回被删除的内容。
+- ⚠️ 缺点：相比设置 length = 0，性能略慢，因为它需要遍历并删除元素，并生成一个包含所有删除元素的数组。
+- 适用：当你需要获取被清空的元素时使用。
+
+:::
+
+### 使用 pop 循环
+
+> 手动遍历并逐个删除元素，效率最低，通常不推荐。
+
+```js
+let arr4 = [1, 2, 3];
+while (arr4.length) {
+  arr4.pop();
+}
+// arr4 现在是 []
+```
+
+::: tip 通常不推荐
+
+- 缺点：非常慢，长数组尤其明显。
+- 适用：基本不推荐，除非你有特殊需求（如每次弹出时执行一些操作）。
+
+:::
+
+### 核心异同总结
+
+| 方法             | 清除所有引用 | 性能             | 关键副作用/特点                                    |
+| ---------------- | ------------ | ---------------- | -------------------------------------------------- |
+| `arr = []`       | 否           | 快 — 创建新对象 | 旧数组若被其他变量引用则依然存活，可能引起内存问题 |
+| `arr.length = 0` | 是           | 最快             | 最简洁推荐，直接截断，无返回值                     |
+| `arr.splice(0)`  | 是           | 较慢             | 返回被删除的元素数组，有额外遍历开销               |
+| `while`/`for`    | 是           | 最慢             | 无必要不推荐，仅在弹出项需特殊处理时用             |
