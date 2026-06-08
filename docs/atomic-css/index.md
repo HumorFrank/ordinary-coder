@@ -22,17 +22,14 @@
 
 ## 原子化 CSS 的演进历程
 
-```mermaid
-graph TD
-    A[传统 CSS] --> B[BEM 方法论]
-    B --> C[CSS-in-JS]
-    C --> D[原子化 CSS]
-    D --> E[动态原子化]
+<AtomicCssFlow />
 
-    D --> F[TailwindCSS<br/>预编译]
-    E --> G[UnoCSS<br/>即时生成]
-    E --> H[Windi CSS<br/>按需编译]
-```
+## 原子化库
+
+- `Tailwind CSS`
+- `Unocss`
+- `AtomicCSS`
+- `Tachyons`
 
 # PostCSS CSS 转换工具的基石
 
@@ -105,6 +102,20 @@ CSS-in-JS 是一种把 CSS 样式直接写在 JS 代码里的`技术方案`。�
 > 要同时掌握组件框架、JavaScript 和 CSS，还要适应"样式写在 JS 里"的新思维方式 。
 - ‌‌**没有统一标准‌‌**
 > 不同库的语法差异大，从一个库切换到另一个库需要大量改写代码
+
+# unocss/tailwindcss/postcss架构
+
+### UnoCSS 核心架构
+
+<UnoCssFlow />
+
+### Tailwind CSS 核心架构
+
+<TailwindFlow />
+
+### PostCSS 核心架构
+
+<PostCssFlow />
 
 # 选择策略
 

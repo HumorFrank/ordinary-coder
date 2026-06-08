@@ -11,11 +11,12 @@
   > [开发者作品集网站](https://6e87v.hatchboxapp.com/) 一份能给你带来灵感的开发者作品集清单
 - [GitCode](https://gitcode.com/)
   > 类似 Gitee 的国内代码托管平台，也可镜像 GitHub 仓库
-
-## 加速服务
-
 - [GitHub 文件加速](https://hub.m5.work/)
-> 快速下载GitHub上的文件和仓库，解决国内访问GitHub速度慢的问题，支持Docker镜像加速和Hugging Face仓库。
+  > 快速下载GitHub上的文件和仓库，解决国内访问GitHub速度慢的问题，支持Docker镜像加速和Hugging Face仓库。
+
+## 音效资源
+
+- [Myinstants](https://myinstants.net/): 音效按钮与表情包音板。
 
 ## 静态站点生成器
 
@@ -70,6 +71,27 @@
 
 - [Headless CMS](https://jamstack.org/headless-cms/)
   > Jamstack 网站的无头内容管理系统列表
+
+## 辅助开发资源
+
+### 开发资源
+
+- [Pixelrepo.com](https://pixelrepo.com/browse)：像素仓库
+- [Cssbuttons.io](https://cssbuttons.io/)：button
+- [UIVerse](https://uiverse.io/)：最大的开源用户界面库
+
+### DOM/HTML标准
+
+- [DOM标准](https://htmlspecs.com/dom/)
+- [HTML标准](https://htmlspecs.com/)
+
+### github 官方API
+
+- [github-api](https://api.github.com/)
+
+### pnpm/npm/yarn
+
+- 快速查看依赖文：`pnpm home <package-name>`
 
 ## 图标库
 

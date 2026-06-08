@@ -53,63 +53,6 @@
 - `Scss/Sass`
 - `Stylus`
 
-## 原子化CSS
-### 什么是 CSS 原子化？
-> CSS 原子化（Atomic CSS）是一种 `CSS 架构方法`，其`核心思想`是`将样式拆分为最小的、单一职责的原子类`（Atomic Classes）。每个原子类只负责一个具体的样式属性，如 `margin-top: 8px`-> `mt-2`，`color: red` -> `text-red`。
-
-### 原子化 CSS 的优势
-- `高度复用性` - 原子类可以在整个项目中复用
-- `样式一致性` - 强制使用设计系统中的预定义值
-- `包体积优化` - 避免样式重复，CSS 体积可控
-- `开发效率` - 快速组合样式，无需命名困扰
-- `维护性强` - 样式变更影响范围可预测
-
-### 原子化 CSS 的挑战
-- `学习成本` - 需要记忆大量原子类名
-- `HTML 复杂度` - 类名可能会很长
-- `设计约束` - 受限于预定义的设计系统
-- `调试困难` - 样式分散在多个原子类中
-- `书写繁琐` 
-  - 伪类
-  - 渐变
-  - transition过渡 和 animate动画
-
-### 原子化 CSS 的演进历程
-
-<AtomicCssFlow />
-
-### 原子化库
-
-- `Tailwind CSS`
-- `Unocss`
-- `AtomicCSS`
-- `Tachyons`
-
-## PostCSS：CSS转换工具的基石
-### 什么是 PostCSS？
-> PostCSS 是一个用 JavaScript 工具转换 CSS 的平台。它本身`不是预处理器`，而是一个允许使用`插件`来转换 `CSS 的工具`。PostCSS 可以做很多事情：添加浏览器前缀、使用未来的 CSS 语法、内联图片等。
-
-### 常用 PostCSS 插件
-- `autoprefixer` - 自动添加浏览器前缀
-- `postcss-preset-env` - 使用现代 CSS 语法
-- `cssnano` - CSS 压缩优化
-- `postcss-nested` - 支持嵌套语法
-- `postcss-import` - 处理@import 语句
-
-## unocss/tailwindcss/postcss架构
-
-### UnoCSS 核心架构
-
-<UnoCssFlow />
-
-### Tailwind CSS 核心架构
-
-<TailwindFlow />
-
-### PostCSS 核心架构
-
-<PostCssFlow />
-
 ## 图表
 
 ### ECharts5
@@ -483,39 +426,6 @@ Taro UI是一个基于Taro框架的多端 UI 组件库，可以在微信小程�
 | `jsencrypt`      | RSA 非对称加密 | RSA                   | 登录注册时的密码传输、敏感数据公钥加密。               |
 | `Web Crypto API` | 浏览器原生     | AES-GCM/SHA-256/等    | 即时通讯（E2E加密），对性能和包体积敏感的项目。        |
 | `sm-crypto`      | 国密算法       | SM2/SM3/SM4           | 政府、金融、国企及任何需通过等保测评、密评的国内项目。 |
-
-## 音效资源
-- [Myinstants](https://myinstants.net/): 音效按钮与表情包音板。
-
-## 效率工具
-
-- [Angrytools](https://angrytools.com/)：Flexbox、Grid等免费网络生成工具，助您加速开发
-
-## 激活工具
-- [IntelliJ IDEA](https://www.kdaiyu.com/3.jetbra.in/)
-
-
-## 辅助开发资源
-
-### 开发资源
-
-- [Pixelrepo.com](https://pixelrepo.com/browse)：像素仓库
-- [Cssbuttons.io](https://cssbuttons.io/)：button
-- [UIVerse](https://uiverse.io/)：最大的开源用户界面库
-
-### DOM/HTML标准
-
-- [DOM标准](https://htmlspecs.com/dom/)
-- [HTML标准](https://htmlspecs.com/)
-
-### github 官方API
-
-- [github-api](https://api.github.com/)
-
-### pnpm/npm/yarn
-
-- 快速查看依赖文：`pnpm home <package-name>`
-
 
 ## 其他
 - [纸由我 PaperMe](https://paperme.toolooz.com/)
