@@ -13,6 +13,22 @@
   > 类似 Gitee 的国内代码托管平台，也可镜像 GitHub 仓库
 - [GitHub 文件加速](https://hub.m5.work/)
   > 快速下载GitHub上的文件和仓库，解决国内访问GitHub速度慢的问题，支持Docker镜像加速和Hugging Face仓库。
+- [iCSS](https://github.com/chokcoco/iCSS)
+> CSS 奇技淫巧，在这里都有。
+- [Pixelrepo.com](https://pixelrepo.com/browse)
+> 像素仓库，浏览、下载并自定义数千种像素艺术素材。寻找完美精灵图的时间不应该比制作游戏的时间更长。
+- [Cssbuttons.io](https://cssbuttons.io/)
+> 精选 100 多个按钮的集合。采用 Tailwind 和 CSS 技术。
+- [UIVerse](https://uiverse.io/)
+> UI 宇宙，最大的开源 UI 库
+- [DOM标准](https://htmlspecs.com/dom/)
+> DOM 现行标准 ——  DOM 定义了一个平台中立的模型，用于事件、活动中止和节点树。
+- [HTML标准](https://htmlspecs.com/)
+> HTML 现行标准 —— 该规范定义了网页平台的大部分内容，详细程度很高。
+- [github-api](https://api.github.com/)
+> github 官方API
+- pnpm/npm/yarn
+> 快速查看依赖文：`pnpm home <package-name>`
 
 ## 音效资源
 
@@ -71,27 +87,6 @@
 
 - [Headless CMS](https://jamstack.org/headless-cms/)
   > Jamstack 网站的无头内容管理系统列表
-
-## 辅助开发资源
-
-### 开发资源
-
-- [Pixelrepo.com](https://pixelrepo.com/browse)：像素仓库
-- [Cssbuttons.io](https://cssbuttons.io/)：button
-- [UIVerse](https://uiverse.io/)：最大的开源用户界面库
-
-### DOM/HTML标准
-
-- [DOM标准](https://htmlspecs.com/dom/)
-- [HTML标准](https://htmlspecs.com/)
-
-### github 官方API
-
-- [github-api](https://api.github.com/)
-
-### pnpm/npm/yarn
-
-- 快速查看依赖文：`pnpm home <package-name>`
 
 ## 图标库
 
