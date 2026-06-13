@@ -88,6 +88,9 @@ export default withMermaid(
             {
               text: "全栈开发",
               link: "/docs/full-stack/index",
+              items: [
+                { text: "Rust", link: "/docs/full-stack/rust" },
+              ]
             },
             {
               text: "基础设施与运维",
