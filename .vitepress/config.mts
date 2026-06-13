@@ -65,8 +65,14 @@ export default withMermaid(
             { text: "TypeScript", link: "/docs/typescript/typescript" },
             { text: "小程序系列", link: "/docs/miniprogram/miniprogram" },
             { text: "高级指南", link: "/docs/advanced/advanced" },
-            { text: "前端工程化", link: "/docs/engineering/engineering" },
             { text: "前端项目架构设计", link: "/docs/fe-arch/index" },
+            {
+              text: "前端工程化与模块化",
+              link: "/docs/core/fe-eng",
+              items: [
+                { text: "前端工程化", link: "/docs/core/fe-eng" },
+              ],
+            },
             {
               text: "技术栈&灵魂伴侣",
               link: "/docs/techstack/index",
@@ -88,9 +94,7 @@ export default withMermaid(
             {
               text: "全栈开发",
               link: "/docs/full-stack/index",
-              items: [
-                { text: "Rust", link: "/docs/full-stack/rust" },
-              ]
+              items: [{ text: "Rust", link: "/docs/full-stack/rust" }],
             },
             {
               text: "基础设施与运维",
