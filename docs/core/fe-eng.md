@@ -57,6 +57,16 @@
 
 > 代码按功能拆分与组织，通过模块系统进行导入导出，解决全局污染和依赖顺序问题（`ES Module`/`CommonJS`），原则 — `高内聚低耦合`
 
+#### 按需导出/导入
+::: danger 注意事项
+
+- 每个模块中可以使用`多次`按需导出
+- 按需`导入的成员名称`必须和按需`导出的名称`保持`一致`
+- 按需导入时，可以使用 `as 关键字`进行重命名
+- 按需导入可以和默认导入一起使用
+
+:::
+
 #### ES Module vs CommonJS
 
 1️⃣ 加载机制
@@ -166,6 +176,24 @@ import Greeter from "./Greeter.js";
 
 > 提升页面加载速度与运行时性能：首屏优化、懒加载、缓存策略、`CDN`、资源压缩、渲染优化
 
+#### 代码分割策略
+
+```mermaid
+flowchart TD
+    A[入口文件] --> A1[路由分割]
+    A --> A2[组件分割]
+    A --> A3[第三方库分割]
+
+    A1[路由分割] --> A11[页面级分割]
+    A1[路由分割] --> A12[功能模块分割]
+
+    A2[组件分割] --> A21[按需/动态导入]
+    A2[组件分割] --> A22[预加载策略]
+
+    A3[第三方库分割] --> A31[Vendor 分割]
+    A3[第三方库分割] --> A32[按需加载]
+```
+
 ### 前端工程 — 监控
 
 > 线上应用的可观测性：错误追踪（`Sentry`）、性能指标采集、用户行为埋点、日志系统
@@ -177,6 +205,197 @@ import Greeter from "./Greeter.js";
 ### 前端工程 — 架构设计
 
 > 项目整体技术方案：目录结构设计、分层架构、状态管理、路由设计、多端复用策略、微前端
+
+#### 架构设计整体流程图
+
+```mermaid
+flowchart TD
+    A[需求分析] --> A1[功能需求]
+    A --> A2[性能需求]
+    A --> A3[技术约束]
+
+    A1 --> B[技术选型]
+    A2 --> B
+    A3 --> B
+
+    B --> B1[框架选择]
+    B --> B2[构建工具]
+    B --> B3[状态管理]
+
+    B1 --> C[架构设计]
+    B2 --> C
+    B3 --> C
+
+    C --> C1[分层架构]
+    C --> C2[模块化设计]
+    C --> C3[数据流设计]
+
+    C1 --> D[工程化配置]
+    C2 --> D
+    C3 --> D
+
+    D --> D1[构建配置]
+    D --> D2[代码规范]
+    D --> D3[测试配置]
+
+    D1 --> E[部署与监控]
+    D2 --> E
+    D3 --> E
+
+    E --> E1[部署方案]
+    E --> E2[监控体系]
+```
+
+#### 架构设计整体流程说明
+
+- **第一阶段：需求分析**
+
+> - 功能需求：明确项目功能需求和业务目标
+> - 性能需求：确定性能指标和用户体验要求
+> - 技术约束：识别技术约束和限制条件
+
+- **第二阶段：技术选型**
+
+> - 框架选择：选择合适的开发框架和库
+> - 构建工具：确定构建工具和开发环境
+> - 状态管理：选择状态管理方案
+
+- **第三阶段：架构设计**
+
+> - 分层设计：设计分层架构和模块划分
+> - 数据流设计：规划组件结构和数据流
+> - 接口设计：定义接口规范和通信机制
+
+- **第四阶段：工程化配置**
+
+> - 配置构建流程和优化策略
+> - 建立代码规范和开发流程
+> - 设置测试框架和CI/CD
+
+- **第五阶段：部署与监控**
+
+> - 部署方案：制定部署策略和发布流程
+> - 监控体系：建立性能监控和错误追踪
+
+#### 架构设计原则
+- 单一职责原则 (SRP)
+> 每个模块或组件应该只有一个引起它变化的原因。
+-  开闭原则 (OCP)
+> 软件实体应该对扩展开放，对修改关闭。
+- 依赖倒置原则 (DIP)
+> 高层模块不应该依赖低层模块，两者都应该依赖抽象。
+
+#### 目录结构设计
+
+::: code-group
+```sh [Monorepo 目录结构]
+project-root/
+├── packages/                       # 包目录
+│   ├── app/                        # 主应用包
+│   │   ├── src/
+│   │   │   ├── components/         # 应用组件
+│   │   │   ├── pages/              # 页面组件
+│   │   │   ├── services/           # 应用服务
+│   │   │   ├── types/              # 类型定义
+│   │   │   └── index.ts            # 入口文件
+│   │   ├── public/                 # 静态资源
+│   │   ├── package.json            # 包配置
+│   │   └── tsconfig.json           # TypeScript配置
+│   ├── ui/                         # UI组件库包
+│   │   ├── src/
+│   │   │   ├── components/         # UI组件
+│   │   │   ├── hooks/              # 自定义Hooks
+│   │   │   ├── types/              # 类型定义
+│   │   │   └── index.ts            # 入口文件
+│   │   ├── package.json            # 包配置
+│   │   └── tsconfig.json           # TypeScript配置
+│   ├── utils/                      # 工具函数包
+│   │   ├── src/
+│   │   │   ├── string/             # 字符串工具
+│   │   │   ├── date/               # 日期工具
+│   │   │   ├── array/              # 数组工具
+│   │   │   ├── types/              # 类型定义
+│   │   │   └── index.ts            # 入口文件
+│   │   ├── package.json            # 包配置
+│   │   └── tsconfig.json           # TypeScript配置
+│   └── api/                        # API客户端包
+│       ├── src/
+│       │   ├── client/             # API客户端
+│       │   ├── types/              # API类型定义
+│       │   ├── interceptors/       # 拦截器
+│       │   └── index.ts            # 入口文件
+│       ├── package.json            # 包配置
+│       └── tsconfig.json           # TypeScript配置
+├── apps/                           # 应用目录（可选）
+│   ├── web/                        # Web应用
+│   │   ├── src/
+│   │   ├── public/
+│   │   └── package.json
+│   └── mobile/                     # 移动端应用
+│       ├── src/
+│       └── package.json
+├── tools/                          # 工具目录
+│   ├── eslint-config/              # ESLint配置
+│   ├── typescript-config/          # TypeScript配置
+│   └── build-tools/                # 构建工具
+├── docs/                           # 文档目录
+├── package.json                    # 根包配置
+├── lerna.json                      # Lerna配置（如果使用）
+├── nx.json                         # Nx配置（如果使用）
+├── tsconfig.json                   # 根TypeScript配置
+├── .eslintrc.js                    # ESLint配置
+├── .prettierrc                     # Prettier配置
+└── README.md                       # 项目说明
+```
+```sh [功能模块化目录结构-单仓库]
+project-root/
+├── src/
+│   ├── modules/                     # 功能模块目录
+│   │   ├── user/                    # 用户模块
+│   │   │   ├── components/          # 用户相关组件
+│   │   │   ├── services/            # 用户相关服务
+│   │   │   ├── types.ts             # 用户相关类型定义
+│   │   │   ├── utils.ts             # 用户相关工具函数
+│   │   │   └── index.ts             # 模块入口文件
+│   │   ├── product/                 # 产品模块
+│   │   │   ├── components/          # 产品相关组件
+│   │   │   ├── services/            # 产品相关服务
+│   │   │   ├── types.ts             # 产品相关类型定义
+│   │   │   ├── utils.ts             # 产品相关工具函数
+│   │   │   └── index.ts             # 模块入口文件
+│   │   └── order/                   # 订单模块
+│   │       ├── components/          # 订单相关组件
+│   │       ├── services/            # 订单相关服务
+│   │       ├── types.ts             # 订单相关类型定义
+│   │       ├── utils.ts             # 订单相关工具函数
+│   │       └── index.ts             # 模块入口文件
+│   ├── shared/                      # 公共资源目录
+│   │   ├── components/              # 公共组件
+│   │   ├── services/                # 公共服务
+│   │   ├── types.ts                 # 公共类型定义
+│   │   ├── utils.ts                 # 公共工具函数
+│   │   ├── hooks.ts                 # 公共Hooks
+│   │   ├── constants.ts             # 公共常量
+│   │   └── styles/                  # 公共样式
+│   ├── app/                         # 应用核心目录
+│   │   ├── components/              # 应用级组件
+│   │   ├── store/                   # 状态管理
+│   │   ├── router/                  # 路由配置
+│   │   └── config.ts                # 应用配置
+│   ├── pages/                       # 页面组件目录
+│   └── index.ts                     # 应用入口文件
+├── public/                          # 静态资源目录
+├── config/                          # 配置文件目录
+├── tests/                           # 测试文件目录
+├── docs/                            # 文档目录
+├── package.json                     # 项目配置
+├── tsconfig.json                    # TypeScript配置
+├── .eslintrc.js                     # ESLint配置
+├── .prettierrc                      # Prettier配置
+└── README.md                        # 项目说明
+```
+
+:::
 
 ## multi-repo vs mono-repo
 
@@ -376,3 +595,4 @@ lerna add pac-2 packages/pac-3
 ## 参考资源
 
 - [《前端工程化概述》 - 张云龙](https://github.com/fouber/blog)
+- [前端学习指南 - 完整的前端开发教程](https://specialxm.github.io/frontend-learning-guide/)
