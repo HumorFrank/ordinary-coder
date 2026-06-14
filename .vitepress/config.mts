@@ -71,6 +71,7 @@ export default withMermaid(
               link: "/docs/core/fe-eng",
               items: [
                 { text: "前端工程化", link: "/docs/core/fe-eng" },
+                { text: "Monorepo", link: "/docs/core/fe-monorepo" },
               ],
             },
             {
