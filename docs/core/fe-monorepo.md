@@ -155,11 +155,11 @@ public-hoist-pattern[]=*prettier*
 
 ## 搭建公共工具库包 (packages/utils)
 
-> **定位：** 纯 TypeScript 工具函数库，不依赖任何 UI 框架，可被 `ui`、`components`、`web` 等任意包引用。
+> 纯 TS 工具函数库，不依赖任何 UI 框架，可被 `ui`、`components`、`web` 等任意包引用。
 
 ### 8. 初始化 utils 包
 
-进入 `utils` 目录并初始化：
+进入 `utils` 目录并初始化
 
 ::: code-group
 ```bash [进入 utils 目录]
@@ -171,7 +171,25 @@ pnpm init
 ```
 :::
 
-修改 `package.json`，`name` 需用 `@scope/name` 格式：
+修改 `package.json`，`name` 需用 `@scope/name` 格式
+
+::: tip 📚 `@scope/name` 格式说明
+
+> 这是 `npm scoped packages`（作用域包） 的命名规范，格式为 `@scope/package-name`。
+
+✨ **命名规则**
+
+1️⃣ scope（作用域）部分
+  - 必须以 `@` 开头，后跟 scope 名称，如 `@monorepo`
+  - scope 名称遵循和普通包名相同的规则
+    - 小写字母、数字
+    - 连字符（`-`）、下划线（`_`）、 点（`.`）
+  - 通常是`组织名`或`项目前缀`，比如 `@vue/reactivity`、`@babel/core`、`@my-company/utils`
+
+2️⃣ name（包名）部分：小写、数字、`-`、`_`、`.` 的组合（不能以 `.` 或 `_` 开头）
+
+
+🛠 `package.json` 配置
 
 ```json
 {
@@ -191,15 +209,17 @@ pnpm init
 }
 ```
 
+:::
+
 ### 9. 在 utils 包中添加 TypeScript 和源码
 
-安装 TypeScript：
+安装 TypeScript
 
 ```bash
 pnpm add -D typescript
 ```
 
-创建 `tsconfig.json`：
+创建 `tsconfig.json`
 
 ```json
 {
@@ -223,7 +243,7 @@ pnpm add -D typescript
 }
 ```
 
-创建 `src` 目录和入口文件：
+创建 `src` 目录和入口文件
 
 ```bash
 mkdir src
@@ -961,7 +981,7 @@ dist
 
 ## 最终项目结构
 
-```plaintext
+```sh
 vue3-monorepo/
 ├── .husky/
 │   └── pre-commit
@@ -1012,9 +1032,9 @@ vue3-monorepo/
 
 ### 模块依赖关系图
 
-```plaintext
+```sh
 ┌─────────────────────────────────────────┐
-│              apps/web                    │
+│              apps/web                   │
 │     (应用层，消费所有公共包)              │
 └──────┬──────────┬───────────┬───────────┘
        │          │           │
@@ -1022,15 +1042,14 @@ vue3-monorepo/
 ┌──────────┐ ┌──────────┐ ┌──────────────┐
 │ @monorepo│ │ @monorepo│ │ @monorepo    │
 │ /utils   │ │ /ui      │ │ /components  │
-│ (工具层)  │ │ (原子层)  │ │ (业务组件层)  │
+│ (工具层)  │ │ (原子层) │ │ (业务组件层)  │
 └──────────┘ └────┬─────┘ └──────┬───────┘
                   │              │
                   │   依赖       │   依赖
                   ▼              ▼
-            ┌──────────┐  ┌──────────┐
-            │ @monorepo│  │ @monorepo│
-            │ /utils   │  │ /ui      │
-            └──────────┘  └──────────┘
+        ┌─────────────────┐  ┌───────────────┐
+        │ @monorepo/utils │  │ @monorepo/ui  │
+        └─────────────────┘  └───────────────┘
 ```
 
 ## 使用说明
