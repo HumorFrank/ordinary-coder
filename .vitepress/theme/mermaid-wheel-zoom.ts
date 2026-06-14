@@ -1,10 +1,10 @@
 import { inBrowser } from 'vitepress'
 
-const MIN_SCALE = 0.5
+const MIN_SCALE = 0.7
 const MAX_SCALE = 3
 const STEP = 0.1
 const MIN_VIEWPORT_HEIGHT = 360
-const MAX_VIEWPORT_HEIGHT = 620
+const MAX_VIEWPORT_HEIGHT = 800
 
 const clamp = (value: number) => Math.min(MAX_SCALE, Math.max(MIN_SCALE, value))
 
@@ -24,7 +24,7 @@ const getSvgDimensions = (svg: SVGSVGElement) => {
   const rect = svg.getBoundingClientRect()
   const viewBox = svg.viewBox?.baseVal
   const width = rect.width || viewBox?.width || 800
-  const height = rect.height || viewBox?.height || 480
+  const height = rect.height || viewBox?.height || 360
   return { width, height }
 }
 

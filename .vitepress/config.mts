@@ -12,15 +12,28 @@ export default withMermaid(
     // 智能配置 base 路径：若在 CI 环境下（如 GitHub Actions）则使用子路径，否则使用根路径
     base: process.env.CI ? "/ordinary-coder/" : "/",
     title: "前端留存指南",
-    description:
-      "试图记录今天学废、明天就会忘掉的前端知识，给未来的自己留条活路。",
+    description: "试图记录今天学废、明天就会忘掉的前端知识，给未来的自己留条活路。",
     markdown: {
       config(md) {
         md.use(groupIconMdPlugin);
       },
     },
     mermaid: {
-      theme: "default", // 可选：设置 Mermaid 图表的主题
+      theme: "default",
+      themeVariables: {
+        fontSize: "16px",
+        primaryColor: "#e3f2fd",
+        primaryBorderColor: "#1565c0",
+        primaryTextColor: "#1a1a1a",
+        lineColor: "#546e7a",
+        secondaryColor: "#f3e5f5",
+        tertiaryColor: "#e8f5e9",
+      },
+      flowchart: {
+        useMaxWidth: false,
+        htmlLabels: true,
+        padding: 16,
+      },
     },
     themeConfig: {
       // https://vitepress.dev/reference/default-theme-config
@@ -54,7 +67,7 @@ export default withMermaid(
             { text: "面向资料编程", link: "/docs/salary/salary" },
             { text: "面向玄学部署", link: "/docs/deploy/deploy" },
             { text: "程序员单词发音", link: "/docs/words/words" },
-            { text: "语义版本规范", link: "/docs/semver/semver" },
+            { text: "语义版本规范(semver)", link: "/docs/semver/semver" },
             {
               text: "魔幻的包管理器",
               link: "/docs/pkg/pkg",
