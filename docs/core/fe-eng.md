@@ -596,3 +596,4 @@ lerna add pac-2 packages/pac-3
 
 - [《前端工程化概述》 - 张云龙](https://github.com/fouber/blog)
 - [前端学习指南 - 完整的前端开发教程](https://specialxm.github.io/frontend-learning-guide/)
+- [深入浅出 Webpack](https://pasoul.github.io/dive-into-webpack/)
