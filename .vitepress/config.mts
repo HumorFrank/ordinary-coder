@@ -29,10 +29,19 @@ export default withMermaid(
         secondaryColor: "#f3e5f5",
         tertiaryColor: "#e8f5e9",
       },
+      themeCSS: `
+        .node rect,
+        .node circle,
+        .node ellipse,
+        .node polygon {
+          rx: 4px;
+          ry: 4px;
+        }
+      `,
       flowchart: {
         useMaxWidth: false,
         htmlLabels: true,
-        padding: 16,
+        padding: 8,
       },
     },
     themeConfig: {

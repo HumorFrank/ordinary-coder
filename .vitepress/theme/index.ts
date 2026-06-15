@@ -36,6 +36,8 @@ import LinuxFileSystem from "./components/LinuxFileSystem.vue";
 import LinuxCommand from "./components/LinuxCommand.vue";
 // Linux 权限系统演示
 import LinuxPermissions from "./components/LinuxPermissions.vue";
+// 前端编译流程
+import FeCompileFlow from "./components/FeCompileFlow.vue";
 export default {
   ...Theme,
   enhanceApp(ctx: EnhanceAppContext) {
@@ -62,5 +64,6 @@ export default {
     ctx.app.component("LinuxFileSystem", LinuxFileSystem);
     ctx.app.component("LinuxCommand", LinuxCommand);
     ctx.app.component("LinuxPermissions", LinuxPermissions);
+    ctx.app.component("FeCompileFlow", FeCompileFlow);
   },
 };
