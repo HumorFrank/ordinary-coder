@@ -263,6 +263,9 @@ graph TD
 > - **旧版 Vite（v6.x<sup>-</sup>）**：依赖预构建使用的是 `esbuild`。
 > - **新版 Vite（v8.x）**：依赖预构建使用的是 `Rolldown`（esbuild 已被废弃）
 
+✨ 代码构建
+> - **Tree Shaking 死代码消除**：自动移除未引用的代码（比如导入却未使用）
+
 :::
 
 📙 开发服务器启动流程
@@ -322,6 +325,115 @@ flowchart TD
 | **构建速度**            | 快                                                                 | 相比还快 10-30 倍                                   |
 
 #### Webpack
+
+1️⃣ 整体架构
+```mermaid
+graph TD
+    %% 主要构建流程 - 垂直布局，链路清晰
+    A[Entry入口文件] --> B[Parser 解析器]
+    B --> C[Resolver 依赖解析]
+    C --> D[Loader 转换器]
+    D --> E[Plugin 插件]
+    E --> F[Output 输出]
+    
+    %% 解析器子流程 - 右侧展开
+    B --> B1[AST构建]
+    B1 --> B2[依赖分析]
+    B2 --> B3[模块识别]
+    
+    %% 依赖解析子流程 - 右侧展开
+    C --> C1[路径解析]
+    C1 --> C2[文件读取]
+    C2 --> C3[模块加载]
+    
+    %% Loader子流程 - 右侧展开
+    D --> D1[文件转换]
+    D1 --> D2[链式处理]
+    D2 --> D3[结果缓存]
+    
+    %% Plugin子流程 - 右侧展开
+    E --> E1[钩子执行]
+    E1 --> E2[资源优化]
+    E2 --> E3[代码分割]
+    
+    %% 样式设置 - 主流程突出显示
+    style A fill:#e3f2fd,stroke:#1976d2,stroke-width:3px,font-weight:bold
+    style F fill:#f1f8e9,stroke:#689f38,stroke-width:3px,font-weight:bold
+    
+    %% 主要流程节点样式
+    style B fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    style C fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
+    style D fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    style E fill:#fce4ec,stroke:#c2185b,stroke-width:2px
+    
+    %% 子流程样式 - 淡化处理
+    style B1 fill:#f8f5ff,stroke:#7b1fa2,stroke-width:1px
+    style B2 fill:#f8f5ff,stroke:#7b1fa2,stroke-width:1px
+    style B3 fill:#f8f5ff,stroke:#7b1fa2,stroke-width:1px
+    style C1 fill:#f1f8e9,stroke:#388e3c,stroke-width:1px
+    style C2 fill:#f1f8e9,stroke:#388e3c,stroke-width:1px
+    style C3 fill:#f1f8e9,stroke:#388e3c,stroke-width:1px
+    style D1 fill:#fff8e1,stroke:#f57c00,stroke-width:1px
+    style D2 fill:#fff8e1,stroke:#f57c00,stroke-width:1px
+    style D3 fill:#fff8e1,stroke:#f57c00,stroke-width:1px
+    style E1 fill:#fce4ec,stroke:#c2185b,stroke-width:1px
+    style E2 fill:#fce4ec,stroke:#c2185b,stroke-width:1px
+    style E3 fill:#fce4ec,stroke:#c2185b,stroke-width:1px
+```
+
+2️⃣ Webpack 的核心机制
+
+- **模块化系统**：一切皆模块的设计理念
+- **Loader机制**：灵活的模块转换能力
+- **Plugin系统**：强大的扩展和定制能力
+- **依赖图分析**：智能的依赖关系处理
+- **代码分割**：灵活的代码分割策略
+
+3️⃣ Webpack 注意事项
+
+::: tip 注意事项
+- loader：做 `“ 文件转换 ”` 的规则系统
+> - 其价值在于把`非 JS 资源`转换成`可被 import 的 JS 模块`，从而让它也能进入依赖图参与打包。
+> - 像 `CSS/图片/字体/TS` 等资源，必须先经过 `loader` 转换，才能被纳入 `Webpack` 的模块依赖图。
+
+- loader vs plugin
+> - **loader**：面向 **某类文件** 的转换（把 A → B）
+> - **plugin**：面向 **整个构建过程** 的扩展（在 hooks 上做事）
+
+:::
+
+#### 打包/构建工具速查
+
+1️⃣ 工具速查
+- Babel
+> `JS/TS/JSX` 的 `“语法转译器”`，把`新语法/语法糖`转成目标环境可运行的 JS。
+- tsc（TypeScript Compiler）
+> - 把 TS 转为 JS，并提供 `TypeScript 类型检查`
+> - tsc 的`转译 ≠ 打包`（不会做依赖合并、分包等）
+- tsup
+> 面向 TypeScript 库的`零配置打包器`（通常基于 esbuild），目标是快速产出 ESM/CJS、声明文件等。
+- Webpack
+> 通用`模块打包器`，能把 JS/CSS/图片/字体等 纳入依赖图，输出一个/多个 bundle，并支持强大的插件生态。
+- Vite
+> 以开发体验为核心的前端构建工具
+> - 开发阶段利用 `原生 ESM` 快速启动，预构建利用 `esbuild/Rolldown` 进行构建
+> - 生产阶段利用 `Rollup/Rolldown` 进行打包
+- Rollup
+> 更偏向`库（Library）打包`的打包器，擅长产出干净的 ESM/CJS 包，Tree Shaking 效果好。
+- esbuild
+> 基于 Go 的高性能`打包/转译`工具，特点是“极快”。
+- Rspack
+> 基于 Rust 的高性能打包器，目标是`尽可能兼容 Webpack 生态与配置`，同时显著提升构建速度。
+- Turborepo（Turbo）
+> Monorepo 的任务编排/缓存系统（不是打包器），解决“多包、多任务”的增量构建与复用。
+
+2️⃣ 分类
+- 语法转译器：Babel（也常用于处理 JSX/语法降级），不负责“完整类型检查”
+- 类型检查/TS 编译器：tsc（类型检查，强在类型系统与产出 d.ts），“转译”不等于打包
+- 应用打包器：Webpack、Rspack、Vite
+- 库打包器：Rollup、tsup（强 tree-shaking、产出干净）
+- 高性能打包/转译内核：esbuild（常被上层工具复用）
+- 任务编排/增量缓存：Turborepo（面向 Monorepo 工作流）
 
 ### 前端工程 — 代码规范
 
