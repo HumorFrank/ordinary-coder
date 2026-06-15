@@ -141,12 +141,143 @@ import Greeter from "./Greeter.js";
 
 > 将 UI 拆分为独立可复用的组件单元，封装模板、逻辑与样式，通过 `props` / `emit` 通信
 
-### 前端工程 — 构建
+### 前端工程 — 项目构建
 
 将源码编译打包为可上线产物
 
 > - 编译（TS → JS、ES6 → ES5、Less → CSS）、 压缩混淆、代码分割、Tree Shaking
 > - 生成 `dist`（`Webpack`、`Vite`、`Rollup`）
+
+#### Vite
+
+**Vite 8.x<sup>-</sup> + 双引擎架构** 《开发原生 ES（ES Module） 模块，预构建 esbuild，生产 Rollup》
+
+```mermaid
+graph TD
+    A[Vite 8.x⁻] --> B[开发环境<br/>Dev]
+    A --> C[生成环境<br/>Pro]
+
+    B --> B1["基于原生 ES Module 模块<br/>浏览器按需请求 无需打包"]
+    B --> B2[esbuild <br/>依赖预构建]
+    B2 --> B2a[CJS/UMD → ESM]
+    B2 --> B2b[多文件库合并<br/>减少请求]
+    B2 --> B2c[缓存于 .vite 目录]
+    B --> B3[HMR 热更新替换]
+    B3 --> B3a[WebSocket<br/>实时推送]
+    B3 --> B3b[模块级增量更新<br/>毫秒级]
+
+    C --> C1[Rollup 核心打包]
+    C1 --> C1a[Tree Shaking <br/>死代码消除]
+    C1 --> C1b[Code Splitting <br/>代码分割]
+    C1 --> C1c[Scope Hoisting <br/>作用域提升]
+    C --> C2[esbuild 压缩优化]
+    C2 --> C2a[JS 压缩（Minify）]
+    C2 --> C2b[CSS 压缩]
+    C2 --> C2c[语法降级兼容]
+    C --> C3[静态资源处理]
+    C3 --> C3a[资源哈希命名]
+    C3 --> C3b[生成 dist 产物]
+
+    %% 样式
+    style A fill:#e3f2fd,stroke:#1976d2,stroke-width:3px,font-weight:bold
+    style B fill:#fce4ec,stroke:#c2185b,stroke-width:2px,font-weight:bold
+    style C fill:#fff3e0,stroke:#f57c00,stroke-width:2px,font-weight:bold
+    style B1 fill:#f5f5f5,stroke:#9e9e9e,stroke-width:1px
+    style B2 fill:#f5f5f5,stroke:#9e9e9e,stroke-width:2px
+    style B2a fill:#f5f5f5,stroke:#9e9e9e,stroke-width:1px
+    style B2b fill:#f5f5f5,stroke:#9e9e9e,stroke-width:1px
+    style B2c fill:#f5f5f5,stroke:#9e9e9e,stroke-width:1px
+    style B3 fill:#f5f5f5,stroke:#9e9e9e,stroke-width:2px
+    style B3a fill:#f5f5f5,stroke:#9e9e9e,stroke-width:1px
+    style B3b fill:#f5f5f5,stroke:#9e9e9e,stroke-width:1px
+    style C1 fill:#f5f5f5,stroke:#9e9e9e,stroke-width:2px
+    style C1a fill:#f5f5f5,stroke:#9e9e9e,stroke-width:1px
+    style C1b fill:#f5f5f5,stroke:#9e9e9e,stroke-width:1px
+    style C1c fill:#f5f5f5,stroke:#9e9e9e,stroke-width:1px
+    style C2 fill:#f5f5f5,stroke:#9e9e9e,stroke-width:2px
+    style C2a fill:#f5f5f5,stroke:#9e9e9e,stroke-width:1px
+    style C2b fill:#f5f5f5,stroke:#9e9e9e,stroke-width:1px
+    style C2c fill:#f5f5f5,stroke:#9e9e9e,stroke-width:1px
+    style C3 fill:#f5f5f5,stroke:#9e9e9e,stroke-width:2px
+    style C3a fill:#f5f5f5,stroke:#9e9e9e,stroke-width:1px
+    style C3b fill:#f5f5f5,stroke:#9e9e9e,stroke-width:1px
+```
+
+**Vite 8.x<sup>+</sup> + Rolldown 统一架构**（开发原生 ES 模块，预构建 Rolldown，生产 Rolldown）
+
+```mermaid
+graph TD
+    A[Vite 8.x⁺] --> B[开发环境<br/>Dev]
+    A --> C[生成环境<br/>Prod]
+
+    B --> B1["基于原生 ES 模块<br/>由 Rolldown 统一内核驱动"]
+    B --> B2["HMR 热模块替换<br/>WebSocket 推送 10-20ms"]
+    B --> B3["vite preview<br/>本地预览生产构建"]
+
+    C --> C2["输出优化的静态资源<br/>至 dist/"]
+    C --> C1["Rolldown 打包<br/>Rust 内核 替代 Rollup"]
+
+    C1 --> C11[Oxc 编译器链]
+    C11 --> C11a[Parser 解析]
+    C11 --> C11b[Resolver 模块解析]
+    C11 --> C11c[Transform 转换]
+    C11 --> C11d[Minifier 压缩]
+    C1 --> C12[代码优化]
+    C12 --> C12a[Tree Shaking <br/>死代码消除]
+    C12 --> C12b[Code Splitting <br/>代码分割]
+    C1 --> C13["Lightning CSS 集成"]
+
+    %% 样式
+    style A fill:#e3f2fd,stroke:#1976d2,stroke-width:3px,font-weight:bold
+    style B fill:#fce4ec,stroke:#c2185b,stroke-width:2px,font-weight:bold
+    style C fill:#fff3e0,stroke:#f57c00,stroke-width:2px,font-weight:bold
+    style B1 fill:#f5f5f5,stroke:#9e9e9e,stroke-width:1px
+    style B2 fill:#f5f5f5,stroke:#9e9e9e,stroke-width:1px
+    style B3 fill:#f5f5f5,stroke:#9e9e9e,stroke-width:1px
+    style C1 fill:#c8e6c9,stroke:#388e3c,stroke-width:2px,font-weight:bold
+    style C11 fill:#e8f5e9,stroke:#43a047,stroke-width:2px
+    style C11a fill:#f5f5f5,stroke:#9e9e9e,stroke-width:1px
+    style C11b fill:#f5f5f5,stroke:#9e9e9e,stroke-width:1px
+    style C11c fill:#f5f5f5,stroke:#9e9e9e,stroke-width:1px
+    style C11d fill:#f5f5f5,stroke:#9e9e9e,stroke-width:1px
+    style C12 fill:#e8f5e9,stroke:#43a047,stroke-width:2px
+    style C12a fill:#f5f5f5,stroke:#9e9e9e,stroke-width:1px
+    style C12b fill:#f5f5f5,stroke:#9e9e9e,stroke-width:1px
+    style C13 fill:#e8f5e9,stroke:#43a047,stroke-width:1px
+    style C2 fill:#e8f5e9,stroke:#43a047,stroke-width:1px
+```
+
+📚 开发服务器（vite dev）vs 构建指令（vite build）
+
+| 对比维度         | 开发服务器（vite dev）                    | 构建指令（vite build）        |
+| ---------------- | ----------------------------------------- | ----------------------------- |
+| **官方描述**     | 基于原生 `ES（ES Module）` 模块提供源文件 | 基于`Rolldown` 打包代码       |
+| **核心工作方式** | 仅按需编译 — `不打包`                     | 全量打包优化                  |
+| **底层技术**     | `Rolldown`（依赖预构建/转换）             | `Rolldown + Oxc`（打包/压缩） |
+| **目标**         | 开发体验：极速启动、`HMR`热更新           | 生产性能：体积小、加载快      |
+| **网络请求数**   | 多（每个模块一个请求）                    | 少（几个 `bundle` 文件）      |
+
+::: tip 注意事项
+🛠 开发服务器（依赖预构建）
+
+> - **旧版 Vite（v6.x<sup>-</sup>）**：依赖预构建使用的是 `esbuild`。
+> - **新版 Vite（v8.x）**：依赖预构建使用的是 `Rolldown`（esbuild 已被废弃）
+
+:::
+
+🚀 技术演进：Vite 8⁻ vs Vite 8
+
+| 对比维度                | Vite 8.0⁻                                                          | Vite 8.0                                            |
+| ----------------------- | ------------------------------------------------------------------ | --------------------------------------------------- |
+| **开发服务器工作模式**  | 原生 `ESM` + 按需编译 + `HMR`                                      | 原生 `ESM` + 按需编译 + `HMR`                       |
+| **开发-依赖预构建工具** | `esbuild`（Go 编写）                                               | `Rolldown`（Rust 编写）                             |
+| **开发-代码转换工具**   | `esbuild`（Go 编写）                                               | `Rolldown` / `Oxc`（Rust 编写）                     |
+| **生产构建工具**        | `Rollup`（JS 编写）                                                | `Rolldown`（Rust 编写）                             |
+| **架构特点**            | 双引擎架构：<br/>- 开发构建用 `esbuild`<br/> - 生产构建用 `Rollup` | 统一引擎：`Rolldown`<br/>开发与生产底层统一为 `Rolldown`      |
+| **配置文件**            | `build.rollupOptions`                                              | `build.rolldownOptions`<br/>（`Rollup` 选项仍兼容） |
+| **构建速度**            | 快                                                                 | 相比还快 10-30 倍                                   |
+
+#### Webpack
 
 ### 前端工程 — 代码规范
 
@@ -724,14 +855,14 @@ graph TD
 
 3️⃣ 编译原理与构建工具的对应关系（含详细备注）
 
-| 编译阶段          | 构建工具   | 具体实现                               | 备注                                                                                                                                                                                                                                |
-| ----------------- | ---------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 编译阶段          | 构建工具   | 具体实现                               | 备注                                                                                                                                                                                                                             |
+| ----------------- | ---------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **词法分析**      | Babel      | @babel/parser                          | 将源代码字符串拆解成Token序列（关键字、标识符、运算符、字面量等），例 `const a = 1;` 拆分为 `[{type: 'keyword', value: 'const'}, {type: 'identifier', value: 'a'}, {type: 'operator', value: '='}, {type: 'numeric', value: 1}]` |
-| **语法分析**      | TypeScript | ts.parse()                  | 将Token序列按照语法规则组织成AST（抽象语法树），同时进行语法正确性校验。                                                                                      |
-| **语义分析**      | ESLint     | AST 遍历规则                     | 在AST基础上进行上下文分析：检查未定义变量、重复定义、作用域泄漏、类型不匹配等。                                                                                  |
-| **中间代码/转换** | Webpack    | Loader系统（如babel-loader,ts-loader） | 将源码转换为中间形态或目标形态。例如通过babel-loader将ES6+代码转为ES5，或通过css-loader处理CSS导入关系                                                                                  |
-| **代码优化**      | Rollup     | Tree Shaking            | 基于ES Module静态结构，分析`import/export`依赖图，消除未被引用的导出（Dead Code Elimination）。例如模块导出了10个函数但只用了1个，其余9个不会进入bundle                                                                             |
-| **代码生成**      | Vite       | esbuild / Rollup（生产环境）           | 将优化后的中间表示转换为最终的目标代码，并组织成可部署的bundle或chunk。开发环境用esbuild极速预构建依赖，生产环境用Rollup生成优化后的静态资源                                                                                        |
+| **语法分析**      | TypeScript | ts.parse()                             | 将Token序列按照语法规则组织成AST（抽象语法树），同时进行语法正确性校验。                                                                                                                                                         |
+| **语义分析**      | ESLint     | AST 遍历规则                           | 在AST基础上进行上下文分析：检查未定义变量、重复定义、作用域泄漏、类型不匹配等。                                                                                                                                                  |
+| **中间代码/转换** | Webpack    | Loader系统（如babel-loader,ts-loader） | 将源码转换为中间形态或目标形态。例如通过babel-loader将ES6+代码转为ES5，或通过css-loader处理CSS导入关系                                                                                                                           |
+| **代码优化**      | Rollup     | Tree Shaking                           | 基于ES Module静态结构，分析`import/export`依赖图，消除未被引用的导出（Dead Code Elimination）。例如模块导出了10个函数但只用了1个，其余9个不会进入bundle                                                                          |
+| **代码生成**      | Vite       | esbuild / Rollup（生产环境）           | 将优化后的中间表示转换为最终的目标代码，并组织成可部署的bundle或chunk。开发环境用esbuild极速预构建依赖，生产环境用Rollup生成优化后的静态资源                                                                                     |
 
 ## multi-repo vs mono-repo
 
