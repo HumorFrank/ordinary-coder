@@ -154,7 +154,7 @@ import Greeter from "./Greeter.js";
 
 ```mermaid
 graph TD
-    A[Vite 8.x⁻] --> B[开发环境<br/>Dev]
+    A[Vite ] --> B[开发环境<br/>Dev] 
     A --> C[生成环境<br/>Pro]
 
     B --> B1["基于原生 ES Module 模块<br/>浏览器按需请求 无需打包"]
@@ -264,6 +264,50 @@ graph TD
 > - **新版 Vite（v8.x）**：依赖预构建使用的是 `Rolldown`（esbuild 已被废弃）
 
 :::
+
+📙 开发服务器启动流程
+
+```mermaid
+flowchart TD
+    %% 主要启动流程 - 垂直布局，链路清晰
+    A[启动 Vite Dev Server] --> B[创建HTTP服务器]
+    B --> C[启动预构建esbuild/rolldown ]
+    C --> D[启动 HMR 服务]
+    D --> E[监听端口]
+    E --> F[服务器就绪]
+    
+    %% 预构建子流程 - 右侧展开
+    C --> C1[扫描项目依赖]
+    C1 --> C2[分析依赖关系]
+    C2 --> C3[ESM转换]
+    C3 --> C4[生成预构建缓存]
+    
+    %% HMR服务子流程 - 右侧展开
+    D --> D1[建立WebSocket连接]
+    D1 --> D2[监听文件变化]
+    D2 --> D3[计算变更模块]
+    D3 --> D4[推送更新信息]
+    
+    %% 样式设置 - 主流程突出显示
+    style A fill:#e3f2fd,stroke:#1976d2,stroke-width:3px,font-weight:bold
+    style F fill:#f1f8e9,stroke:#689f38,stroke-width:3px,font-weight:bold
+    
+    %% 主要流程节点样式
+    style B fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    style C fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
+    style D fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    style E fill:#fce4ec,stroke:#c2185b,stroke-width:2px
+    
+    %% 子流程样式 - 淡化处理
+    style C1 fill:#f8f5ff,stroke:#7b1fa2,stroke-width:1px
+    style C2 fill:#f8f5ff,stroke:#7b1fa2,stroke-width:1px
+    style C3 fill:#f8f5ff,stroke:#7b1fa2,stroke-width:1px
+    style C4 fill:#f8f5ff,stroke:#7b1fa2,stroke-width:1px
+    style D1 fill:#fff8e1,stroke:#f57c00,stroke-width:1px
+    style D2 fill:#fff8e1,stroke:#f57c00,stroke-width:1px
+    style D3 fill:#fff8e1,stroke:#f57c00,stroke-width:1px
+    style D4 fill:#fff8e1,stroke:#f57c00,stroke-width:1px
+```
 
 🚀 技术演进：Vite 8⁻ vs Vite 8
 
