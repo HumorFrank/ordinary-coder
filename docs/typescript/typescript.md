@@ -5,8 +5,8 @@
 ### 种类
 
 - 基本类型
-  - string 
-  - number 
+  - string
+  - number
   - boolean
 - Arrays
 - Functions
@@ -222,52 +222,67 @@ function request(url: string, method: HttpMethod) {
 ## 高频符号
 
 ### 可选（?）
+
 > `?`：可选属性或者参数或者条件类型，用于标记 `属性或参数是可选的`（可能不存在）
 
 1️⃣ 条件类型：（条件 ? true-表达式 : false-表达式）
 
-  > - `SomeType extends OtherType ? TrueType : FalseType;`（`T extends U ? X : Y`）
-  > - 当 `extends` 左边的类型可以赋值给右边的类型时，你将获得` TrueType` 类型；
-  > - 否则你将获得` FalseType` 类型。
+> - `SomeType extends OtherType ? TrueType : FalseType;`（`T extends U ? X : Y`）
+> - 当 `extends` 左边的类型可以赋值给右边的类型时，你将获得` TrueType` 类型；
+> - 否则你将获得` FalseType` 类型。
 
 2️⃣ 可选参数
+
 > `testFunction(name:string,account?:number)`
 
 3️⃣ 属性
+
 > `const props = defineProps<{title?:string; icon?: string;}>()`
 
 ### 非空断言运算符（!）
+
 1️⃣ `!`：非空断言运算符
+
 > 明确知晓 变量不会是 `null` 或者 `undefined`（info!.name：明确知晓info不为 `null`或者`undefined`）。
 
 ### 联合类型（|）
+
 > `|`：联合类型，表示一个值可以是 `多种类型之一`（`A | B `表示 `A` 或 `B`）。
 
 ### 交叉类型（&）
+
 > `&`：交叉类型，表示一个值必须 `同时满足多个类型`（`A & B` 表示 `A` 和 `B` 的组合）。
 
 ### 空值合并运算符（??）
+
 > `??`：空值合并运算符， 如果左侧是 `null` 或 `undefined`，则返回右侧的默认值，否则返回左侧的值。
 
 ### 逻辑与运算符（&&）
+
 > `&&`: 逻辑与运算符，当左侧为 `false` 时，直接返回左侧的值，否则返回右侧的值。
 
 ### 逻辑或运算符（||）
+
 > `||`：逻辑或运算符, 当左侧为 `true` 时，直接返回左侧的值，否则返回右侧的值。
 
 ### 展开运算符（...）
+
 > `...`：展开运算符, 在 TS 中，还能用于 `合并类型`(对象类型不能直接使用展开运算符 `...` 来合并，你需要使用交叉类型 `&`来合并多个对象类型)。
 
 ### 类型断言（as）
+
 > `as`：类型断言,`强制告诉 TS 某个值的类型`（类似于强制类型转换）。
 
 ### 索引类型查询（keyof）
+
 > `keyof`：索引类型查询，获取 `某个类型的所有键（属性名）的联合类型`。(keyof T)
 
 ### typeof
+
 > `typeof`：类型查询，获取 `某个值的类型`（返回的是 `TS` 类型）。(typeof obj)
 
 ### 映射类型的键遍历（in）
+
 > `in`：映射类型的键遍历，在 `映射类型（Mapped Types）` 中 `遍历键`。([K in Keys]: T)
 
 ## 条件类型（?）
@@ -426,8 +441,11 @@ type Res = MyAwaited<Promise<Promise<number>>>; // number
 - `[T]`：`阻止分发`，`[T] extends [U]`，视作整体比较
 - `infer R`：`类型推断`，`Array<infer U>`，提取数组元素类型
 - `extends never`：`过滤`，返回 `never`，表示在联合类型中删除该项
+
 ## 高级类型
+
 ### 常见高级类型
+
 - 交叉类型（`T & U`）
 - 联合类型（`T | U`）
 - 类型别名
@@ -436,93 +454,106 @@ type Res = MyAwaited<Promise<Promise<number>>>; // number
 - 映射类型
 - 条件类型（`T extends U ? X : Y`）
 
+### 参考文档
+- [TypeScript高级应用](https://specialxm.github.io/frontend-learning-guide/engineering/typescript-advanced.html)
+- [TypeScript 官网](https://www.typescriptlang.org/)
+
 ### Example
+
 ::: code-group
+
 ```ts [交叉类型.ts]
 function extend<T extends object, U>(first: T, second: U): T & U {
-  let result = {} as T & U
+  let result = {} as T & U;
   for (let key in first) {
-    result[key] = first[key] as any
+    result[key] = first[key] as any;
   }
   for (let key in second) {
     if (!result.hasOwnProperty(key)) {
-      result[key] = second[key] as any
+      result[key] = second[key] as any;
     }
   }
-  return result
+  return result;
 }
 ```
+
 ```ts [联合类型.ts]
 function formatCommandline(command: string[] | string) {
-  let line = ''
-  if (typeof command === 'string') {
-    line = command.trim()
+  let line = "";
+  if (typeof command === "string") {
+    line = command.trim();
   } else {
-    line = command.join(' ').trim()
+    line = command.join(" ").trim();
   }
 }
 ```
+
 ```ts [类型别名.ts]
-type some = boolean | string
+type some = boolean | string;
 
-const b: some = true // ok
-const c: some = 'hello' // ok
-const d: some = 123 // 不能将类型“123”分配给类型“some”
+const b: some = true; // ok
+const c: some = "hello"; // ok
+const d: some = 123; // 不能将类型“123”分配给类型“some”
 
-type Container<T> = { value: T }
+type Container<T> = { value: T };
 
 type Tree<T> = {
-  value: T
-  left: Tree<T>
-  right: Tree<T>
-}
+  value: T;
+  left: Tree<T>;
+  right: Tree<T>;
+};
 ```
+
 ```ts [类型索引.ts]
 interface Button {
-  type: string
-  text: string
+  type: string;
+  text: string;
 }
 
-type ButtonKeys = keyof Button
+type ButtonKeys = keyof Button;
 // 等效于
-type ButtonKeys = 'type' | 'text'
+type ButtonKeys = "type" | "text";
 ```
+
 ```ts [类型约束.ts]
-type BaseType = string | number | boolean
+type BaseType = string | number | boolean;
 
 // 这里表示 copy 的参数
 // 只能是字符串、数字、布尔这几种基础类型
 function copy<T extends BaseType>(arg: T): T {
-  return arg
+  return arg;
 }
 
 function getValue<T, K extends keyof T>(obj: T, key: K) {
-  return obj[key]
+  return obj[key];
 }
 
-const obj = { a: 1 }
-const a = getValue(obj, 'a')
+const obj = { a: 1 };
+const a = getValue(obj, "a");
 ```
+
 ```ts [映射类型.ts]
 type Readonly<T> = {
-  readonly [P in keyof T]: T[P]
-}
+  readonly [P in keyof T]: T[P];
+};
 
 interface Obj {
-  a: string
-  b: string
+  a: string;
+  b: string;
 }
 
-type ReadOnlyObj = Readonly<Obj>
+type ReadOnlyObj = Readonly<Obj>;
 
 interface ReadOnlyObj {
-  readonly a: string
-  readonly b: string
+  readonly a: string;
+  readonly b: string;
 }
 ```
+
 ```ts [条件类型.ts]
 T extends U ? X : Y
 ```
+
 :::
 
 ## 从类型创建类型
@@ -544,14 +575,14 @@ function identity<Type>(arg: Type): Type {
 }
 // 等价
 function identity<T>(arg: T): T {
-  return arg
+  return arg;
 }
 
 // 方式一：将所有参数（包括类型参数）传递给函数
-let output = identity<string>("myString"); 
+let output = identity<string>("myString");
 
 // 方式2：使用类型参数推断
-let output = identity("myString"); 
+let output = identity("myString");
 ```
 
 #### 泛型类型
@@ -614,12 +645,12 @@ interface Lengthwise {
 
 function loggingIdentity<Type extends Lengthwise>(arg: Type): Type {
   // Now we know it has a .length property, so no more error
-  console.log(arg.length); 
+  console.log(arg.length);
   return arg;
 }
 
 // 由于通用函数现在受到限制，它将不再适用于所有类型
-loggingIdentity(3); 
+loggingIdentity(3);
 
 // 相反，我们需要传入类型具备所有必需属性的值
 loggingIdentity({ length: 10, value: 3 });
@@ -638,7 +669,7 @@ let x = { a: 1, b: 2, c: 3, d: 4 };
 
 getProperty(x, "a");
 getProperty(x, "m");
-// Argument of type '"m"' is not assignable 
+// Argument of type '"m"' is not assignable
 // to parameter of type '"a" | "b" | "c" | "d"'.
 ```
 
@@ -717,9 +748,9 @@ declare function create<
 >(element?: T, children?: U): Container<T, U>;
 
 // const div: Container<HTMLDivElement, HTMLDivElement[]>
-const div = create(); 
+const div = create();
 // const p: Container<HTMLParagraphElement, HTMLParagraphElement[]>
-const p = create(new HTMLParagraphElement()); 
+const p = create(new HTMLParagraphElement());
 
 // 1) 什么都不传：用默认
 const c1 = create();
@@ -793,27 +824,31 @@ const c3 = create(div, children);
 > `模板字面量类型` - 通过模板字面量字符串更改属性的映射类型
 
 ## 函数
+
 ### 函数重载
+
 - `定义`
-> 允许创建数项名称相同但输入输出类型或个数不同的子程序
+
+  > 允许创建数项名称相同但输入输出类型或个数不同的子程序
 
 - 关于 `TS` 函数重载
-> 必须要把精确的定义放在前面，最后函数实现时，需要使用`|`操作符或者`?`操作符，把所有可能的输入类型全部包含进去，用于具体实现
+
+  > 必须要把精确的定义放在前面，最后函数实现时，需要使用`|`操作符或者`?`操作符，把所有可能的输入类型全部包含进去，用于具体实现
 
 - Example
 
 ```ts [Example.ts]
 // 上边是声明
-function add(arg1: string, arg2: string): string
-function add(arg1: number, arg2: number): number
+function add(arg1: string, arg2: string): string;
+function add(arg1: number, arg2: number): number;
 // 因为我们在下边有具体函数的实现，所以这里并不需要添加 declare 关键字
 // 下边是实现
 function add(arg1: string | number, arg2: string | number) {
   // 在实现上我们要注意严格判断两个参数的类型是否相等，而不能简单的写一个 arg1 + arg2
-  if (typeof arg1 === 'string' && typeof arg2 === 'string') {
-    return arg1 + arg2
-  } else if (typeof arg1 === 'number' && typeof arg2 === 'number') {
-    return arg1 + arg2
+  if (typeof arg1 === "string" && typeof arg2 === "string") {
+    return arg1 + arg2;
+  } else if (typeof arg1 === "number" && typeof arg2 === "number") {
+    return arg1 + arg2;
   }
 }
 ```
@@ -828,8 +863,11 @@ function add(arg1: string | number, arg2: string | number) {
   - `Value`：数字/字符串，`1/'1'`、`'up'/'UP'`
   - `格式`: `key = value`
 - ⚠️ 全项目一致：大驼峰命名（PascalCase）/ 全大写，全项目统一一种即可。
+
 ### 枚举分类
+
 ::: code-group
+
 ```ts [数字枚举.ts]
 // 默认从 0 开始依次递增（和数组下标一样）
 enum Direction {
@@ -839,28 +877,31 @@ enum Direction {
   Right, // 值默认为 3
 }
 
-console.log(Direction.Up === 0) // true
-console.log(Direction.Down === 1) // true
-console.log(Direction.Left === 2) // true
-console.log(Direction.Right === 3) // true
+console.log(Direction.Up === 0); // true
+console.log(Direction.Down === 1); // true
+console.log(Direction.Left === 2); // true
+console.log(Direction.Right === 3); // true
 ```
+
 ```ts [字符串枚举.ts]
 // 枚举类型的值其实也可以是字符串类型：
 enum Direction {
-  Up = 'Up',
-  Down = 'Down',
-  Left = 'Left',
-  Right = 'Right',
+  Up = "Up",
+  Down = "Down",
+  Left = "Left",
+  Right = "Right",
 }
 
-console.log(Direction['Right'], Direction.Up) // Right Up
+console.log(Direction["Right"], Direction.Up); // Right Up
 ```
+
 ```ts [异构枚举.ts]
 enum BooleanLikeHeterogeneousEnum {
   No = 0,
-  Yes = 'YES',
+  Yes = "YES",
 }
 ```
+
 :::
 
 ### 注意事项
