@@ -149,6 +149,77 @@ import Greeter from "./Greeter.js";
 > - 编译（TS → JS、ES6 → ES5、Less → CSS）、 压缩混淆、代码分割、Tree Shaking
 > - 生成 `dist`（`Webpack`、`Vite`、`Rollup`）
 
+#### 编译 vs 转译 vs 转换
+- **编译 (Compilation)**：高级语言 → 低级语言（机器码/字节码），跨层级转换。
+```sh
+TypeScript → 机器码（跨度大）
+Java → 字节码
+C 语言 → 机器码
+```
+- **转译 (Transpilation)**：高级语言 → 高级语言（语言A → 语言B，语义不变），同层级转换。
+```sh
+TypeScript → JavaScript（跨度小，都在 JS 生态）
+ES6 → ES5（同语言不同版本）
+```
+- **转换 (Transformation)**：是"改变代码"的总称，编译、转译、重构都是转换的"具体形式"
+```sh
+包含编译、转译、代码重构等所有改变代码的操作
+
+转换 (Transformation) —— 统称
+  ├── 编译 (Compilation)：高级语言 → 低级语言
+  ├── 转译 (Transpilation)：高级语言 → 高级语言
+  ├── 重构 (Refactoring)：保持行为，改变结构
+  ├── 优化 (Optimization)：保持语义，提升性能
+  └── 混淆 (Obfuscation)：保持功能，代码变形，难读难懂
+```
+
+#### 构建完整流程
+```md
+# pnpm run build 完整流程
+
+## 阶段 1：预编译阶段
+- TypeScript → JavaScript
+- Sass/Less → CSS
+
+## 阶段 2：代码检查阶段
+- ESLint 代码规范检查
+- TypeScript 类型检查
+
+## 阶段 3：依赖解析阶段
+- 分析模块依赖关系
+- 构建依赖图谱
+
+## 阶段 4：转译阶段
+- Babel 语法转换
+  - ES6+ → ES5
+  - JSX → 普通函数调用
+  - TypeScript 简化
+  - 新提案语法 → 稳定语法
+- Polyfill 注入
+- 确保浏览器兼容性
+
+## 阶段 5：打包阶段
+- 合并模块文件
+- Tree Shaking（删除无用代码）
+
+## 阶段 6：优化阶段
+- 代码压缩（minify）
+- 代码分割（code splitting）
+- 提取公共模块
+
+## 阶段 7：资源处理阶段
+- 图片压缩
+- 生成雪碧图
+- 字体文件处理
+
+## 阶段 8：产物生成阶段
+- 输出文件到 dist 目录
+- 生成 manifest 文件
+
+## 执行顺序
+预编译 → 代码检查 → 依赖解析 → 转译 → 打包 → 优化 → 资源处理 → 产物生成
+```
+
 #### Vite
 
 **Vite 8.x<sup>-</sup> + 双引擎架构** 《开发原生 ES（ES Module） 模块，预构建 esbuild，生产 Rollup》
