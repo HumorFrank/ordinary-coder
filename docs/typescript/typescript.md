@@ -295,7 +295,64 @@ function request(url: string, method: HttpMethod) {
 T extends U ? X : Y
 ```
 
-> 含义：若类型`T`能够赋值给类型`U`（即`T`是`U`的`子类型`），则结果类型是`X`，否则为`Y`。
+> 含义：`T` 是 `U`的"超集"（即 `T` 必须拥有 `U` 的所有东西，结果类型是`X`，否则为`Y`）
+>
+> - 只要 `T` 拥有 `至少 U` 的所有属性，`T` 就是 `U` 的子类型
+> - 多出来的属性不影响（可以"向上转型"）
+
+2️⃣ 条件类型 + [ 接口类型（interface）| 类型别名（type）— 对象]
+
+```ts
+type Person = { name: string; age: number };
+type Person01 = { name: string; age: number; address: string };
+
+type Test<T, U> = T extends U ? X : Y;
+```
+
+::: tip `Test<T, U>` -> `Test<Person01, Person>` — 案例解析
+
+- `U` (Person) 要求：有 `name` 和 `age`
+- `T` (Person01) 实际：有 `name`、`age`、`address`
+
+> `Person01` 完全满足 `Person` 的要求（多一个 `address` 没关系），所以 `Person01 extends Person` 为 `true`，所以结果类型是 `X`。
+
+✅ 总结
+> `T extends U`: `T` 必须完全包含 `U` 的所有属性（`T` 可以比 `U` 的属性多，但不能比 `U` 的属性少），结果才是 `true`，否则是 `false`。
+
+:::
+
+2️⃣ 条件类型 + 联合类型
+```ts
+type Test01<T, U> = T extends U ? T : never; // 即 留下“符合条件的”
+type Test02<T, U> = T extends U ? never : T; // 即 排除“符合条件的”
+
+type O = 'a'|'b'|'c'
+type T = 'a'|'b'
+
+Test01<O, T>; // 结果类型：'a'|'b'
+Test02<O, T> // 结果类型：'c' 
+```
+
+::: tip 条件类型 + 联合类型 解析
+
+🅰 Test01：留下“符合条件的”
+
+- `'a'` 是 `'a'|'b'` 的成员 ✅ → 留 `'a'`
+- `'b'` 是 ✅ → 留 `'b'`
+- `'c'` 不是 ❌ → 扔（never）
+
+🅱 Test02：排除“符合条件的”
+
+- `'a'` 是 ✅ → 扔
+- `'b'` 是 ✅ → 扔
+- `'c'` 不是 ❌ → 留 'c'
+
+📚 正确理解
+> 条件类型遇到联合类型时，会自动分布式执行一 一把联合类型拆开，每一项单独判断。
+
+📙 记忆口诀
+> `T extends U` 在条件类型里，碰到联合类型就像 `in` 循环左边有 `|` 号，就拆开挨个问
+:::
 
 ### 基础判断
 
@@ -455,6 +512,7 @@ type Res = MyAwaited<Promise<Promise<number>>>; // number
 - 条件类型（`T extends U ? X : Y`）
 
 ### 参考文档
+
 - [TypeScript高级应用](https://specialxm.github.io/frontend-learning-guide/engineering/typescript-advanced.html)
 - [TypeScript 官网](https://www.typescriptlang.org/)
 
