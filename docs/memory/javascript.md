@@ -610,6 +610,203 @@ console.log("积:", product);
 console.log("商:", quotient);
 ```
 
+## 对象基础
+
+### 对象的创建方式
+
+| 创建方式              | 适用场景               | 优点                    | 缺点                            |
+| --------------------- | ---------------------- | ----------------------- | ------------------------------- |
+| **对象字面量**        | 单个对象、配置项       | 简洁直观（`推荐`）      | 无法复用                        |
+| **`new Object()`**    | 基本不用               | 无                      | 写法累赘，表现不一致            |
+| **工厂函数**          | 批量生成相同结构对象   | 灵活，可封装私有变量    | 方法不能共享，`instanceof` 失效 |
+| **构造函数 + `new`**  | 批量生成且需明确类型   | `instanceof` 可判断类型 | 方法不共享，忘记 `new` 会出错   |
+| **原型模式**          | 需要实例共享方法       | 方法共享，节省内存      | 属性和方法分开定义，结构松散    |
+| **ES6 `class`**       | 现代面向对象开发       | 语法集中，封装好        | 本质仍是原型，易造成误解        |
+| **`Object.create()`** | 纯净对象或精准控制原型 | 可创建无原型的对象      | 定义属性麻烦，可读性差          |
+
+::: code-group
+
+```js [对象字面量]
+const person = {
+  name: "张三",
+  age: 25,
+  city: "北京",
+  greet() {
+    return `你好，我是${this.name}`;
+  },
+};
+```
+
+```js [new Object()]
+const car = new Object();
+car.brand = "丰田";
+car.model = "凯美瑞";
+car.year = 2020;
+```
+
+```js [工厂函数]
+function createPerson(name, age) {
+  return {
+    name,
+    age,
+    greet() {
+      console.log(`Hi, I'm ${this.name}`);
+    },
+  };
+}
+
+const alice = createPerson("Alice", 30);
+```
+
+```js [构造函数]
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+  this.greet = function () {
+    console.log(`Hi, I'm ${this.name}`);
+  };
+}
+
+const bob = new Person("Bob", 25);
+console.log(bob instanceof Person); // true
+```
+
+```js [class]
+class Person {
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+
+  greet() {
+    console.log(`Hi, I'm ${this.name}`);
+  }
+
+  // 静态方法，属于类本身
+  static species() {
+    return "Homo sapiens";
+  }
+}
+
+const diana = new Person("Diana", 22);
+```
+
+```js [原型模式]
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+}
+
+Person.prototype.greet = function () {
+  console.log(`Hi, I'm ${this.name}`);
+};
+
+const charlie = new Person("Charlie", 28);
+```
+
+```js [Object.create()]
+const animal = Object.create(null); // 创建无原型对象
+animal.type = "猫";
+animal.color = "白色";
+```
+
+:::
+
+### 属性访问与管理
+
+::: code-group
+
+```js [属性访问]
+const user = {
+  name: "王五",
+  age: 28,
+  email: "wangwu@example.com",
+};
+
+// 点语法
+console.log(user.name); // 王五
+
+// 方括号语法
+console.log(user["age"]); // 28
+
+// 动态属性名
+const propertyName = "email";
+console.log(user[propertyName]); // wangwu@example.com
+```
+
+```js [属性描述符]
+const obj = {};
+
+Object.defineProperty(obj, "readOnly", {
+  value: 42,
+  writable: false, // 不可写
+  enumerable: true, // 可枚举
+  configurable: false, // 不可配置
+});
+
+// 批量定义属性
+Object.defineProperties(obj, {
+  prop1: {
+    value: "value1",
+    writable: true,
+  },
+  prop2: {
+    value: "value2",
+    writable: false,
+  },
+});
+```
+
+```js [属性检测]
+const user = { name: "赵六", age: 25 };
+
+console.log("name" in user); // true
+console.log(user.hasOwnProperty("age")); // true
+console.log(Object.hasOwn(user, "city")); // false (ES2022)
+```
+
+:::
+
+### 继承实现
+
+- 1. 原型链继承
+- 2. 组合继承（推荐）
+- 3. ES6 Class继承（extends）
+
+## 数组与集合
+
+### 数组创建方式
+
+::: code-group
+
+```js [1.数组字面量（推荐）]
+const fruits = ["苹果", "香蕉", "橙子"];
+const numbers = [1, 2, 3, 4, 5];
+const mixed = [1, "hello", true, null, undefined];
+```
+
+```js [2.new Array()]
+const colors = new Array("红", "绿", "蓝");
+const emptyArray = new Array(5); // 创建长度为5的空数组
+```
+
+```js [3.Array.from() 方法]
+const arrayFromString = Array.from("JavaScript");
+// ['J', 'a', 'v', 'a', 'S', 'c', 'r', 'i', 'p', 't']
+
+const arrayFromSet = Array.from(new Set([1, 2, 2, 3])); // [1, 2, 3]
+
+// 带映射函数
+const doubled = Array.from([1, 2, 3], (x) => x * 2); // [2, 4, 6]
+```
+
+```js [4.展开运算符]
+const baseArray = [1, 2, 3];
+const newArray = [...baseArray, 4, 5]; // [1, 2, 3, 4, 5]
+```
+
+:::
+
 ## 核心理念对比
 
 | 特性       | 面向过程 (POP)                                 | 面向对象 (OOP)                                                       |
@@ -621,90 +818,107 @@ console.log("商:", quotient);
 
 ## 结合现代前端 (Vue 3) 的思考
 
-> Vue 3 Composition API (组合式 API) , 它在形式上看起来像`“面向过程”`（定义一堆 const 变量和 function），但实际上通过闭包和响应式系统，实现了比传统 OOP 更灵活的逻辑复用。
->
-> - Options API (Vue 2): 典型的 OOP 结构。data 是属性，methods 是行为，this 指向实例。
-> - Composition API (Vue 3)
->   > - 看起来像过程式：代码按功能块组织（hooks/composables）。
->   > - 核心是封装：一个`useGameLogic()` 函数内部封装了状态和方法，返回给组件使用。这本质上是`函数式编程`与`封装思想`的结合。
+Vue 3 Composition API (组合式 API) , 它在形式上看起来像`“面向过程”`（定义一堆 const 变量和 function），但实际上通过闭包和响应式系统，实现了比传统 OOP 更灵活的逻辑复用。
 
-## 实战代码演练
+- Options API (Vue 2): 典型的 OOP 结构。data 是属性，methods 是行为，this 指向实例。
+- Composition API (Vue 3)
+  > - 看起来像过程式：代码按功能块组织（hooks/composables）。
+  > - 核心是封装：一个`useGameLogic()` 函数内部封装了状态和方法，返回给组件使用。这本质上是`函数式编程`与`封装思想`的结合。
 
-### 面向过程 (POP) 写法
+## 事件系统
 
-> 在面向过程中，我们会定义全局变量（数据）和独立的函数（行为）。
+### 事件概念
 
-```js
-/* --- 数据 --- */
-let chickenName = "小黄";
-let chickenX = 0;
-let chickenY = 0;
-let chickenHealth = 100;
+事件是发生在HTML元素上的动作，可以是用户操作（如点击、输入、滚动）或系统行为（如页面加载、网络请求完成）。
 
-/* --- 过程/函数 --- */
-function moveChicken(x, y) {
-  chickenX += x;
-  chickenY += y;
-  console.log(`${chickenName} 移动到了 (${chickenX}, ${chickenY})`);
-}
+### 事件的基本组成
 
-function feedChicken(foodAmount) {
-  chickenHealth += foodAmount;
-  console.log(`${chickenName} 吃饱了，生命值: ${chickenHealth}`);
-}
+- 1. 事件源（Event Target）- 发生事件的元素
+- 2. 事件类型（Event Type）- 事件的种类
+- 3. 事件处理函数（Event Handler）- 响应事件的代码
+- 4. 事件对象（Event Object）- 包含事件信息的对象
 
-// 执行过程 (步骤清晰)
-moveChicken(10, 5);
-feedChicken(20);
-```
+### 事件传播机制
 
-⚠️ 特点
+1️⃣ 事件传播的三个阶段
 
-- 数据散落在外部。
-- 如果我们要增加第二只小鸡（chicken2Name, chicken2X...），代码会变得非常混乱且难以管理。
-- 函数需要依赖外部变量或者通过参数传递数据。
+> 捕获阶段、目标阶段、冒泡阶段
 
-### 面向对象 (OOP) 写法
+2️⃣ 事件传播顺序
 
-> 在面向对象中，我们将“小鸡”视为一个独立的个体，它自己包含坐标信息（数据）和移动能力（方法）。
+- 1. 捕获阶段：从 window 到目标元素的父元素
+- 2. 目标阶段：目标元素本身
+- 3. 冒泡阶段：从目标元素的父元素到 window
+
+3️⃣ 事件委托原理
 
 ```js
-// 使用 ES6 Class 语法
-class Chicken {
-  // 构造函数：初始化数据
-  constructor(name) {
-    this.name = name;
-    this.x = 0;
-    this.y = 0;
-    this.health = 100;
+// 传统方式：为每个元素绑定事件
+const listItems = document.querySelectorAll("li");
+listItems.forEach((item) => {
+  item.addEventListener("click", function () {
+    console.log("列表项被点击:", this.textContent);
+  });
+});
+
+// 事件委托：在父元素上监听
+const list = document.querySelector("ul");
+list.addEventListener("click", function (event) {
+  if (event.target.tagName === "LI") {
+    console.log("列表项被点击:", event.target.textContent);
+    event.target.classList.toggle("selected");
   }
+});
 
-  // 方法：封装行为
-  move(x, y) {
-    this.x += x;
-    this.y += y;
-    console.log(`${this.name} 移动到了 (${this.x}, ${this.y})`);
-  }
-
-  feed(foodAmount) {
-    this.health += foodAmount;
-    console.log(`${this.name} 吃饱了，生命值: ${this.health}`);
-  }
-}
-
-// 实例化对象
-const chicken1 = new Chicken("小黄");
-const chicken2 = new Chicken("小白");
-
-// 对象自己执行行为
-chicken1.move(10, 5);
-chicken2.feed(10);
+// 动态添加的元素也会自动绑定事件
+const newItem = document.createElement("li");
+newItem.textContent = "新项目";
+list.appendChild(newItem);
 ```
 
-⚠️ 特点
+::: tip 事件委托的优势
 
-- `封装`：数据 (x, y) 和操作数据的方法 (move) 被绑在一起。外部不需要知道 move 内部是如何修改坐标的，只需要调用即可。
-- `复用性`：可以轻松创建无数只小鸡，互不干扰。
+- 性能优化 - 减少事件监听器数量
+- 动态元素 - 自动处理新添加的元素
+- 内存管理 - 避免内存泄漏
+- 代码简化 - 统一的事件处理逻辑
+
+:::
+
+### 事件性能优化
+- 1. 合理使用防抖和节流
+  - 防抖：延迟执行，重复调用会重置计时器
+  - 节流：限制执行频率
+- 2. 合理使用事件委托
+- 3. 内存泄漏防范（及时移除事件监听器）
+
+## 异步编程模式
+### 概述
+
+异步编程是 JS 中处理非阻塞操作的核心概念，它允许程序在等待某些操作完成时继续执行其他任务。
+::: tip  什么是异步编程？
+异步编程是一种编程模式，允许程序在等待某些操作（如网络请求、文件读取、定时器）完成的同时继续执行其他代码。
+:::
+
+### 异步编程方案
+- 1. 回调函数（Callback）
+- 2. Promise
+- 3. async/await
+
+::: tip 常见问题
+
+- 回调地狱：使用 `Promise` 或 `async/await` 解决
+- 错误处理：`try-catch`、`Promise.catch`、错误边界
+- 并发控制：`Promise.all`、`Promise.race`、自定义并发限制
+- 性能优化：并行执行、超时处理、重试机制
+
+:::
+
+### 异步编程的作用
+- 用户体验：避免界面冻结/白屏/卡死
+- 性能优化：充分利用系统资源
+- 并发处理：同时处理多个任务
+- 响应性：保持程序响应能力
 
 ## 位运算符
 
@@ -726,21 +940,24 @@ chicken2.feed(10);
 :::
 
 ## JS 闭包
+
 > 定义：当一个函数访问在其外部定义的变量时，就形成了闭包。
 
 ::: code-group
+
 ```js [简单案例]
 const items = [
-  { id: 1, title: 'First' },
-  { id: 2, title: 'Second' },
-  { id: 3, title: 'Final' }
+  { id: 1, title: "First" },
+  { id: 2, title: "Second" },
+  { id: 3, title: "Final" },
 ];
 const matcher = /^F/;
-const filteringFn = x => matcher.test(x.title);
+const filteringFn = (x) => matcher.test(x.title);
 // 仔细观察 filteringFn，会发现它使用了一个在外部定义的变量 matcher，这是一个闭包。
-items.filter(filteringFn); 
+items.filter(filteringFn);
 // [{ id: 1, title: 'First' }, { id: 3, title: 'Final' }]
 ```
+
 ```js [复杂案例]
 const initCounter = (start = 0) => {
   let value = start;
@@ -748,9 +965,9 @@ const initCounter = (start = 0) => {
     get: () => value,
     increment: () => ++value,
     decrement: () => --value,
-    reset: () => value = start
+    reset: () => (value = start),
   };
-}
+};
 const counter = initCounter(5);
 counter.get(); // 5
 counter.increment(); // 6
@@ -758,10 +975,13 @@ counter.increment(); // 7
 counter.decrement(); // 6
 counter.reset(); // 5
 ```
+
 :::
 
 ## this指向
+
 > [理解 JavaScript 中的“this”关键字](https://www.30secondsofcode.org/js/s/this/)
+
 - 默认情况下，`this`指的是`全局对象`。
 - 在函数中，当不在严格模式下时，`this`指的是`全局对象`。
 - 在函数中，当处于严格模式时，`this`是`undefined`。
@@ -783,7 +1003,7 @@ function f() {
 console.log(f() === window); // true
 
 // 在严格模式下，若函数在进入执行上下文时未设置，则其值this将为空。
-'use strict';
+("use strict");
 function f() {
   return this;
 }
@@ -792,9 +1012,9 @@ console.log(f()); // undefined
 // 3.对象上下文
 // 当一个函数作为对象的方法被调用时，this它指的是调用该方法的对象本身。
 const obj = {
-  f: function() {
+  f: function () {
     return this;
-  }
+  },
 };
 const myObj = Object.create(obj);
 myObj.foo = 1;
@@ -814,11 +1034,11 @@ const f = () => this;
 console.log(f() === window); // true
 
 const obj = {
-  foo: function() {
+  foo: function () {
     const baz = () => this;
     return baz();
   },
-  bar: () => this
+  bar: () => this,
 };
 console.log(obj.foo()); // { foo, bar }
 console.log(obj.bar() === window); // true
@@ -827,8 +1047,8 @@ console.log(obj.bar() === window); // true
 // 并且它的词法上下文由箭头函数保留。
 
 // 5.事件处理程序上下文：在事件处理程序中使用时，this指的是放置监听器的元素。
-const el = document.getElementById('my-el');
-el.addEventListener('click', function() {
+const el = document.getElementById("my-el");
+el.addEventListener("click", function () {
   console.log(this === el); // true
 });
 ```
@@ -1195,20 +1415,20 @@ console.log(++x); // 先递增，后返回新值。
 
 ## NaN ≠ NaN
 
-> `NaN`（非数）是唯一一个与任何比较算符比较时`不等于自身`的 JS 值。 
+> `NaN`（非数）是唯一一个与任何比较算符比较时`不等于自身`的 JS 值。
 
 ```js
 const x = Math.sqrt(-1); // NaN
-const y = 0 / 0;         // NaN
+const y = 0 / 0; // NaN
 
-x === y;                 // false
-x === NaN;               // false
+x === y; // false
+x === NaN; // false
 
-Number.isNaN(x);         // true
-Number.isNaN(y);         // true
+Number.isNaN(x); // true
+Number.isNaN(y); // true
 
-isNaN(x);                // true
-isNaN('hello');          // true
+isNaN(x); // true
+isNaN("hello"); // true
 ```
 
 ## 清空数组的方法
@@ -1301,18 +1521,19 @@ while (arr4.length) {
 
 ### 核心异同总结
 
-| 方法             | 清除所有引用 | 性能             | 关键副作用/特点                                    |
-| ---------------- | ------------ | ---------------- | -------------------------------------------------- |
+| 方法             | 清除所有引用 | 性能            | 关键副作用/特点                                    |
+| ---------------- | ------------ | --------------- | -------------------------------------------------- |
 | `arr = []`       | 否           | 快 — 创建新对象 | 旧数组若被其他变量引用则依然存活，可能引起内存问题 |
-| `arr.length = 0` | 是           | 最快             | 最简洁推荐，直接截断，无返回值                     |
-| `arr.splice(0)`  | 是           | 较慢             | 返回被删除的元素数组，有额外遍历开销               |
-| `while`/`for`    | 是           | 最慢             | 无必要不推荐，仅在弹出项需特殊处理时用             |
+| `arr.length = 0` | 是           | 最快            | 最简洁推荐，直接截断，无返回值                     |
+| `arr.splice(0)`  | 是           | 较慢            | 返回被删除的元素数组，有额外遍历开销               |
+| `while`/`for`    | 是           | 最慢            | 无必要不推荐，仅在弹出项需特殊处理时用             |
 
 ## 函数
 
 ### 纯函数
 
 1️⃣ 纯函数是指满足以下两个条件的函数
+
 - 对于`相同的输入`，它总是返回`相同的输出`。
 - 在`函数作用范围之外`，不会产生`任何副作用`。
 
@@ -1322,22 +1543,106 @@ while (arr4.length) {
 // Pure 纯函数
 const add = (x, y) => x + y;
 const concat = (arr, value) => [...arr, value];
-const order = arr => [...arr].sort((a, b) => a - b);
+const order = (arr) => [...arr].sort((a, b) => a - b);
 
 // Impure 非纯函数
-const addRandom = x => x + Math.random();
-const pushConcat = (arr, value) => { arr.push(value); return arr; }
-const reorder = arr => arr.sort((a, b) => a - b);
+const addRandom = (x) => x + Math.random();
+const pushConcat = (arr, value) => {
+  arr.push(value);
+  return arr;
+};
+const reorder = (arr) => arr.sort((a, b) => a - b);
 ```
 
 ### 递归函数
 
 1️⃣ 递归
+
 > 递归是一种`编程技巧`，核心思想是`将大问题分解为规模更小、结构相同的子问题`。
 
 2️⃣ 递归函数
+
 > 递归函数是指在函数体内部调用自身的函数
 
 3️⃣ 一个正确的递归函数必须包含两个要素
+
 > - **基线条件**：终止递归的条件，直接返回结果，防止无限递归导致栈溢出。
 > - **递归条件**：将问题分解为更小的子问题并调用自身。
+
+## 实战代码演练
+
+### 面向过程 (POP) 写法
+
+> 在面向过程中，我们会定义全局变量（数据）和独立的函数（行为）。
+
+```js
+/* --- 数据 --- */
+let chickenName = "小黄";
+let chickenX = 0;
+let chickenY = 0;
+let chickenHealth = 100;
+
+/* --- 过程/函数 --- */
+function moveChicken(x, y) {
+  chickenX += x;
+  chickenY += y;
+  console.log(`${chickenName} 移动到了 (${chickenX}, ${chickenY})`);
+}
+
+function feedChicken(foodAmount) {
+  chickenHealth += foodAmount;
+  console.log(`${chickenName} 吃饱了，生命值: ${chickenHealth}`);
+}
+
+// 执行过程 (步骤清晰)
+moveChicken(10, 5);
+feedChicken(20);
+```
+
+⚠️ 特点
+
+- 数据散落在外部。
+- 如果我们要增加第二只小鸡（chicken2Name, chicken2X...），代码会变得非常混乱且难以管理。
+- 函数需要依赖外部变量或者通过参数传递数据。
+
+### 面向对象 (OOP) 写法
+
+> 在面向对象中，我们将“小鸡”视为一个独立的个体，它自己包含坐标信息（数据）和移动能力（方法）。
+
+```js
+// 使用 ES6 Class 语法
+class Chicken {
+  // 构造函数：初始化数据
+  constructor(name) {
+    this.name = name;
+    this.x = 0;
+    this.y = 0;
+    this.health = 100;
+  }
+
+  // 方法：封装行为
+  move(x, y) {
+    this.x += x;
+    this.y += y;
+    console.log(`${this.name} 移动到了 (${this.x}, ${this.y})`);
+  }
+
+  feed(foodAmount) {
+    this.health += foodAmount;
+    console.log(`${this.name} 吃饱了，生命值: ${this.health}`);
+  }
+}
+
+// 实例化对象
+const chicken1 = new Chicken("小黄");
+const chicken2 = new Chicken("小白");
+
+// 对象自己执行行为
+chicken1.move(10, 5);
+chicken2.feed(10);
+```
+
+⚠️ 特点
+
+- `封装`：数据 (x, y) 和操作数据的方法 (move) 被绑在一起。外部不需要知道 move 内部是如何修改坐标的，只需要调用即可。
+- `复用性`：可以轻松创建无数只小鸡，互不干扰。
