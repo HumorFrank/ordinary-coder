@@ -2,7 +2,6 @@
 
 > 什么是前端工程化？就是根据具体的业务特点，将前端的开发流程、技术、工具、经验等规范化、标准化就是前端工程化。
 
-
 ## 前端工程
 
 ::: tip 按工程化流程顺序排列
@@ -150,18 +149,24 @@ import Greeter from "./Greeter.js";
 > - 生成 `dist`（`Webpack`、`Vite`、`Rollup`）
 
 #### 编译 vs 转译 vs 转换
+
 - **编译 (Compilation)**：高级语言 → 低级语言（机器码/字节码），跨层级转换。
+
 ```sh
 TypeScript → 机器码（跨度大）
 Java → 字节码
 C 语言 → 机器码
 ```
+
 - **转译 (Transpilation)**：高级语言 → 高级语言（语言A → 语言B，语义不变），同层级转换。
+
 ```sh
 TypeScript → JavaScript（跨度小，都在 JS 生态）
 ES6 → ES5（同语言不同版本）
 ```
+
 - **转换 (Transformation)**：是"改变代码"的总称，编译、转译、重构都是转换的"具体形式"
+
 ```sh
 包含编译、转译、代码重构等所有改变代码的操作
 
@@ -174,22 +179,27 @@ ES6 → ES5（同语言不同版本）
 ```
 
 #### 构建完整流程
+
 ```md
 # pnpm run build 完整流程
 
 ## 阶段 1：预编译阶段
+
 - TypeScript → JavaScript
 - Sass/Less → CSS
 
 ## 阶段 2：代码检查阶段
+
 - ESLint 代码规范检查
 - TypeScript 类型检查
 
 ## 阶段 3：依赖解析阶段
+
 - 分析模块依赖关系
 - 构建依赖图谱
 
 ## 阶段 4：转译阶段
+
 - Babel 语法转换
   - ES6+ → ES5（新语法"翻译"成旧语法）
   - JSX → 普通函数调用
@@ -199,24 +209,29 @@ ES6 → ES5（同语言不同版本）
 - 确保浏览器兼容性
 
 ## 阶段 5：打包阶段
+
 - 合并模块文件
 - Tree Shaking（删除无用代码）
 
 ## 阶段 6：优化阶段
+
 - 代码压缩（minify）
 - 代码分割（code splitting）
 - 提取公共模块
 
 ## 阶段 7：资源处理阶段
+
 - 图片压缩
 - 生成雪碧图
 - 字体文件处理
 
 ## 阶段 8：产物生成阶段
+
 - 输出文件到 dist 目录
 - 生成 manifest 文件
 
 ## 执行顺序
+
 预编译 → 代码检查 → 依赖解析 → 转译 → 打包 → 优化 → 资源处理 → 产物生成
 ```
 
@@ -240,7 +255,7 @@ ES6 → ES5（同语言不同版本）
 
 ```mermaid
 graph TD
-    A[Vite ] --> B[开发环境<br/>Dev] 
+    A[Vite ] --> B[开发环境<br/>Dev]
     A --> C[生成环境<br/>Pro]
 
     B --> B1["基于原生 ES Module 模块<br/>浏览器按需请求 无需打包"]
@@ -350,6 +365,7 @@ graph TD
 > - **新版 Vite（v8.x）**：依赖预构建使用的是 `Rolldown`（esbuild 已被废弃）
 
 ✨ 代码构建
+
 > - **Tree Shaking 死代码消除**：自动移除未引用的代码（比如导入却未使用）
 
 :::
@@ -364,29 +380,29 @@ flowchart TD
     C --> D[启动 HMR 服务]
     D --> E[监听端口]
     E --> F[服务器就绪]
-    
+
     %% 预构建子流程 - 右侧展开
     C --> C1[扫描项目依赖]
     C1 --> C2[分析依赖关系]
     C2 --> C3[ESM转换]
     C3 --> C4[生成预构建缓存]
-    
+
     %% HMR服务子流程 - 右侧展开
     D --> D1[建立WebSocket连接]
     D1 --> D2[监听文件变化]
     D2 --> D3[计算变更模块]
     D3 --> D4[推送更新信息]
-    
+
     %% 样式设置 - 主流程突出显示
     style A fill:#e3f2fd,stroke:#1976d2,stroke-width:3px,font-weight:bold
     style F fill:#f1f8e9,stroke:#689f38,stroke-width:3px,font-weight:bold
-    
+
     %% 主要流程节点样式
     style B fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
     style C fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
     style D fill:#fff3e0,stroke:#f57c00,stroke-width:2px
     style E fill:#fce4ec,stroke:#c2185b,stroke-width:2px
-    
+
     %% 子流程样式 - 淡化处理
     style C1 fill:#f8f5ff,stroke:#7b1fa2,stroke-width:1px
     style C2 fill:#f8f5ff,stroke:#7b1fa2,stroke-width:1px
@@ -400,19 +416,350 @@ flowchart TD
 
 🚀 技术演进：Vite 8⁻ vs Vite 8
 
-| 对比维度                | Vite 8.0⁻                                                          | Vite 8.0                                            |
-| ----------------------- | ------------------------------------------------------------------ | --------------------------------------------------- |
-| **开发服务器工作模式**  | 原生 `ESM` + 按需编译 + `HMR`                                      | 原生 `ESM` + 按需编译 + `HMR`                       |
-| **开发-依赖预构建工具** | `esbuild`（Go 编写）                                               | `Rolldown`（Rust 编写）                             |
-| **开发-代码转换工具**   | `esbuild`（Go 编写）                                               | `Rolldown` / `Oxc`（Rust 编写）                     |
-| **生产构建工具**        | `Rollup`（JS 编写）                                                | `Rolldown`（Rust 编写）                             |
-| **架构特点**            | 双引擎架构：<br/>- 开发构建用 `esbuild`<br/> - 生产构建用 `Rollup` | 统一引擎：`Rolldown`<br/>开发与生产底层统一为 `Rolldown`      |
-| **配置文件**            | `build.rollupOptions`                                              | `build.rolldownOptions`<br/>（`Rollup` 选项仍兼容） |
-| **构建速度**            | 快                                                                 | 相比还快 10-30 倍                                   |
+| 对比维度                | Vite 8.0⁻                                                          | Vite 8.0                                                 |
+| ----------------------- | ------------------------------------------------------------------ | -------------------------------------------------------- |
+| **开发服务器工作模式**  | 原生 `ESM` + 按需编译 + `HMR`                                      | 原生 `ESM` + 按需编译 + `HMR`                            |
+| **开发-依赖预构建工具** | `esbuild`（Go 编写）                                               | `Rolldown`（Rust 编写）                                  |
+| **开发-代码转换工具**   | `esbuild`（Go 编写）                                               | `Rolldown` / `Oxc`（Rust 编写）                          |
+| **生产构建工具**        | `Rollup`（JS 编写）                                                | `Rolldown`（Rust 编写）                                  |
+| **架构特点**            | 双引擎架构：<br/>- 开发构建用 `esbuild`<br/> - 生产构建用 `Rollup` | 统一引擎：`Rolldown`<br/>开发与生产底层统一为 `Rolldown` |
+| **配置文件**            | `build.rollupOptions`                                              | `build.rolldownOptions`<br/>（`Rollup` 选项仍兼容）      |
+| **构建速度**            | 快                                                                 | 相比还快 10-30 倍                                        |
+
+🛠 Vite 配置
+
+::: code-group
+
+```ts [基础 Vite 配置]
+// vite.config.ts
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
+import { resolve } from "path";
+
+export default defineConfig({
+  // ========== 插件配置 ==========
+  plugins: [
+    // 编译 Vue 3 单文件组件（.vue），支持 SFC/Composition API/<script setup> 等特性
+    vue(),
+  ],
+
+  // ========== 路径别名解析 ==========
+  resolve: {
+    alias: {
+      // 使用 @ 代替 src 目录，避免深层相对路径引用
+      "@": resolve(__dirname, "src"),
+      // 组件目录别名
+      "@components": resolve(__dirname, "src/components"),
+      // 页面视图目录别名
+      "@views": resolve(__dirname, "src/views"),
+      // 工具函数目录别名
+      "@utils": resolve(__dirname, "src/utils"),
+      // 静态资源目录别名
+      "@assets": resolve(__dirname, "src/assets"),
+    },
+  },
+
+  // ========== 开发服务器配置 ==========
+  server: {
+    // 本地开发服务端口号
+    port: 3000,
+    // 启动服务后自动在浏览器中打开
+    open: true,
+    // API 请求代理，解决开发环境跨域问题
+    proxy: {
+      "/api": {
+        // 后端服务实际地址
+        target: "http://localhost:8080",
+        // 修改请求头中的 origin 为目标地址
+        changeOrigin: true,
+        // 路径重写：将 /api 前缀去除后再转发给后端
+        // 例如：/api/user/info → http://localhost:8080/user/info
+        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+    },
+  },
+
+  // ========== 生产构建配置 ==========
+  build: {
+    // 打包输出目录
+    outDir: "dist",
+    // 生产环境不生成 sourcemap 文件（减小包体积，避免源码泄露）
+    sourcemap: false,
+    // Rollup 打包选项
+    rollupOptions: {
+      output: {
+        // 手动分割代码块，优化缓存策略
+        manualChunks: {
+          // 将 Vue 生态核心库单独打包为 vendor 包
+          // 这些库通常不会频繁变动，单独打包有利于浏览器缓存
+          vendor: ["vue", "vue-router", "pinia"],
+          // 将工具类库单独打包为 utils 包
+          utils: ["lodash-es", "axios"],
+        },
+      },
+    },
+  },
+});
+```
+
+```ts [高级 Vite 配置]
+// vite.config.ts
+import { defineConfig, loadEnv } from "vite";
+import vue from "@vitejs/plugin-vue";
+import { resolve } from "path";
+// 自动导入 API，无需手动 import Vue、ref 等
+import AutoImport from "unplugin-auto-import/vite";
+// 自动注册组件，无需手动 import 和注册
+import Components from "unplugin-vue-components/vite";
+// Element Plus 组件解析器，实现按需自动导入
+import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
+
+// 使用函数形式导出配置，可访问 command（serve/build）和 mode（development/production）
+export default defineConfig(({ command, mode }) => {
+  // 加载对应模式的环境变量，第三个参数 '' 表示加载所有前缀的变量（不只是 VITE_）
+  const env = loadEnv(mode, process.cwd(), "");
+
+  return {
+    // ========== 插件配置 ==========
+    plugins: [
+      // 编译 Vue 3 单文件组件（.vue），支持 SFC/Composition API/<script setup> 等特性
+      vue(),
+
+      // 自动导入组合式 API 和常用库
+      AutoImport({
+        // 自动导入 Vue、Vue Router、Pinia 的 API
+        // 使用 ref、computed、useRouter 等无需手动 import
+        imports: ["vue", "vue-router", "pinia"],
+        // 生成类型声明文件路径，解决 TypeScript 提示问题
+        dts: "src/auto-imports.d.ts",
+      }),
+
+      // 自动注册组件
+      Components({
+        // 使用 Element Plus 解析器，实现组件级别的按需导入
+        // 只打包项目中实际使用的组件，减小最终产物体积
+        resolvers: [ElementPlusResolver()],
+        // 生成组件类型声明文件路径
+        dts: "src/components.d.ts",
+      }),
+    ],
+
+    // ========== 路径别名解析 ==========
+    resolve: {
+      alias: {
+        // @ 指向 src 目录
+        "@": resolve(__dirname, "src"),
+      },
+    },
+
+    // ========== 开发服务器配置 ==========
+    server: {
+      // 从环境变量读取端口号，支持动态配置
+      // 例如 .env.development 中 VITE_PORT=8080
+      port: parseInt(env.VITE_PORT) || 3000,
+      // API 请求代理
+      proxy: {
+        "/api": {
+          // 代理目标地址从环境变量动态读取
+          target: env.VITE_API_BASE_URL,
+          // 修改请求头 origin 为目标地址
+          changeOrigin: true,
+        },
+      },
+    },
+
+    // ========== 生产构建配置 ==========
+    build: {
+      // 设置构建目标浏览器兼容性，es2015 支持大部分现代浏览器
+      target: "es2015",
+      // 使用 terser 进行代码压缩（比 esbuild 压缩率更高）
+      minify: "terser",
+      // terser 压缩选项
+      terserOptions: {
+        compress: {
+          // 移除所有 console.* 调用，避免生产环境日志泄露
+          drop_console: true,
+          // 移除所有 debugger 语句
+          drop_debugger: true,
+        },
+      },
+      // Rollup 打包配置
+      rollupOptions: {
+        // 外部化：不将 Vue 打包进产物，运行时从全局变量获取
+        // 适用于通过 CDN 引入 Vue 的场景（减少包体积）
+        external: ["vue"],
+        output: {
+          // 指定外部化模块在全局作用域中的变量名
+          // 在 HTML 中需通过 <script> 标签提前引入 Vue
+          globals: {
+            vue: "Vue",
+          },
+        },
+      },
+    },
+
+    // ========== CSS 预处理配置 ==========
+    css: {
+      preprocessorOptions: {
+        // SCSS 预处理器选项
+        scss: {
+          // 在每个 SCSS 文件开头自动注入的内容
+          // 使 variables.scss 中的变量和混入在任意组件中可直接使用
+          additionalData: `@import "@/styles/variables.scss";`,
+        },
+      },
+    },
+  };
+});
+```
+
+```ts [综合 Vite 配置]
+// vite.config.ts
+import { defineConfig, loadEnv } from "vite";
+import vue from "@vitejs/plugin-vue";
+import { fileURLToPath, URL } from "node:url";
+// 自动导入 API，无需手动 import Vue、ref 等
+import AutoImport from "unplugin-auto-import/vite";
+// 自动注册组件，无需手动 import 和注册
+import Components from "unplugin-vue-components/vite";
+// Element Plus 组件解析器，实现按需自动导入
+import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
+
+// 使用函数形式导出配置，可访问 command（serve/build）和 mode（development/production）
+export default defineConfig(({ command, mode }) => {
+  // 加载对应模式的环境变量，第三个参数 '' 表示加载所有前缀的变量（不只是 VITE_）
+  const env = loadEnv(mode, process.cwd(), "");
+
+  return {
+    // ========== 插件配置 ==========
+    plugins: [
+      // 编译 Vue 3 单文件组件（.vue），支持 SFC/Composition API/<script setup> 等特性
+      vue(),
+
+      // 自动导入组合式 API 和常用库
+      AutoImport({
+        // 自动导入 Vue、Vue Router、Pinia 的 API
+        // 使用 ref、computed、useRouter 等无需手动 import
+        imports: ["vue", "vue-router", "pinia"],
+        // 生成类型声明文件路径，解决 TypeScript 提示问题
+        dts: "src/auto-imports.d.ts",
+      }),
+
+      // 自动注册组件
+      Components({
+        // 使用 Element Plus 解析器，实现组件级别的按需导入
+        // 只打包项目中实际使用的组件，减小最终产物体积
+        resolvers: [ElementPlusResolver()],
+        // 生成组件类型声明文件路径
+        dts: "src/components.d.ts",
+      }),
+    ],
+
+    // ========== 路径别名解析 ==========
+    // 使用 new URL() + import.meta.url 方式，兼容 ESM 环境
+    // 相比 __dirname 方式，在 strict ESM 项目中更可靠
+    resolve: {
+      alias: {
+        // @ 指向 src 目录
+        "@": fileURLToPath(new URL("./src", import.meta.url)),
+        // 组件目录别名
+        "@components": fileURLToPath(new URL("./src/components", import.meta.url)),
+        // 页面视图目录别名
+        "@views": fileURLToPath(new URL("./src/views", import.meta.url)),
+        // 工具函数目录别名
+        "@utils": fileURLToPath(new URL("./src/utils", import.meta.url)),
+        // 静态资源目录别名
+        "@assets": fileURLToPath(new URL("./src/assets", import.meta.url)),
+      },
+    },
+
+    // ========== 开发服务器配置 ==========
+    server: {
+      // 从环境变量读取端口号，支持动态配置
+      // 例如 .env.development 中 VITE_PORT=8080
+      port: parseInt(env.VITE_PORT) || 3000,
+      // 启动服务后自动在浏览器中打开
+      open: true,
+      // API 请求代理，解决开发环境跨域问题
+      proxy: {
+        "/api": {
+          // 代理目标地址从环境变量动态读取
+          target: env.VITE_API_BASE_URL || "http://localhost:8080",
+          // 修改请求头中的 origin 为目标地址
+          changeOrigin: true,
+          // 路径重写：将 /api 前缀去除后再转发给后端
+          // 例如：/api/user/info → http://localhost:8080/user/info
+          rewrite: (path) => path.replace(/^\/api/, ""),
+        },
+      },
+    },
+
+    // ========== 生产构建配置 ==========
+    build: {
+      // 构建输出目录
+      outDir: "dist",
+      // 设置构建目标浏览器兼容性，es2015 支持大部分现代浏览器
+      target: "es2015",
+      // 使用 terser 进行代码压缩（比 esbuild 压缩率更高，但稍慢）
+      minify: "terser",
+      // 生产环境不生成 sourcemap 文件（减小包体积，避免源码泄露）
+      sourcemap: false,
+      // terser 压缩选项
+      terserOptions: {
+        compress: {
+          // 移除所有 console.* 调用，避免生产环境日志泄露
+          drop_console: true,
+          // 移除所有 debugger 语句
+          drop_debugger: true,
+        },
+      },
+      // Rollup 打包配置
+      rollupOptions: {
+        output: {
+          // 手动分割代码块，优化缓存策略
+          manualChunks: {
+            // 将 Vue 生态核心库单独打包为 vendor 包
+            // 这些库通常不会频繁变动，单独打包有利于浏览器缓存
+            vendor: ["vue", "vue-router", "pinia"],
+            // 将 Element Plus 单独打包，组件库体积较大且稳定
+            elementPlus: ["element-plus"],
+            // 将工具类库单独打包为 utils 包
+            utils: ["lodash-es", "axios"],
+          },
+        },
+      },
+    },
+
+    // ========== CSS 预处理配置 ==========
+    css: {
+      preprocessorOptions: {
+        // SCSS 预处理器选项
+        scss: {
+          // 在每个 SCSS 文件开头自动注入的内容
+          // 使 variables.scss 中的变量和混入在任意组件中可直接使用
+          additionalData: `@import "@/styles/variables.scss";`,
+        },
+      },
+    },
+  };
+});
+```
+
+:::
+
+::: warning 新旧路径别名方式对比
+
+| 方式       | 代码                                               | 依赖的**核心变量**              | 适用的**模块系统**                      |
+| ---------- | -------------------------------------------------- | ------------------------------- | --------------------------------------- |
+| **旧方式** | `resolve(__dirname, 'src')`                        | Node.js 的`__dirname`           | 仅限 CommonJS                           |
+| **新方式** | `fileURLToPath(new URL('./src', import.meta.url))` | **`import.meta.url`** + Node.js | **ESM** (以及支持 ESM 的现代 Node 版本) |
+
+:::
 
 #### Webpack
 
 1️⃣ 整体架构
+
 ```mermaid
 graph TD
     %% 主要构建流程 - 垂直布局，链路清晰
@@ -421,37 +768,37 @@ graph TD
     C --> D[Loader 转换器]
     D --> E[Plugin 插件]
     E --> F[Output 输出]
-    
+
     %% 解析器子流程 - 右侧展开
     B --> B1[AST构建]
     B1 --> B2[依赖分析]
     B2 --> B3[模块识别]
-    
+
     %% 依赖解析子流程 - 右侧展开
     C --> C1[路径解析]
     C1 --> C2[文件读取]
     C2 --> C3[模块加载]
-    
+
     %% Loader子流程 - 右侧展开
     D --> D1[文件转换]
     D1 --> D2[链式处理]
     D2 --> D3[结果缓存]
-    
+
     %% Plugin子流程 - 右侧展开
     E --> E1[钩子执行]
     E1 --> E2[资源优化]
     E2 --> E3[代码分割]
-    
+
     %% 样式设置 - 主流程突出显示
     style A fill:#e3f2fd,stroke:#1976d2,stroke-width:3px,font-weight:bold
     style F fill:#f1f8e9,stroke:#689f38,stroke-width:3px,font-weight:bold
-    
+
     %% 主要流程节点样式
     style B fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
     style C fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
     style D fill:#fff3e0,stroke:#f57c00,stroke-width:2px
     style E fill:#fce4ec,stroke:#c2185b,stroke-width:2px
-    
+
     %% 子流程样式 - 淡化处理
     style B1 fill:#f8f5ff,stroke:#7b1fa2,stroke-width:1px
     style B2 fill:#f8f5ff,stroke:#7b1fa2,stroke-width:1px
@@ -478,42 +825,47 @@ graph TD
 3️⃣ Webpack 注意事项
 
 ::: tip 注意事项
+
 - loader：做 `“ 文件转换 ”` 的规则系统
-> - 其价值在于把`非 JS 资源`转换成`可被 import 的 JS 模块`，从而让它也能进入依赖图参与打包。
-> - 像 `CSS/图片/字体/TS` 等资源，必须先经过 `loader` 转换，才能被纳入 `Webpack` 的模块依赖图。
+
+  > - 其价值在于把`非 JS 资源`转换成`可被 import 的 JS 模块`，从而让它也能进入依赖图参与打包。
+  > - 像 `CSS/图片/字体/TS` 等资源，必须先经过 `loader` 转换，才能被纳入 `Webpack` 的模块依赖图。
 
 - loader vs plugin
-> - **loader**：面向 **某类文件** 的转换（把 A → B）
-> - **plugin**：面向 **整个构建过程** 的扩展（在 hooks 上做事）
+  > - **loader**：面向 **某类文件** 的转换（把 A → B）
+  > - **plugin**：面向 **整个构建过程** 的扩展（在 hooks 上做事）
 
 :::
 
 #### 打包/构建工具速查
 
 1️⃣ 工具速查
+
 - Babel
-> `JS/TS/JSX` 的 `“语法转译器”`，把`新语法/语法糖`转成目标环境可运行的 JS。
+  > `JS/TS/JSX` 的 `“语法转译器”`，把`新语法/语法糖`转成目标环境可运行的 JS。
 - tsc（TypeScript Compiler）
-> - 将 TS 编译为 JS，并提供 `类型检查`，专注于 ts 编译
-> - tsc 的`转译 ≠ 打包`（不会做依赖合并、分包等）
+  > - 将 TS 编译为 JS，并提供 `类型检查`，专注于 ts 编译
+  > - tsc 的`转译 ≠ 打包`（不会做依赖合并、分包等）
 - tsup
-> 面向 TypeScript 库的`零配置打包器`（通常基于 esbuild），目标是快速产出 ESM/CJS、声明文件等。
+  > 面向 TypeScript 库的`零配置打包器`（通常基于 esbuild），目标是快速产出 ESM/CJS、声明文件等。
 - Webpack
-> 通用`模块打包器`，能把 JS/CSS/图片/字体等 纳入依赖图，输出一个/多个 bundle，并支持强大的插件生态。
+  > 通用`模块打包器`，能把 JS/CSS/图片/字体等 纳入依赖图，输出一个/多个 bundle，并支持强大的插件生态。
 - Vite
-> 以开发体验为核心的前端构建工具
-> - 开发阶段利用 `原生 ESM` 快速启动，预构建利用 `esbuild/Rolldown` 进行构建
-> - 生产阶段利用 `Rollup/Rolldown` 进行打包
+  > 以开发体验为核心的前端构建工具
+  >
+  > - 开发阶段利用 `原生 ESM` 快速启动，预构建利用 `esbuild/Rolldown` 进行构建
+  > - 生产阶段利用 `Rollup/Rolldown` 进行打包
 - Rollup
-> 更偏向`库（Library）打包`的打包器，擅长产出干净的 ESM/CJS 包，Tree Shaking 效果好。
+  > 更偏向`库（Library）打包`的打包器，擅长产出干净的 ESM/CJS 包，Tree Shaking 效果好。
 - esbuild
-> 基于 Go 的高性能`打包/转译`工具，特点是“极快”。
+  > 基于 Go 的高性能`打包/转译`工具，特点是“极快”。
 - Rspack
-> 基于 Rust 的高性能打包器，目标是`尽可能兼容 Webpack 生态与配置`，同时显著提升构建速度。
+  > 基于 Rust 的高性能打包器，目标是`尽可能兼容 Webpack 生态与配置`，同时显著提升构建速度。
 - Turborepo（Turbo）
-> Monorepo 的任务编排/缓存系统（不是打包器），解决“多包、多任务”的增量构建与复用。
+  > Monorepo 的任务编排/缓存系统（不是打包器），解决“多包、多任务”的增量构建与复用。
 
 2️⃣ 分类
+
 - 语法转译器：Babel（也常用于处理 JSX/语法降级），不负责“完整类型检查”
 - 类型检查/TS 编译器：tsc（类型检查，强在类型系统与产出 d.ts），“转译”不等于打包
 - 应用打包器：Webpack、Rspack、Vite
