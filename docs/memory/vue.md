@@ -855,6 +855,168 @@ const AsyncHeavyComponent = defineAsyncComponent({
   > - 明确给节点绑定 `Attributes`（v-bind="$attrs"）
 > ⚠️ 和`单根节`点组件有所不同，有着`多个根节点`的组件没有自动 attribute 透传行为。若 `$attrs` 没有被`显式绑定`，将会`抛出`一个`运行时警告`。
 
+## 基础类型定义
+### 组件 Props 类型定义
+
+::: code-group
+```ts [基础 Props 类型]
+interface Props {
+  title: string
+  count?: number
+  isVisible?: boolean
+  user: {
+    id: number
+    name: string
+    email: string
+  }
+  items: string[]
+  onUpdate?: (value: string) => void
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  count: 0,
+  isVisible: false
+})
+```
+```ts [复杂 Props 类型]
+// 联合类型
+type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'success'
+
+// 泛型类型
+interface ApiResponse<T> {
+  data: T
+  status: number
+  message: string
+}
+
+interface User {
+  id: number
+  name: string
+  email: string
+}
+
+interface Props {
+  variant: ButtonVariant
+  size: 'small' | 'medium' | 'large'
+  user: User
+  apiResponse: ApiResponse<User[]>
+  onAction: (action: 'edit' | 'delete', userId: number) => void
+}
+
+const props = defineProps<Props>()
+```
+
+:::
+### 事件类型定义
+```ts [基础事件类型]
+// 运行时
+const emit = defineEmits(['change', 'update'])
+
+// 基于选项：带验证的事件类型
+const emit = defineEmits({
+  change: (id: number) => {
+    // 返回 `true` 或 `false`
+    // 表明验证通过或失败
+  },
+  update: (value: string) => {
+    // 返回 `true` 或 `false`
+    // 表明验证通过或失败
+  }
+})
+
+// 基于类型
+const emit = defineEmits<{
+  (e: 'change', id: number): void
+  (e: 'update', value: string): void
+}>()
+
+// 3.3+: 可选的、更简洁的语法
+const emit = defineEmits<{
+  change: [id: number]
+  update: [value: string]
+}>()
+```
+
+### 响应式数据类型定义
+::: code-group
+```ts [基础响应式类型]
+import { ref, reactive, computed } from 'vue'
+
+// ref 类型定义
+const count = ref<number>(0)
+const message = ref<string>('Hello')
+const isVisible = ref<boolean>(false)
+
+// reactive 类型定义
+interface UserState {
+  id: number | null
+  name: string
+  email: string
+  isLoggedIn: boolean
+  preferences: {
+    theme: 'light' | 'dark'
+    language: string
+  }
+}
+
+const userState = reactive<UserState>({
+  id: null,
+  name: '',
+  email: '',
+  isLoggedIn: false,
+  preferences: {
+    theme: 'light',
+    language: 'zh-CN'
+  }
+})
+
+// computed 类型定义
+const displayName = computed<string>(() => {
+  return userState.name || 'Anonymous'
+})
+
+const isAdmin = computed<boolean>(() => {
+  return userState.id === 1 // 假设 ID 为 1 的是管理员
+})
+```
+```ts [复杂一点的响应式类型]
+// 泛型响应式类型
+interface ApiState<T> {
+  data: T | null
+  loading: boolean
+  error: string | null
+}
+
+const userApiState = reactive<ApiState<User[]>>({
+  data: null,
+  loading: false,
+  error: null
+})
+
+const postApiState = reactive<ApiState<Post[]>>({
+  data: null,
+  loading: false,
+  error: null
+})
+
+// 联合类型的响应式数据
+type Theme = 'light' | 'dark' | 'auto'
+type Language = 'zh-CN' | 'en-US' | 'ja-JP'
+
+interface AppSettings {
+  theme: Theme
+  language: Language
+  notifications: boolean
+}
+
+const appSettings = reactive<AppSettings>({
+  theme: 'light',
+  language: 'zh-CN',
+  notifications: true
+})
+```
+
+:::
 ## 组件基础
 
 ### 组件分类
