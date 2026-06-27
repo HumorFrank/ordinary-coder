@@ -5,6 +5,45 @@
 - [Node.js中文网](https://nodejs.cn/)
   > Node.js 是一个开源的、跨平台的 JavaScript 运行时环境。
 
+## Vue3生态4大Hooks库
+> — VueUse · Vue Hooks Plus · ahooks-vue · V3Hooks 
+
+- [VueUse](https://vueuse.org/)
+> 200+ 官方品质全能工具箱
+- [Vue Hooks Plus](https://inhiblabcore.github.io/vue-hooks-plus/zh/)
+> 中后台“请求”一条龙，插件还能跨 Tab 广播
+- [ahooks-vue](https://namepain.github.io/ahooks-vue/zh/)
+> 阿里 ahooks 的 Vue 3 官方移植
+- [V3Hooks](https://github.com/yanzhandong/v3hooks)
+> 社区轻量版“Vue 原生派”，零依赖更小巧
+
+## 网络请求
+- [Axios](https://github.com/axios/axios)
+> 适用于浏览器和 Node.js 的基于 Promise 的 HTTP 客户端
+- [TanStack Query Vue](https://github.com/axios/axios)：（npm 名` @tanstack/vue-query`）是 React Query 的 Vue 兄弟版本
+> 一个异步状态管理库，旨在简化服务器状态的获取、缓存、同步和更新。
+
+## Vue 动效生态
+- [Motion for Vue](https://motion.dev/docs/vue)
+> Motion for Vue 是一个简单却功能强大的动画库。它是唯一一个拥有混合引擎的动画库，能够实现硬件加速动画。
+- [GSAP](https://motion.dev/docs/vue)
+> GSAP 是一个与框架无关的 JavaScript 动画库，它能让开发者化身动画超人。
+- [Inspira UI](https://github.com/unovue/inspira-ui)
+> 纯 Vue 组件、开箱即用（一个专门为Vue与Nuxt设计的组件集）
+- [Uiverse.io](https://uiverse.io/)
+> 社区模板丰富
+
+## 动画库
+- [Anime.js](https://github.com/juliangarnier/anime)
+> Anime.js是一个快速、多用途且轻量级的 JavaScript 动画库，拥有简洁而强大的 API。
+
+## 游戏
+
+- [Pixijs](https://github.com/pixijs/pixijs)
+> PixiJS 是一款先进的开源 2D 渲染引擎，专为在 Web 上打造惊艳的视觉体验而设计。
+- [Phaser](https://npmx.dev/package/phaser)
+> Phaser 是一个快速、免费且有趣的开源 HTML5 游戏框架
+
 ## 优质资源
 
 - [GitHub](https://github.com/emmabostian/developer-portfolios)
