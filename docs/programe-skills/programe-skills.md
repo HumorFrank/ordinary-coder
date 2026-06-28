@@ -1,22 +1,7 @@
-# 开源项目热度榜单
----
-- [TIOBE Index](https://www.tiobe.com/tiobe-index/)
->  根据全球开发者、课程、第三方供应商、搜索引擎等数据综合排名。
-- [PYPL PopularitY of Programming Language](https://pypl.github.io/PYPL.html)
-> 根据 Google 搜索中编程语言教程的频率。
-- [Best of JS](https://bestofjs.org/)
-> 这里汇集了与 Web 平台相关的最佳开源项目
-- [《JavaScript Rising Stars》](https://risingstars.js.org/)
-> 前端最流行的顶级开源项目排行榜
-- [GitHub Trending](https://github.com/trending)
-> 可按“本日/本周/本月”查看全球最热门的开源项目，支持筛选 JavaScript、TypeScript、CSS、HTML 等前端语言。
-
----
-
 # 编程语言
 
 ## 前端框架
----
+ 
 - `Svelte`
   > 一个用于构建 Web 前端用户界面的框架。它使用编译器将用 HTML、CSS 和 JavaScript 编写的声明式组件转换为精简、高度优化的 JavaScript 代码。
 - `Vue`
@@ -53,7 +38,7 @@
 ```
 
 ## 全栈框架
----
+ 
 
 - `Next.js`
 
@@ -63,7 +48,7 @@
   > 全栈 Vue 框架，使用 Vue 构建快速、生产就绪的 Web 应用。基于文件的路由、自动导入和服务器端渲染 —— 一切均已开箱即用。
 
 ## 前端开发
----
+ 
 - `Anime.js`
   > 一个快速且多功能的 JavaScript 动画库
 - `Axios`
@@ -110,16 +95,16 @@
   > Node.js 是一个免费、开源、跨平台的 JavaScript 运行时环境，可以让开发人员创建服务器、Web 应用、命令行工具、以及脚本。
 
 ## 动画库
----
+ 
 - `Anime.js`
 
   > Anime.js 是一个轻量且功能强大的 JavaScript 动画库，适用于构建各种网页动效。
 
 - `GSAP`
   > SAP（GreenSock 动画平台）是一个高性能的 JavaScript 动画库 ，旨在创建跨所有主流浏览器无缝协作的动画。它被广泛用于制作 CSS、SVG、canvas、WebGL、React、Vue 等动画。GSAP 以其速度、精准性和灵活性著称，是开发互动且视觉吸引的网页应用开发者的首选。
----
+ 
 ## 代码托管
----
+ 
 - `GitHub`
 
   > 全球最大开源平台，支持 Actions 自动化流程。
@@ -130,9 +115,9 @@
 
 - `Gitea`
   > 轻量自托管 Git 平台，部署方便。
----
+ 
 ## CI/CD 自动化部署
----
+ 
 - `GitHub Actions`
 
   > GitHub 原生自动化构建与部署。
@@ -141,9 +126,9 @@
   > GitLab 内置持续集成系统。
 - `Jenkins`
   > 老牌 CI 工具，扩展性强，可高度自定义。
----
+ 
 ## 后端开发
----
+ 
 - `JAVA`
   > 一种以领域模型为核心的方法论，利用 Java 的面向对象特性，将业务逻辑与代码结构紧密结合，提升复杂系统的可维护性与可扩展性
 - `Python`
@@ -162,9 +147,9 @@
   > Cloudflare 开源的高性能网络代理框架，用于构建 HTTP 服务和反向代理
 - `PM2`
   > PM2 是一个高性能的 Node.js 进程管理工具，提供自动重启、负载均衡、日志管理等功能。
----
+ 
 ## 数据库与缓存
----
+ 
 - `MySQL`
 
   > MySQL 是最流行的关系型数据库管理系统，在 WEB 应用方面 MySQL 是最好的 RDBMS(Relational Database Management System：关系数据库管理系统)应用软件之一。
@@ -203,9 +188,9 @@
 
 - `Redis`
   > 高性能的键值对存储系统，常用于缓存、消息队列、排行榜等场景
----
+ 
 ## 编程语言基础
----
+ 
 - `C`
 
   > C 语言是一种通用的、面向过程式的计算机程序设计语言。
@@ -248,9 +233,9 @@
 
 - `TypeScript`
   > TypeScript 是由 Microsoft 开发的开源编程语言，它是 JavaScript 的超集，意味着任何有效的 JavaScript 代码也是有效的 TypeScript 代码。
----
+ 
 ## 版本控制
----
+ 
 - `Corepack`
 
   > Node.js 官方提供的包管理代理工具，支持 npm、pnpm、yarn 的统一调用，帮助开发者简化版本管理和工具切换
@@ -269,9 +254,9 @@
 
 - `Volta`
   > Volta 是一个快速、跨平台的 JavaScript 工具链管理器，用来无缝管理和切换 Node.js、npm、pnpm、yarn 等工具版本
----
+ 
 ## 系统与运维
----
+ 
 - `Docker`
 
   > 一个开源的容器引擎，用于构建、分发和运行分布式应用程序

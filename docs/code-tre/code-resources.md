@@ -1,5 +1,17 @@
 # 程序员资源
 
+## 开源项目热度榜单
+- [TIOBE Index](https://www.tiobe.com/tiobe-index/)
+>  根据全球开发者、课程、第三方供应商、搜索引擎等数据综合排名。
+- [PYPL PopularitY of Programming Language](https://pypl.github.io/PYPL.html)
+> 根据 Google 搜索中编程语言教程的频率。
+- [Best of JS](https://bestofjs.org/)
+> 这里汇集了与 Web 平台相关的最佳开源项目
+- [《JavaScript Rising Stars》](https://risingstars.js.org/)
+> 前端最流行的顶级开源项目排行榜
+- [GitHub Trending](https://github.com/trending)
+> 可按“本日/本周/本月”查看全球最热门的开源项目，支持筛选 JavaScript、TypeScript、CSS、HTML 等前端语言。
+
 ## Node.js中文网
 
 - [Node.js中文网](https://nodejs.cn/)
