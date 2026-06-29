@@ -73,6 +73,13 @@
 - 官方文档：[官方文档地址](https://vue-echarts.vercel.app/)
 - 仓库资源：[github地址](https://github.com/ecomfe/vue-echarts)
 
+### 图表示例
+- [MCChart](http://echarts.zhangmuchen.top/#/index)
+- [isqqw](https://www.isqqw.com/)
+- [MakeAPie](https://www.makeapie.cn/echarts)
+- [PPChart](http://ppchart.com/)
+- [EChart 资源](https://juejin.cn/post/7440714844763406375#heading-16)
+
 ## 后台管理系统解决方案
 
 ### vue-element-admin

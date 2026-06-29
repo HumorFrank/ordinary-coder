@@ -354,6 +354,7 @@ enterprise-project/
 | 小型展示站             | Vue / Svelte + 静态部署 | 成本更低               |
 
 ### 选型决策流程图
+
 ```txt
 开始选择框架
   │
@@ -381,6 +382,7 @@ enterprise-project/
 ```
 
 ### 核心建议
+
 ```txt
 🎯 新手开发者: 选 Vue，快速入门，体验完整框架流程
 🎯 求职找工作: 学 React，市场需求最大，机会最多
@@ -388,6 +390,7 @@ enterprise-project/
 🎯 个人学习: 学 Svelte，理解编译器思想，拓宽视野
 🎯 全栈开发: 用 Nuxt 或 Next.js，一套框架搞定 Web
 ```
+
 ## 参考资料
 
 - [easy-vibe](https://datawhalechina.github.io/easy-vibe/zh-cn/)
