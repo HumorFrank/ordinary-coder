@@ -38,6 +38,8 @@ import LinuxCommand from "./components/LinuxCommand.vue";
 import LinuxPermissions from "./components/LinuxPermissions.vue";
 // 前端编译流程
 import FeCompileFlow from "./components/FeCompileFlow.vue";
+// H5 授权
+import H5Code from "./components/H5Code.vue";
 export default {
   ...Theme,
   enhanceApp(ctx: EnhanceAppContext) {
@@ -65,5 +67,6 @@ export default {
     ctx.app.component("LinuxCommand", LinuxCommand);
     ctx.app.component("LinuxPermissions", LinuxPermissions);
     ctx.app.component("FeCompileFlow", FeCompileFlow);
+    ctx.app.component("H5Code", H5Code);
   },
 };
