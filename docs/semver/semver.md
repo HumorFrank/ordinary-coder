@@ -125,3 +125,144 @@
 - [关于语义化版本控制](https://docs.npmjs.net.cn/about-semantic-versioning/)
 - [Semver 版本范围查看器](https://devtool.tech/semver)
 - [Semver 版本范围查看器](https://vvvtools.com/tools/semver-checker/)
+
+
+## 更新项目版本号
+
+> 参考自 [优雅地修改 package.json 的 version](https://zhuddan.github.io/blog/2024-04-01)
+
+### npm version（内置命令）
+
+npm 内置的 `npm version` 命令遵循 Semver 规则，自动递增版本号并创建 `git tag`
+
+```bash
+npm version patch   # X.Y.Z → X.Y.(Z+1)   向下兼容的问题修正
+npm version minor   # X.Y.Z → X.(Y+1).0   向下兼容的功能新增
+npm version major   # X.Y.Z → (X+1).0.0   不兼容的 API 修改
+```
+
+::: tip 执行后会自动
+- 更新 `package.json` 和 `package-lock.json` 中的版本号
+- 创建 `git commit`（提交信息为版本号）
+- 打 `git tag`（如 `v1.0.1`）
+
+> 不想自动打 tag 可加 `--no-git-tag-version`。
+:::
+
+#### 暴力更新入门版
+::: code-group
+```js [update-version.mjs]
+import fs from "fs"
+
+const data = JSON.parse(fs.readFileSync('./package.json').toString())
+const versionParts = data.version.split('.').map(Number)
+
+const majorNumber = versionParts[0] * 10000
+const minorNumber = versionParts[1] * 100
+let versionNumber =  majorNumber + minorNumber + versionParts[2];
+versionNumber += 1;
+
+const major = Math.floor(versionNumber / 10000);
+const minor = Math.floor((versionNumber % 10000) / 100);
+const patch = versionNumber % 100;
+
+data.version = `${major}.${minor}.${patch}`;
+console.log("New version:", data.version);
+fs.writeFileSync('./package.json', JSON.stringify(data, null, 2))
+```
+```json [新增更新版本号脚本-手动更新]
+{
+  "name": "test",
+  "version": "1.0.3",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "update-version": "node update-version.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
+```
+```json [每次打包之前都更新版本号-联动更新]
+{
+  "name": "test",
+  "version": "1.0.3",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "update-version": "node update-version.mjs",
+    "prebuild": "npm run update-version"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
+```
+> `prebuild` 会在执行 `pnpm run build` 之前自动运行。
+:::
+#### 暴力更新进阶版
+> 使用 `npm` 命令更新
+
+::: code-group
+```sh [命令更新：主版本号.次版本号.补丁号]
+# 1.0.0 -> 1.0.1
+npm version patch
+
+# 1.0.1 -> 1.1.0
+npm version minor
+
+# 1.1.0 -> 2.0.0
+npm version major
+```
+```json [脚本更新：主版本号.次版本号.补丁号]
+{
+  "name": "test",
+  "version": "1.0.3",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "version:patch:": "npm version patch", 
+    "version:patch:": "minor version minor", 
+    "version:major:": "npm version major"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
+```
+
+:::
+
+### bumpp（推荐）
+
+[bumpp](https://github.com/antfu-collective/bumpp) 是 Anthony Fu 维护的交互式版本更新工具，支持交互式选择、conventional commits 联动和 monorepo。
+
+```bash
+pnpm add bumpp
+```
+
+**交互模式**：运行 `bumpp`，上下键选择版本类型
+
+```bash
+Current version 0.0.0
+             major  1.0.0
+             minor  0.1.0
+             patch  0.0.1
+            custom  ...
+```
+
+**命令行模式**：
+
+```bash
+bumpp patch           # X.Y.Z → X.Y.(Z+1)
+bumpp minor           # X.Y.Z → X.(Y+1).0
+bumpp major           # X.Y.Z → (X+1).0.0
+bumpp patch --yes     # 跳过确认，直接执行
+```
+
+**monorepo 前缀**：工作区中各子包版本号可能相同，需指定 tag 前缀区分：
+
+```bash
+bumpp --tag "a@%s"   # 生成 tag: a@x.x.x
+```
