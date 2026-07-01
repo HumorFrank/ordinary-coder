@@ -88,6 +88,7 @@ export default withMermaid(
             { text: "小程序系列", link: "/docs/miniprogram/miniprogram" },
             { text: "高级指南", link: "/docs/advanced/advanced" },
             { text: "前端项目架构设计", link: "/docs/fe-arch/index" },
+            { text: "前端网络体系", link: "/docs/network/index" },
             {
               text: "前端工程化与模块化",
               link: "/docs/core/fe-eng",
