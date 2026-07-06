@@ -1258,15 +1258,21 @@ Vue 3 组件
 
 ## 透传 Attributes
 
-> “透传 attribute”指的是传递给一个组件，却没有被该组件声明为 props 或 emits 的 attribute 或者 v-on 事件监听器。
+“透传 attribute”指的是传递给一个组件，却没有被该组件声明为 props 或 emits 的 attribute 或者 v-on 事件监听器。
 
-- `Attributes 继承`：当一个组件以单个元素为根作渲染时，透传的 attribute 会自动被添加到根元素上。
-- `对 class 和 style 的合并`：若一个子组件的根元素已经有了 class 或 style attribute，它会和从父组件上继承的值合并。
-- `v-on 监听器继承`：click 监听器会被添加到 子组件 的根元素。
-- `禁用 Attributes 继承`：你不想要一个组件自动地继承 attribute，你可以在组件选项(`defineOptions`)中设置 `inheritAttrs: false`。
-- `v-bind="$attrs"`：透传进来的 attribute 可以在模板的表达式中直接用 `$attrs` 访问到。
-  - `$attrs` 对象包含了除组件所声明的 `props` 和 `emits` 之外的所有其他 attribute。
-- `在 JS 中访问透传 Attributes`：你可以在 `<script setup>`; 中使用 `useAttrs() API` 来访问一个组件的所有透传 attribute。
+- `Attributes 继承`
+> 当一个组件以单个元素为根作渲染时，透传的 attribute 会自动被添加到根元素上。
+- `对 class 和 style 的合并`
+> 若一个子组件的根元素已经有了 class 或 style attribute，它会和从父组件上继承的值合并。
+- `v-on 监听器继承`
+> click 监听器会被添加到 子组件 的根元素。
+- `禁用 Attributes 继承`
+> 你不想要一个组件自动地继承 attribute，你可以在组件选项(`defineOptions`)中设置 `inheritAttrs: false`。
+- `v-bind="$attrs"`
+> 透传进来的 attribute 可以在模板的表达式中直接用 `$attrs` 访问到。
+> - `$attrs` 对象包含了除组件所声明的 `props` 和 `emits` 之外的所有其他 attribute。
+- `在 JS 中访问透传 Attributes`
+> 你可以在 `<script setup>`; 中使用 `useAttrs() API` 来访问一个组件的所有透传 attribute。
 
 ## 插槽入门到放弃
 
