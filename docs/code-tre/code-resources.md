@@ -17,9 +17,10 @@
 - [Node.js中文网](https://nodejs.cn/)
   > Node.js 是一个开源的、跨平台的 JavaScript 运行时环境。
 
-## Vue3生态4大Hooks库
-> — VueUse · Vue Hooks Plus · ahooks-vue · V3Hooks 
+## Vite / Vue 生态圈导航
 
+- [Vite / Vue 生态圈导航](https://vitejs.cn/)
+> 发现 Vite 和 Vue 生态系统中最好的框架、UI 库、工具和插件
 - [VueUse](https://vueuse.org/)
 > 200+ 官方品质全能工具箱
 - [Vue Hooks Plus](https://inhiblabcore.github.io/vue-hooks-plus/zh/)
