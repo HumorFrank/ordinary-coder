@@ -12,10 +12,41 @@
 - [GitHub Trending](https://github.com/trending)
 > 可按“本日/本周/本月”查看全球最热门的开源项目，支持筛选 JavaScript、TypeScript、CSS、HTML 等前端语言。
 
-## Node.js中文网
+## 现代 Web 开发
+
+###  JS 框架语法对比
+- [Component Party 英文版本](https://component-party.dev/)
+> Vue vs React vs Svelte vs Angular 
+
+- [Component Party 中文版](https://component-party.lainbo.com/)
+> Vue vs React vs Svelte vs Angular
+
+### Node.js中文网
 
 - [Node.js中文网](https://nodejs.cn/)
   > Node.js 是一个开源的、跨平台的 JavaScript 运行时环境。
+
+### 前端检查清单
+
+- [前端检查清单](https://github.com/thedaviddias/Front-End-Checklist)
+  > 前端检查表是面向人类和人工智能代理的开源前端质量系统。它将前端最佳实践转化为实用的评审工作流程，你可以在网上浏览、使用兼容 MCP 的工具，或直接在这份 README 中进行。
+
+- [前端开发规则和最佳实践](https://frontendchecklist.io/rules)
+  > 前端开发规则和最佳实践，帮助你构建高质量的 Web 应用。
+
+- [精选清单](https://frontendchecklist.io/checklists)
+  > 基于规则库构建目标导向型工作流程。可以按结果、受众或审核风格选择清单，而无需每次都从整个目录开始。
+
+- [前端学习套件](https://github.com/sadanandpai/frontend-learning-kit)
+  > 前端技术指南和精选前端资料集。
+
+- [Frontend Developer 路线图](https://roadmap.sh/frontend)
+  > 2026 年成为现代前端开发人员的循序渐进指南
+
+## Markdown 写简历
+
+- [写简历](https://cv.ftqq.com/#)
+  > 一个基于 Markdown 的简历模板，支持自定义模板和字段。
 
 ## Vite / Vue 生态圈导航
 
