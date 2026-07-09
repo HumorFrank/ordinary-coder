@@ -1,6 +1,6 @@
 {
   "name": "ordinary-coder",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "为了防止秃头而学的那些事儿",
   "scripts": {
     "docs:dev": "vitepress dev",
