@@ -28,4 +28,4 @@ Crawl-delay: 10
 User-agent: *
 Allow: /
 
-Sitemap: https://libao-jun.github.io/ordinary-coder/
+Sitemap: https://libao-jun.github.io/ordinary-coder/sitemap.xml
