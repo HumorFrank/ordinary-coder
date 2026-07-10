@@ -4,6 +4,7 @@ import "@vue-flow/core/dist/style.css";
 import "./custom-outline.css";
 import "./mermaid-clarity.css";
 import { EnhanceAppContext } from "vitepress";
+import "./style.css";
 
 import { setupMermaidWheelZoom } from "./mermaid-wheel-zoom";
 import AtomicCssFlow from "./components/AtomicCssFlow.vue";

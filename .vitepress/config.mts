@@ -1,18 +1,20 @@
 import { defineConfig } from "vitepress";
-import {
-  groupIconMdPlugin,
-  groupIconVitePlugin,
-} from "vitepress-plugin-group-icons";
+import {  groupIconMdPlugin, groupIconVitePlugin } from "vitepress-plugin-group-icons";
 import { withMermaid } from "vitepress-plugin-mermaid";
+import siteConfig from "./siteConfig.mts";
 
 // https://vitepress.dev/reference/site-config
 export default withMermaid(
   defineConfig({
-    // 你的 GitHub Pages 部署在 /ordinary-coder/ 子路径下
-    // 智能配置 base 路径：若在 CI 环境下（如 GitHub Actions）则使用子路径，否则使用根路径
-    base: process.env.CI ? "/ordinary-coder/" : "/",
-    title: "前端留存指南",
-    description: "试图记录今天学废、明天就会忘掉的前端知识，给未来的自己留条活路。",
+    base: siteConfig.base,
+    title: siteConfig.title,
+    description: siteConfig.description,
+    head: [
+      ['meta', { property: 'og:title', content: siteConfig.title }],
+      ['meta', { property: 'og:description', content: siteConfig.description }],
+      ['meta', { property: 'og:image', content: siteConfig.ogImg }],
+      ['meta', { property: 'og:url', content: siteConfig.fullUrl }],
+    ],
     markdown: {
       config(md) {
         md.use(groupIconMdPlugin);
@@ -53,7 +55,7 @@ export default withMermaid(
       // 配置侧边栏，按照目录结构组织文档
       sidebar: [
         {
-          text: "试图记录会忘掉的前端知识",
+          text: "试图记录会忘掉的程序员知识",
           items: [
             { text: "CV 工程师", link: "/docs/cv/cv" },
             {

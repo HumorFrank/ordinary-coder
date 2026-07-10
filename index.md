@@ -3,9 +3,10 @@
 layout: home
 
 hero:
-  name: "前端留存指南"
-  text: "试图记录今天学废、明天就会忘掉的前端知识"
-  tagline: 为了防止秃头而学的那些事儿
+  name: "Coder Notes"
+  text: "试图记录今天学废、明天就会忘掉的程序员知识"
+  tagline: 为了预防秃头干的那些事儿
+  image: logo.png
   actions:
     - theme: brand
       text: CV 工程师
