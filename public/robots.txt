@@ -1,0 +1,31 @@
+User-Agent: Googlebot
+Allow: /
+Crawl-delay: 10
+
+User-Agent: Baiduspider
+Allow: /
+Crawl-delay: 10
+
+User-Agent: Bingbot
+Allow: /
+Crawl-delay: 10
+
+User-Agent: Sogou spider
+Allow: /
+Crawl-delay: 10
+
+User-agent: 360Spider
+Allow: /
+
+User-agent: Facebot
+Allow: /
+Crawl-delay: 10
+
+User-agent: Twitterbot
+Allow: /
+Crawl-delay: 10
+
+User-agent: *
+Allow: /
+
+Sitemap: https://libao-jun.github.io/ordinary-coder/
