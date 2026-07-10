@@ -8,8 +8,8 @@ const host = process.env.CI
   ? "https://libao-jun.github.io"
   : "http://localhost:5173";
 export default {
-  title: "程序员笔记",
-  description: "试图记录今天学废、明天就会忘掉的程序员知识，给未来的自己留条活路。",
+  title: "程序员随笔",
+  description: "程序员随笔，试图记录今天学废、明天就会忘掉的技能与知识，给未来的自己多留一条路。",
   base,
   host,
   fullUrl: `${host}${base}`,

@@ -4,7 +4,7 @@ layout: home
 
 hero:
   name: "Coder Notes"
-  text: "试图记录今天学废、明天就会忘掉的程序员知识"
+  text: "程序员随笔，试图记录今天学废、明天就会忘掉的技能与知识"
   tagline: 为了预防秃头干的那些事儿
   image: logo.png
   actions:
@@ -31,7 +31,7 @@ features:
   - title: 📋 CV 工程师
     details: 一路复制粘贴成为高级工程师的秘籍
   - title: 🧠 对抗遗忘曲线
-    details: 试图记录今天学废、明天就会忘掉的前端知识，给未来的自己留条活路。
+    details: 试图记录今天学废、明天就会忘掉的技能与知识，给未来的自己多留一条路。
   - title: 🐛 Bug 制造与修复
     details: 不仅教你怎么写 Bug，顺便教你怎么修。
   - title: 💼 面向资料编程

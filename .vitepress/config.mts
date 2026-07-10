@@ -55,7 +55,7 @@ export default withMermaid(
       // 配置侧边栏，按照目录结构组织文档
       sidebar: [
         {
-          text: "试图记录会忘掉的程序员知识",
+          text: "试图记录易忘的技能与知识",
           items: [
             { text: "CV 工程师", link: "/docs/cv/cv" },
             {
