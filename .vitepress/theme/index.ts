@@ -41,6 +41,7 @@ import LinuxPermissions from "./components/LinuxPermissions.vue";
 import FeCompileFlow from "./components/FeCompileFlow.vue";
 // H5 授权
 import H5Code from "./components/H5Code.vue";
+
 export default {
   ...Theme,
   enhanceApp(ctx: EnhanceAppContext) {

@@ -11,6 +11,7 @@ export default withMermaid(
     description: siteConfig.description,
     head: [
       ['meta', { property: 'og:title', content: siteConfig.title }],
+      ['meta', { property: 'og:type', content: 'website' }],
       ['meta', { property: 'og:description', content: siteConfig.description }],
       ['meta', { property: 'og:image', content: siteConfig.ogImg }],
       ['meta', { property: 'og:url', content: siteConfig.fullUrl }],
@@ -47,6 +48,7 @@ export default withMermaid(
       },
     },
     themeConfig: {
+      logo: "/ant.png",
       // https://vitepress.dev/reference/default-theme-config
       nav: [
         { text: "首页", link: "/" },
