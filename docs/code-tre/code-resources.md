@@ -48,6 +48,9 @@
 - [写简历](https://cv.ftqq.com/#)
   > 一个基于 Markdown 的简历模板，支持自定义模板和字段。
 
+### 技术文档
+- [技术文档](https://jinxi1334640772.github.io/)
+
 ## Vite / Vue 生态圈导航
 
 - [Vite / Vue 生态圈导航](https://vitejs.cn/)

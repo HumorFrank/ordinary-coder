@@ -1,5 +1,12 @@
 # 更新日志
 
+## [2026-07-11 v1.0.3]
+- 完善 `config.mts` 配置
+  - 搜索 新增 `search` 的 `options` 配置
+  - 首页 新增 `footer` 配置
+  - 新增 构建优化 `vite -> build & rollupOptions` 配置
+  - 新增 缓存策略 `meta -> Cache-Control` 配置
+
 ## [2026-07-11 v1.0.2]
 - 修复 `sitemap.xml` 文件中主机名解析问题
   - 添加末尾 `/` 后，相对路径会解析到子目录，**loc** 会包含 `/ordinary-coder` 路径

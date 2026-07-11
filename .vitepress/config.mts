@@ -10,6 +10,9 @@ export default withMermaid(
     title: siteConfig.title,
     description: siteConfig.description,
     head: [
+      // 缓存策略: 缓存 1 小时
+      ['meta', { 'http-equiv': 'Cache-Control', content: 'max-age=3600' }], 
+      // Open Graph 元数据
       ['meta', { property: 'og:title', content: siteConfig.title }],
       ['meta', { property: 'og:type', content: 'website' }],
       ['meta', { property: 'og:description', content: siteConfig.description }],
@@ -221,6 +224,23 @@ export default withMermaid(
       optimizeDeps: {
         include: ["mermaid"],
       },
+      build:{
+        minify: 'terser',
+        terserOptions: {
+          compress: {
+            drop_console: true,
+            drop_debugger: true
+          }
+        },
+        rollupOptions:{
+          output:{
+            manualChunks:{
+              vue: ['vue'],
+              vitepress: ['vitepress']
+            }
+          }
+        }
+      }
     },
     sitemap: {
       // 末尾 / 至关重要！ 没有它，相对路径会解析到域名根目录而不是子目录
