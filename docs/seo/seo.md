@@ -179,6 +179,8 @@ Allow: /
 
 ## sitemap.xml
 
+[Sitemaps.org 协议](https://www.sitemaps.org/protocol.html)
+
 `sitemap.xml` 是网站地图，用来向搜索引擎提供一批`希望被发现的页面 URL`（以及可选的更新时间、更新频率、优先级等提示信息），
 帮助爬虫更系统地遍历站点。哪些路径`不允许抓取`或`不希望被索引`，
 通常由 `robots.txt`、`noindex` 等机制单独声明，而不是靠 sitemap 来“禁止”。
@@ -210,7 +212,68 @@ Allow: /
 
 ## TDK
 
+### TDK + meta
+TDK 是 Title、Description、Keywords 的缩写，是 SEO（搜索引擎优化）里的核心元信息，也常统称为页面的`元数据`。
+
+在原生 HTML 里，它们大致对应 `<head>` 中的
+- `<title>`
+- `<meta name="description">`
+- `<meta name="keywords">` 
+- ...
+
+### TDK 的作用
+- **title** 是页面标题
+> 通常会出现在浏览器标签页和搜索引擎结果页（SERP）上，**对点击率影响最大**。
+- **description** 是页面摘要
+> 常被用作 SERP 中的描述文案。
+- **keywords** 是页面关键词
+> 常被用作 SERP 中的关键词文案。
+
+### 书写建议
+- **title**
+> 不同页面应有区分度；全站共用的后缀可通过根布局的 `title.template` 统一拼接。
+- **description**
+> 长度适中即可（常见建议约 150 字以内作参考），重点写清「这一页解决什么问题」。
+- **keywords**
+> 用数组表达多个词即可，与页面内容一致即可。
+
 ## JSON-LD
+JSON-LD（JSON for Linked Data）是一种用于表达结构化数据的 JSON 格式。
+它能帮助搜索引擎和 AI 更准确理解页面内容（例如商品、文章、组织、人物、活动等实体），从而提升页面在检索系统中的可理解性。
+
+### 基础结构
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": "https://example.com/people/zhangsan",
+  "name": "张三",
+  "age": 25
+}
+```
+::: tip 字段说明
+
+- `@context`：通常使用 `https://schema.org`
+- `@type`：实体类型（如 Product、Article、Organization）更多类型请
+- `@id`：唯一标识符，通常是实体的URL
+- 其他字段：请根据文档填写
+- [查看文档](https://schema.org/docs/full.html)
+
+:::
+
+### 常见问题
+1️⃣ 用 **next/script** 还是原生 `<script>`？
+- JSON-LD 不是要执行的脚本代码，而是结构化数据声明。
+- 在这个场景里，官方建议使用原生 `<script type="application/ld+json"`。
+
+2️⃣ 放在 **layout.tsx** 还是 **page.tsx**？
+- 放在 **layout.tsx**：适合站点级、栏目级的通用结构化数据
+- 放在 **page.tsx**：适合文章、商品详情这类强依赖当前页面数据的实体
+
+3️⃣ 如何验证配置是否有效？
+可使用以下工具进行校验
+- **Google Rich Results Test**：检查可用于 Google 富结果的结构化数据
+- **Schema Markup Validator**：通用 Schema.org 结构校验
 
 ## Open Graph
 
