@@ -199,7 +199,12 @@ export default withMermaid(
       },
     },
     sitemap: {
-      hostname: `https://libao-jun.github.io${process.env.CI ? '/ordinary-coder' : ''}`
+      // 末尾 / 至关重要！ 没有它，相对路径会解析到域名根目录而不是子目录
+      // ❌：'https://libao-jun.github.io/ordinary-coder' 
+      
+      // 添加末尾 / 后，相对路径会解析到子目录
+      // ✅：'https://libao-jun.github.io/ordinary-coder/'
+      hostname: siteConfig.fullUrl,
     }
   }),
 );
