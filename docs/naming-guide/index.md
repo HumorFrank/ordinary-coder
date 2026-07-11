@@ -1,5 +1,15 @@
 # 命名指南
 
+## 常见命名方式
+
+| 命名方式    | 格式         | 示例                        | 适用场景         |
+| ----------- | ------------ | --------------------------- | ---------------- |
+| PascalCase | 大驼峰式     | `StudentInfo`, `UserInfo`   | 类名、构造函数   |
+| camelCase   | 小驼峰式     | `studentInfo`, `userInfo`   | 变量、函数名     |
+| kebab-case  | 短横线命名法 | `student-info`, `user-info` | CSS类名、文件名  |
+| snake_case  | 蛇形命名法   | `student_info`, `user_info` | 常量、数据库字段 |
+| uppercase   | 全大写       | `MAX_COUNT`, `API_URL`      | 常量定义         |
+
 ## 目录命名
 
 ### 项目目录名
