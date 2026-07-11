@@ -63,6 +63,8 @@
 > 阿里 ahooks 的 Vue 3 官方移植
 - [V3Hooks](https://github.com/yanzhandong/v3hooks)
 > 社区轻量版“Vue 原生派”，零依赖更小巧
+- [Vue Plugins](https://www.vue-plugins.org/)
+> 发现并探索最优的 Vue.js 插件，助你提升应用功能。由社区策划，开发者维护。
 
 ## 网络请求
 - [Axios](https://github.com/axios/axios)
