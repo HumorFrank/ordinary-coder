@@ -276,5 +276,76 @@ JSON-LD（JSON for Linked Data）是一种用于表达结构化数据的 JSON �
 - **Schema Markup Validator**：通用 Schema.org 结构校验
 
 ## Open Graph
+[Open Graph](https://ogp.me/) 是 Facebook（现 Meta）提出的一套页面元数据协议，通过 `<meta property="og:*">` 描述标题、描述、封面图、类型等。
+当链接被分享到微信、Slack、Discord、LinkedIn 等平台时，抓取方会读取这些标签来生成卡片预览，因此 OG 与 SEO（点击率、品牌呈现）和 传播体验 都密切相关。
+
+### Example
+
+::: code-group
+```html [Apple官网]
+<meta property="og:image" content="https://www.apple.com/ac/structured-data/images/open_graph_logo.png?202604211141" />
+<meta property="og:title" content="Apple" />
+<meta property="og:description" content="Discover the innovative world of Apple and shop everything iPhone, iPad, Apple Watch, Mac, and Apple TV, plus explore accessories, entertainment, and expert device support." />
+<meta property="og:url" content="https://www.apple.com/" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:site_name" content="Apple" />
+<meta property="og:type" content="website" />
+```
+```js [layout.js | page.js]
+export const metadata = {
+  openGraph: {
+    title: 'Next.js',
+    description: 'The React Framework for the Web',
+    url: 'https://nextjs.org',
+    siteName: 'Next.js',
+    images: [
+      {
+        url: 'https://nextjs.org/og.png', // Must be an absolute URL
+        width: 800,
+        height: 600,
+      },
+      {
+        url: 'https://nextjs.org/og-alt.png', // Must be an absolute URL
+        width: 1800,
+        height: 1600,
+        alt: 'My custom alt',
+      },
+    ],
+    videos: [
+      {
+        url: 'https://nextjs.org/video.mp4', // Must be an absolute URL
+        width: 800,
+        height: 600,
+      },
+    ],
+    audio: [
+      {
+        url: 'https://nextjs.org/audio.mp3', // Must be an absolute URL
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+}
+```
+:::
+
 
 ## Web Vitals
+
+Web Vitals 是 Google 推出的一套以用户为中心的网页性能指标体系，
+用来衡量真实用户在加载速度、交互响应、页面稳定性三个维度的体验表现，
+也是 SEO 评估的重要参考项。
+
+### 核心三项指标
+- **LCP**（Good：<= 2.5s，Needs Improvement：2.5s ~ 4.0s，Poor：> 4.0s）
+> LCP 衡量的是视口内最大内容元素（通常是大图、视频封面或大段文本）完成渲染所需的时间，反映“主要内容何时可见”。
+- **INP**（Good：<= 200ms，Needs Improvement：200ms ~ 500ms，Poor：> 500ms）
+> INP 衡量用户交互（点击、输入、键盘操作）到页面下一次可见更新之间的延迟，反映整体交互流畅度。
+- **CLS**（Good：<= 0.1，Needs Improvement：0.1 ~ 0.25，Poor：> 0.25）
+> CLS 衡量页面在生命周期内发生的意外布局位移总量，反映视觉稳定性。比如图片未预留尺寸、异步内容插入导致页面“跳动”。
+
+## 参考
+- [Open Graph](https://ogp.me/)
+- [Next.js 中文教程](https://nextjs-docs-henna-six.vercel.app/seo/introduce)
+- [generateMetadata](https://nextjs.org/docs/app/api-reference/functions/generate-metadata)
