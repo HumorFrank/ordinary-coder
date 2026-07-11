@@ -980,78 +980,15 @@ counter.reset(); // 5
 
 ## this指向
 
-> [理解 JavaScript 中的“this”关键字](https://www.30secondsofcode.org/js/s/this/)
+this 指向判断规则，按以下顺序依次判断，命中即停
 
-- 默认情况下，`this`指的是`全局对象`。
-- 在函数中，当不在严格模式下时，`this`指的是`全局对象`。
-- 在函数中，当处于严格模式时，`this`是`undefined`。
-- 在箭头函数中，`this`保留封闭词法上下文的值`this`。
-- 在对象方法中，`this`指的是调用该方法的对象。
-- 在构造函数调用中，`this`它绑定到正在构造的新对象。
-- 在事件处理程序中，`this`它绑定到放置监听器的元素。
-
-```js
-// 1.全局执行上下文
-// 在全局执行上下文中，this 指的是全局对象。
-console.log(this === window); // true
-
-// 2.函数上下文
-// 不在严格模式下时，函数的 this 指向全局对象。
-function f() {
-  return this;
-}
-console.log(f() === window); // true
-
-// 在严格模式下，若函数在进入执行上下文时未设置，则其值this将为空。
-("use strict");
-function f() {
-  return this;
-}
-console.log(f()); // undefined
-
-// 3.对象上下文
-// 当一个函数作为对象的方法被调用时，this它指的是调用该方法的对象本身。
-const obj = {
-  f: function () {
-    return this;
-  },
-};
-const myObj = Object.create(obj);
-myObj.foo = 1;
-console.log(myObj.f()); // { foo: 1 }
-
-// 当在构造函数中使用时，this指的是正在构造的对象。
-class C {
-  constructor() {
-    this.x = 10;
-  }
-}
-const obj = new C();
-console.log(obj.x); // 10
-
-// 4.箭头函数上下文：在箭头函数中，this保留封闭词法上下文的值this。
-const f = () => this;
-console.log(f() === window); // true
-
-const obj = {
-  foo: function () {
-    const baz = () => this;
-    return baz();
-  },
-  bar: () => this,
-};
-console.log(obj.foo()); // { foo, bar }
-console.log(obj.bar() === window); // true
-// 注意在第二个示例中，箭头函数的this指的是全局对象，
-// 除非它被包装在常规function调用中，而常规this调用的 `this` 指的是调用它的对象，
-// 并且它的词法上下文由箭头函数保留。
-
-// 5.事件处理程序上下文：在事件处理程序中使用时，this指的是放置监听器的元素。
-const el = document.getElementById("my-el");
-el.addEventListener("click", function () {
-  console.log(this === el); // true
-});
-```
+| 步骤 | 判断条件                    | this 指向                                         |
+| :--: | --------------------------- | ------------------------------------------------- |
+| 1    | 是箭头函数                | 定义时外层作用域的 `this`，不可修改               |
+| 2    | 是 `new` 调用             | 新创建的实例对象                                  |
+| 3    | 是 `call`/`apply`/`bind`  | 指定的第一个参数（`null/undefined` 则退化为默认） |
+| 4    | 是对象方法调用 `obj.fn()` | 最近的调用者对象                                  |
+| 5    | 以上都不是？                | 默认绑定：严格模式 `undefined`，非严格 `window`   |
 
 ## bind/call/apply
 
