@@ -123,6 +123,7 @@ export default withMermaid(
               items: [
                 { text: "Vue 生态", link: "/docs/fe-eco/vue-eco" },
                 { text: "React 生态", link: "/docs/fe-eco/react-eco" },
+                { text: "WebSocket", link: "/docs/fe-eco/webSocket" },
               ],
             },
             {
