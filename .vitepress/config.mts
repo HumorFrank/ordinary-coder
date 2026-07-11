@@ -189,8 +189,15 @@ export default withMermaid(
       // 配置大纲显示 1~4 级标题
       outline: {
         level: [1, 4], // Vite 默认通常是显示 h1~h4
-        label: "本页目录", // 修改文本为 "本页目录"
+        label: "目录", // 修改文本为 "本页目录"
       },
+      footer: {
+        message: 'Released under the MIT License.',
+        copyright: `Copyright © ${new Date().getFullYear()}-present Libao-Jun`,
+      },
+      returnToTopLabel: '回到顶部',
+      sidebarMenuLabel: '菜单',
+      darkModeSwitchLabel: '主题',
     },
     vite: {
       plugins: [groupIconVitePlugin()],
