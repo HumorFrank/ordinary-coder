@@ -1,25 +1,28 @@
 # 程序员资源
 
 ## 开源项目热度榜单
+
 - [TIOBE Index](https://www.tiobe.com/tiobe-index/)
->  根据全球开发者、课程、第三方供应商、搜索引擎等数据综合排名。
+  > 根据全球开发者、课程、第三方供应商、搜索引擎等数据综合排名。
 - [PYPL PopularitY of Programming Language](https://pypl.github.io/PYPL.html)
-> 根据 Google 搜索中编程语言教程的频率。
+  > 根据 Google 搜索中编程语言教程的频率。
 - [Best of JS](https://bestofjs.org/)
-> 这里汇集了与 Web 平台相关的最佳开源项目
+  > 这里汇集了与 Web 平台相关的最佳开源项目
 - [《JavaScript Rising Stars》](https://risingstars.js.org/)
-> 前端最流行的顶级开源项目排行榜
+  > 前端最流行的顶级开源项目排行榜
 - [GitHub Trending](https://github.com/trending)
-> 可按“本日/本周/本月”查看全球最热门的开源项目，支持筛选 JavaScript、TypeScript、CSS、HTML 等前端语言。
+  > 可按“本日/本周/本月”查看全球最热门的开源项目，支持筛选 JavaScript、TypeScript、CSS、HTML 等前端语言。
 
 ## 现代 Web 开发
 
-###  JS 框架语法对比
+### JS 框架语法对比
+
 - [Component Party 英文版本](https://component-party.dev/)
-> Vue vs React vs Svelte vs Angular 
+
+  > Vue vs React vs Svelte vs Angular
 
 - [Component Party 中文版](https://component-party.lainbo.com/)
-> Vue vs React vs Svelte vs Angular
+  > Vue vs React vs Svelte vs Angular
 
 ### Node.js中文网
 
@@ -29,15 +32,19 @@
 ### 前端检查清单
 
 - [前端检查清单](https://github.com/thedaviddias/Front-End-Checklist)
+
   > 前端检查表是面向人类和人工智能代理的开源前端质量系统。它将前端最佳实践转化为实用的评审工作流程，你可以在网上浏览、使用兼容 MCP 的工具，或直接在这份 README 中进行。
 
 - [前端开发规则和最佳实践](https://frontendchecklist.io/rules)
+
   > 前端开发规则和最佳实践，帮助你构建高质量的 Web 应用。
 
 - [精选清单](https://frontendchecklist.io/checklists)
+
   > 基于规则库构建目标导向型工作流程。可以按结果、受众或审核风格选择清单，而无需每次都从整个目录开始。
 
 - [前端学习套件](https://github.com/sadanandpai/frontend-learning-kit)
+
   > 前端技术指南和精选前端资料集。
 
 - [Frontend Developer 路线图](https://roadmap.sh/frontend)
@@ -49,49 +56,65 @@
   > 一个基于 Markdown 的简历模板，支持自定义模板和字段。
 
 ### 技术文档
+
 - [技术文档](https://jinxi1334640772.github.io/)
 
 ## Vite / Vue 生态圈导航
 
 - [Vite / Vue 生态圈导航](https://vitejs.cn/)
-> 发现 Vite 和 Vue 生态系统中最好的框架、UI 库、工具和插件
+  > 发现 Vite 和 Vue 生态系统中最好的框架、UI 库、工具和插件
 - [VueUse](https://vueuse.org/)
-> 200+ 官方品质全能工具箱
+  > 200+ 官方品质全能工具箱
 - [Vue Hooks Plus](https://inhiblabcore.github.io/vue-hooks-plus/zh/)
-> 中后台“请求”一条龙，插件还能跨 Tab 广播
+  > 中后台“请求”一条龙，插件还能跨 Tab 广播
 - [ahooks-vue](https://namepain.github.io/ahooks-vue/zh/)
-> 阿里 ahooks 的 Vue 3 官方移植
+  > 阿里 ahooks 的 Vue 3 官方移植
 - [V3Hooks](https://github.com/yanzhandong/v3hooks)
-> 社区轻量版“Vue 原生派”，零依赖更小巧
+  > 社区轻量版“Vue 原生派”，零依赖更小巧
 - [Vue Plugins](https://www.vue-plugins.org/)
-> 发现并探索最优的 Vue.js 插件，助你提升应用功能。由社区策划，开发者维护。
+  > 发现并探索最优的 Vue.js 插件，助你提升应用功能。由社区策划，开发者维护。
+- [JavaScript Fun - 代码库集合](https://www.javascript.fun/)
+  > 一个集合当下最流行的 JavaScript 代码库，显示流行排行，开发者可以轻松的找到想要最新的代码插件、工具和博客。
+## CDN 加速
+
+- [cdnjs](https://cdnjs.com/libraries)
+  > cdnjs 是一个免费且开源的 CDN 服务 ，受到超过 12.5% 所有网站的信赖，服务于 每月超过 2000 亿次请求 ，由 Cloudflare 驱动。
+- [unpkg](https://unpkg.com/)
+  > unpkg 是一个免费的 CDN 服务，用于分发 NPM 包。它提供了一个 URL，你可以直接在浏览器中使用，而不需要下载到本地。
+- [jsdelivr](https://www.jsdelivr.com/)
+  > jsdelivr 是一个免费的 CDN 服务，用于分发 NPM 包。它提供了一个 URL，你可以直接在浏览器中使用，而不需要下载到本地。
+- [bootcdn](https://www.bootcdn.cn/)
+  > 稳定、快速、免费的前端开源项目 CDN 加速服务
 
 ## 网络请求
+
 - [Axios](https://github.com/axios/axios)
-> 适用于浏览器和 Node.js 的基于 Promise 的 HTTP 客户端
+  > 适用于浏览器和 Node.js 的基于 Promise 的 HTTP 客户端
 - [TanStack Query Vue](https://github.com/axios/axios)：（npm 名` @tanstack/vue-query`）是 React Query 的 Vue 兄弟版本
-> 一个异步状态管理库，旨在简化服务器状态的获取、缓存、同步和更新。
+  > 一个异步状态管理库，旨在简化服务器状态的获取、缓存、同步和更新。
 
 ## Vue 动效生态
+
 - [Motion for Vue](https://motion.dev/docs/vue)
-> Motion for Vue 是一个简单却功能强大的动画库。它是唯一一个拥有混合引擎的动画库，能够实现硬件加速动画。
+  > Motion for Vue 是一个简单却功能强大的动画库。它是唯一一个拥有混合引擎的动画库，能够实现硬件加速动画。
 - [GSAP](https://motion.dev/docs/vue)
-> GSAP 是一个与框架无关的 JavaScript 动画库，它能让开发者化身动画超人。
+  > GSAP 是一个与框架无关的 JavaScript 动画库，它能让开发者化身动画超人。
 - [Inspira UI](https://github.com/unovue/inspira-ui)
-> 纯 Vue 组件、开箱即用（一个专门为Vue与Nuxt设计的组件集）
+  > 纯 Vue 组件、开箱即用（一个专门为Vue与Nuxt设计的组件集）
 - [Uiverse.io](https://uiverse.io/)
-> 社区模板丰富
+  > 社区模板丰富
 
 ## 动画库
+
 - [Anime.js](https://github.com/juliangarnier/anime)
-> Anime.js是一个快速、多用途且轻量级的 JavaScript 动画库，拥有简洁而强大的 API。
+  > Anime.js是一个快速、多用途且轻量级的 JavaScript 动画库，拥有简洁而强大的 API。
 
 ## 游戏
 
 - [Pixijs](https://github.com/pixijs/pixijs)
-> PixiJS 是一款先进的开源 2D 渲染引擎，专为在 Web 上打造惊艳的视觉体验而设计。
+  > PixiJS 是一款先进的开源 2D 渲染引擎，专为在 Web 上打造惊艳的视觉体验而设计。
 - [Phaser](https://npmx.dev/package/phaser)
-> Phaser 是一个快速、免费且有趣的开源 HTML5 游戏框架
+  > Phaser 是一个快速、免费且有趣的开源 HTML5 游戏框架
 
 ## 优质资源
 
@@ -102,21 +125,21 @@
 - [GitHub 文件加速](https://hub.m5.work/)
   > 快速下载GitHub上的文件和仓库，解决国内访问GitHub速度慢的问题，支持Docker镜像加速和Hugging Face仓库。
 - [iCSS](https://github.com/chokcoco/iCSS)
-> CSS 奇技淫巧，在这里都有。
+  > CSS 奇技淫巧，在这里都有。
 - [Pixelrepo.com](https://pixelrepo.com/browse)
-> 像素仓库，浏览、下载并自定义数千种像素艺术素材。寻找完美精灵图的时间不应该比制作游戏的时间更长。
+  > 像素仓库，浏览、下载并自定义数千种像素艺术素材。寻找完美精灵图的时间不应该比制作游戏的时间更长。
 - [Cssbuttons.io](https://cssbuttons.io/)
-> 精选 100 多个按钮的集合。采用 Tailwind 和 CSS 技术。
+  > 精选 100 多个按钮的集合。采用 Tailwind 和 CSS 技术。
 - [UIVerse](https://uiverse.io/)
-> UI 宇宙，最大的开源 UI 库
+  > UI 宇宙，最大的开源 UI 库
 - [DOM标准](https://htmlspecs.com/dom/)
-> DOM 现行标准 ——  DOM 定义了一个平台中立的模型，用于事件、活动中止和节点树。
+  > DOM 现行标准 —— DOM 定义了一个平台中立的模型，用于事件、活动中止和节点树。
 - [HTML标准](https://htmlspecs.com/)
-> HTML 现行标准 —— 该规范定义了网页平台的大部分内容，详细程度很高。
+  > HTML 现行标准 —— 该规范定义了网页平台的大部分内容，详细程度很高。
 - [github-api](https://api.github.com/)
-> github 官方API
+  > github 官方API
 - pnpm/npm/yarn
-> 快速查看依赖文：`pnpm home <package-name>`
+  > 快速查看依赖文：`pnpm home <package-name>`
 
 ## 音效资源
 
