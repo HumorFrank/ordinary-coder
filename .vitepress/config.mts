@@ -73,6 +73,7 @@ export default withMermaid(
                 { text: "ES6", link: "/docs/memory/es6" },
                 { text: "Vue", link: "/docs/memory/vue" },
                 { text: "React", link: "/docs/memory/react" },
+                { text: "Electron", link: "/docs/memory/electron" },
                 { text: "Vue Router", link: "/docs/memory/vue-router" },
                 { text: "Pinia", link: "/docs/memory/pinia" },
                 { text: "Vite", link: "/docs/memory/vite" },
