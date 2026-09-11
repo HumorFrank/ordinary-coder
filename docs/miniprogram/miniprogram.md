@@ -31,10 +31,44 @@
 
 **一句话建议**：如果你用的是国内服务器，那么**域名ICP备案 + 小程序备案 + 公安备案**这三项一个都不能少。公安备案虽然不直接卡小程序上线，但属于必须履行的法定义务，建议在ICP备案通过后一并办理。
 
+#### 各家小程序备案
+
+开发者自行到各家小程序管理控制台上传相关信息，即可完成，不涉及域名及固定IP等要素。 
+
+1️⃣ **小程序备案参考资料**
+
+- [微信小程序备案操作指引](https://developers.weixin.qq.com/miniprogram/product/record/record_guidelines.html)
+- [支付宝小程序备案操作指引](https://opendocs.alipay.com/mini/0apy22?pathHash=2cd5467d)
+- [抖音小程序ICP备案指引](https://developer.open-douyin.com/docs/resource/zh-CN/mini-app/operation/settle/ICPFiling/ICPintroduce)
+- [小红书小程序备案流程](https://miniapp.xiaohongshu.com/doc/DC896252)
+- [快手小程序备案流程](https://mp.kuaishou.com/docs/operate/specification/icp/guide.html)
+- [京东小程序备案流程](https://mp-docs.jd.com/doc/operation/beian/2300)
+- [百度小程序备案指引](https://smartprogram.baidu.com/docs/introduction/register_filings/)
+
+2️⃣ **小程序备案整体流程** 
+
+备案整体流程总共分为五个环节：备案信息填写、平台初审、工信部短信核验、通管局审核和备案成功 
+
+- 备案信息填写
+  > 填写备案信息及上传材料
+- 平台初审
+  > - 微信 1~2个工作日内完成平台初审
+  > - 抖音 1~6个工作日内完成平台初审
+  > - 支付宝 1 个工作日内完成平台初审
+  > - 小红书  1~2 个工作日内完成平台初审
+  > - 快手  1~2 个工作日内完成平台初审
+- 工信部短信核验
+  > 24 小时内完成短信核验
+- 通管局审核
+  > 在 1~20 个工作日内完成审核，没有催审途径。
+- 备案成功 
+  > 管理局下发小程序备案号
+- 悬挂备案号
+  > 平台会自动获取小程序备案号，并在【小程序主体信息页】展示备案号，小程序开发者无需自行操作。 
+
 ### 小程序上线平台
 
 根据需求上线不同的平台：微信、抖音、快手、百度、支付宝、小红书等等，不同平台小程序需要配置对应平台的小程序`AppID`。
-
 
 ### 小程序的版本
 
